@@ -53,25 +53,23 @@ let lrq_aoe  =  { //array of entries
 };
 
 
-function lrq_html_to_array(extracted_html){
+function lrq_html_to_array($html){
 
     //
 
 
-};
+}
 
-function lrq_array_to_blocks(){
+function lrq_array_to_blocks($aoe){
 
     //
 
-};
+}
 
 window.addEventListener("DOMContentLoaded", function() {
-    var inp = document.getElementById("search");
     var btn = document.getElementById("searchBtn");
 
     btn.addEventListener("click", function() {
-        var searchTerm = inp.value;
             // Get the active tab
             chrome.tabs.query({
                 active: true,
