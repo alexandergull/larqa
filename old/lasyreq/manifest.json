@@ -1,0 +1,27 @@
+{
+  "name": "LasyReq",
+  "version": "1.0",
+  "description": "Lasy Request",
+  "content_scripts": [
+    {
+      "matches": ["http://*/*"],
+      "js": ["contentscript.js","jquery.min.js","extractHTML.js"]
+    }
+    ],
+  "manifest_version": 2,
+  "permissions": [
+    "storage",
+    "cookies",
+    "notifications",
+    "tabs"
+  ],
+  "background": { "scripts": ["background.js","popup.js","jquery.min.js"] },
+  "web_accessible_resources": ["icon_small.png"],
+  "Content-Security-Policy": "default-src 'self':; script-src  https: 'unsafe-inline'; style-src https: 'unsafe-inline'",
+
+
+  "browser_action": {
+    "default_title": "Open LasyReq",
+    "default_popup": "popup.html"
+  }
+}
