@@ -1,261 +1,257 @@
-﻿/*
-Текущий этап разработки:
-
-	рефакторинг в классы (dev)
-
-Задачи
-
-	парсинг HTML через popup
-	вывод таблицы через popup
-	анализ данных (можно выводить третьим td в блоке, потребуется ещё одно поле boolean в Details)
+/*
+	//TODO парсинг HTML через popup (пока только через ajax по URL могу)
+	//TODO инициализация классов
+	//TODO анализ данных (можно выводить третьим td в блоке, потребуется ещё одно поле boolean в Details)
 */
 class Id {
-	constructor(
-		signature,
-		value,
-		link_staff,
-		link_user
-	) {
-		this.signature = signature;
-		this.value = value;
-		this.link_staff = link_staff;
-		this.link_user = link_user;
-	}
+  constructor(
+      url,
+      value,
+      link_staff,
+      link_user
+  ) {
+    this.url = url;
+    this.value = value;
+    this.link_staff = link_staff;
+    this.link_user = link_user;
+  }
 
-	value_init(){
+  value_init(){
 
-	}
+  }
 
-	link_init(){
+  link_init(){
 
-	}
+  }
+
+  url_init(){}
 }
 
 class Status {
-	constructor(
-		agent,
-		isAllowed,
-		filters,
-		type
-	) {
-		this.agent = agent;
-		this.isAllowed = isAllowed;
-		this.filters = filters;
-		this.type = type;
-	}
+  constructor(
+      agent,
+      isAllowed,
+      filters,
+      type
+  ) {
+    this.agent = agent;
+    this.isAllowed = isAllowed;
+    this.filters = filters;
+    this.type = type;
+  }
 
-	init(){
+  init(){
 
-	}
+  }
 }
 
 class Detail {
-	
-	constructor( 
-	
-		name ,
-		block_id ,
-		signature ,
-		value ,
-		css_id,
-		section_id
-		
-	) 
-	
-	{
-	
-		//Init class
-		this.name  =  name;
-		this.block_id  =  block_id;
-		this.signature  =  signature;
-		this.value  =  value;
-		this.css_id  =  css_id;	
-		this.section_id = 	section_id;	
 
-	}
-	
-	misc_show_detail(){
-		console.log(
-		'detail_name '  +  this.name  +  ' '  +
-		'block_id '  +  this.block_id  +  ' '  +
-		'signature '  +  this.signature  +  ' '  +
-		'value '  +  this.value  +  ' '  +
-		'css_id '  +  this.css_id + ' ' +
-		'section_id '  +  this.section_id
-		)
-	}
+  constructor(
+
+      name ,
+      block_id ,
+      signature ,
+      value ,
+      css_id,
+      section_id
+
+  )
+
+  {
+
+    //Init class
+    this.name  =  name;
+    this.block_id  =  block_id;
+    this.signature  =  signature;
+    this.value  =  value;
+    this.css_id  =  css_id;
+    this.section_id = 	section_id;
+
+  }
+
+  misc_show_detail(){
+    console.log(
+        'detail_name '  +  this.name  +  ' '  +
+        'block_id '  +  this.block_id  +  ' '  +
+        'signature '  +  this.signature  +  ' '  +
+        'value '  +  this.value  +  ' '  +
+        'css_id '  +  this.css_id + ' ' +
+        'section_id '  +  this.section_id
+    )
+  }
 
 
 }
 
 class Option {
-	
-	constructor( 
-	
-		name, 
-		value,
-		signature,
-		priority,
-	
-	) 
-	
-	{
-	
-		//Init class
-		this.name  =  name;
-		this.value  =  value;
-		this.signature  =  signature;
-		this.priority =  priority;
 
-	}
-	
-	misc_show_option(){
+  constructor(
 
-	}
+      name,
+      value,
+      signature,
+      priority,
+
+  )
+
+  {
+
+    //Init class
+    this.name  =  name;
+    this.value  =  value;
+    this.signature  =  signature;
+    this.priority =  priority;
+
+  }
+
+  misc_show_option(){
+
+  }
 
 }
 
 class CT_request {
-	constructor(
-		id,
-		status,
-		details,
-		options,
-		analysis
-	)
+  constructor(
+      id,
+      status,
+      details,
+      options,
+      analysis
+  )
 
-	{
-		this.id = id; // class Id
-		this.status = status; // class Status
-		this.details = details; // array of class Detail
-		this.options = options; //array of class Option
-		this.analysis = analysis;
-	}
+  {
+    this.id = id; // class Id
+    this.status = status; // class Status
+    this.details = details; // array of class Detail
+    this.options = options; //array of class Option
+    this.analysis = analysis;
+  }
 
-	set_details_signature_data() { // Установка данных для поиска
+  set_details_signature_data() { // Установка данных для поиска
 
-		let values = [
-			// имя параметра, номер блока, сигнатура, РЕЗЕРВ, стиль, где искать
-			['sender_email','0','<td>email&nbsp;</td>','','default','sender'],
-			['sender_email_is_bl','0','<td>email_in_list&nbsp;</td>','','default','details'],
-			['sender_email_is_sc','0','<td>short_cache_email&nbsp;</td>','','default','details' ],
-			['sender_email_is_disp','0','<td>mail_domain_one_raz&nbsp;</td>','','default','details'],
-			['sender_ip','1','<td>ip&nbsp;</td>','','default','sender'],
-			['sender_ip_is_bl','1','<td>ip_in_list&nbsp;</td>','','default','details'],
-			['sender_ip_is_sc','1','<td>short_cache_ip&nbsp;</td>','','default','details' ],
-			['ct_options','2','<td>ct_options&nbsp;</td>','','default','sender' ],
-			['ct_agent','3','<td>agent&nbsp;</td>','','default','params' ],
-			['js_status','4','<td>js_on&nbsp;</td>','','default','params'],
-			['submit_time','4','<td>submit_time&nbsp;</td>','','default','params'],
-			['cookies_enabled','4','<td>cookies_enabled&nbsp;</td>','','default','sender'],
-			['page_referrer','4','<td>REFFERRER&nbsp;</td>','','default','sender'],
-			['page_pre_referrer','4','<td>REFFERRER_PREVIOUS&nbsp;</td>','','default','sender'],
-			['page_url','4','<td>page_url&nbsp;</td>','','default','sender'],
-			['sender_url','4','<td>sender_url&nbsp;</td>','','default','sender'],
-			['comment_type','4','<td>comment_type&nbsp;</td>','','default','sender'],
-			['hook_type','4','<td>hook&nbsp;</td>','','default','sender'],
-			['is_greylisted','4','<td>grey_list_stop&nbsp;</td>','','default','details'],
-			['is_mobile_ua','4','<td>is_mobile_UA&nbsp;</td>','','default','details'],
-			['links_detected','4','<td>links&nbsp;</td>','','default','details'],
-			['allowed_by_pl','4','<td>private_list_allow&nbsp;</td>','','default','details'],
-			['denied_by_pl','4','<td>private_list_deny&nbsp;</td>','','default','details'],
-			['pl_has_records','4','<td>private_list_detected&nbsp;</td>','','default','details']
-		];
+    let values = [
+      // имя параметра, номер блока, сигнатура, РЕЗЕРВ, стиль, где искать
+      ['sender_email','0','<td>email&nbsp;</td>','','default','sender'],
+      ['sender_email_is_bl','0','<td>email_in_list&nbsp;</td>','','default','details'],
+      ['sender_email_is_sc','0','<td>short_cache_email&nbsp;</td>','','default','details' ],
+      ['sender_email_is_disp','0','<td>mail_domain_one_raz&nbsp;</td>','','default','details'],
+      ['sender_ip','1','<td>ip&nbsp;</td>','','default','sender'],
+      ['sender_ip_is_bl','1','<td>ip_in_list&nbsp;</td>','','default','details'],
+      ['sender_ip_is_sc','1','<td>short_cache_ip&nbsp;</td>','','default','details' ],
+      ['ct_options','2','<td>ct_options&nbsp;</td>','','default','sender' ],
+      ['ct_agent','3','<td>agent&nbsp;</td>','','default','params' ],
+      ['js_status','4','<td>js_on&nbsp;</td>','','default','params'],
+      ['submit_time','4','<td>submit_time&nbsp;</td>','','default','params'],
+      ['cookies_enabled','4','<td>cookies_enabled&nbsp;</td>','','default','sender'],
+      ['page_referrer','4','<td>REFFERRER&nbsp;</td>','','default','sender'],
+      ['page_pre_referrer','4','<td>REFFERRER_PREVIOUS&nbsp;</td>','','default','sender'],
+      ['page_url','4','<td>page_url&nbsp;</td>','','default','sender'],
+      ['sender_url','4','<td>sender_url&nbsp;</td>','','default','sender'],
+      ['comment_type','4','<td>comment_type&nbsp;</td>','','default','sender'],
+      ['hook_type','4','<td>hook&nbsp;</td>','','default','sender'],
+      ['is_greylisted','4','<td>grey_list_stop&nbsp;</td>','','default','details'],
+      ['is_mobile_ua','4','<td>is_mobile_UA&nbsp;</td>','','default','details'],
+      ['links_detected','4','<td>links&nbsp;</td>','','default','details'],
+      ['allowed_by_pl','4','<td>private_list_allow&nbsp;</td>','','default','details'],
+      ['denied_by_pl','4','<td>private_list_deny&nbsp;</td>','','default','details'],
+      ['pl_has_records','4','<td>private_list_detected&nbsp;</td>','','default','details']
+    ];
 
-		let length = (values.length); //длина массива данных для поиска определена
+    let length = (values.length); //длина массива данных для поиска определена
 
-		return [values,length]
+    return [values,length]
 
-	}// Установка данных для поиска
+  }// Установка данных для поиска
 
-	construct_details_block_html () { //конструирует блоки основываясь на Section ID из
+  construct_details_block_html () { //конструирует блоки основываясь на Section ID из
 
-		let block_id;
+    let block_id;
 
-		let ar = [];
+    let ar = [];
 
-		let j;
+    let j;
 
-		let i;
+    let i;
 
-		for (j = 0; j<detail_array_length; j++){
-			ar.push (parseInt(this.details[j].block_id));
-		}
+    for (j = 0; j<detail_array_length; j++){
+      ar.push (parseInt(this.details[j].block_id));
+    }
 
-		let number_of_blocks = Math.max.apply (null, ar) + 1; //колчество блоков определено
+    let number_of_blocks = Math.max.apply (null, ar) + 1; //колчество блоков определено
 
-		for (block_id = 0; block_id !== number_of_blocks; block_id++) {
+    for (block_id = 0; block_id !== number_of_blocks; block_id++) {
 
-			add_html_tag_to_layout_window('main_tbody', 'beforeend', ('<tr id="tier_block_' + block_id + '">SECTION ' + block_id + '</tr>'));
+      add_html_tag_to_layout_window('main_tbody', 'beforeend', ('<tr id="tier_block_' + block_id + '">SECTION ' + block_id + '</tr>'));
 
-			for (i = 0; i < detail_array_length - 1; i++) { //добавление строк
+      for (i = 0; i < detail_array_length - 1; i++) { //добавление строк
 
-				if (stringcounter <= i) { //хуй знает как это работает и почему без этого не работает
+        if (stringcounter <= i) { //хуй знает как это работает и почему без этого не работает
 
-					if (parseInt(this.details[stringcounter].block_id) === block_id) { // добавляем строки если block_id совпал
-						stringcounter++;
+          if (parseInt(this.details[stringcounter].block_id) === block_id) { // добавляем строки если block_id совпал
+            stringcounter++;
 
-						add_html_tag_to_layout_window('main_tbody', 'beforeend', ('<tr id="tier_' + stringcounter + '"></tr>'));
+            add_html_tag_to_layout_window('main_tbody', 'beforeend', ('<tr id="tier_' + stringcounter + '"></tr>'));
 
-						add_html_tag_to_layout_window(('tier_' + stringcounter), 'beforeend', ('<td>' + this.details[stringcounter].name + ' #' + stringcounter + ':</td>'));
+            add_html_tag_to_layout_window(('tier_' + stringcounter), 'beforeend', ('<td>' + this.details[stringcounter].name + ' #' + stringcounter + ':</td>'));
 
-						add_html_tag_to_layout_window(('tier_' + stringcounter), 'beforeend', ('<td>' + this.details[stringcounter].value + '</td>'));
+            add_html_tag_to_layout_window(('tier_' + stringcounter), 'beforeend', ('<td>' + this.details[stringcounter].value + '</td>'));
 
-					}
+          }
 
-				}
+        }
 
-			}
+      }
 
-		}
+    }
 
-	}//конструирует блоки основываясь на Section ID из set_details_signature_data
+  }//конструирует блоки основываясь на Section ID из set_details_signature_data
 
-	set_values_to_details_array() { // Внесение результатов поиcка values в массив объектов Details
+  set_values_to_details_array() { // Внесение результатов поиcка values в массив объектов Details
 
-		log('Функция заполнения values для маccива Details начала работать');
-		for (let i=0; i<detail_array_length; i++){
+    log('Функция заполнения values для маccива Details начала работать');
+    for (let i=0; i<detail_array_length; i++){
 
-			this.details[i].value = get_detail_value (this.details[i].section_id, this.details[i].signature);
-			log (this.details[i]);
-		}
-		log('Функция заполнения values для маccива Details закончила работать');
-	} // вносит результатов поиска values в массив объектов Details
+      this.details[i].value = get_detail_value (this.details[i].section_id, this.details[i].signature);
+      log (this.details[i]);
+    }
+    log('Функция заполнения values для маccива Details закончила работать');
+  } // вносит результатов поиска values в массив объектов Details
 
-	init_details_array (){ //создаёт объекты Details в массиве (без values) на основе set_details_signature_data
+  init_details_array (){ //создаёт объекты Details в массиве (без values) на основе set_details_signature_data
 
-		log ('Создание массива Details началось');
+    log ('Создание массива Details началось');
 
-		this.details  =  [];
+    this.details  =  [];
 
-		let values = this.set_details_signature_data()[0];
+    let values = this.set_details_signature_data()[0];
 
-		for (let i = 0; i < detail_array_length; i++) {
+    for (let i = 0; i < detail_array_length; i++) {
 
-			this.details.push  (   new   Detail  (  ( values[i][0]),(values[i][1]),(values[i][2]),(values[i][3]),(values[i][4]),(values[i][5] )  )  );
+      this.details.push  (   new   Detail  (  ( values[i][0]),(values[i][1]),(values[i][2]),(values[i][3]),(values[i][4]),(values[i][5] )  )  );
 
-		}
+    }
 
-		log ('Создание массива Details закончено.');
+    log ('Создание массива Details закончено.');
 
-		return ct_request.details;
+    return ct_request.details;
 
-	} //создаёт объекты Details в массиве (без values)
+  } //создаёт объекты Details в массиве (без values)
 
-	call_detail_value_by_name (name) {
-		log('Функция поиска значния по имени начала работать..');
-		log('Ищем значение по:'+ name);
-		for (let i=0; i<detail_array_length; i++){
+  call_detail_value_by_name (name) {
+    log('Функция поиска значния по имени начала работать..');
+    log('Ищем значение по:'+ name);
+    for (let i=0; i<detail_array_length; i++){
 
-			if (this.details[i].name === name) {
+      if (this.details[i].name === name) {
 
-				log('Найдено: ' + this.details[i].value);
+        log('Найдено: ' + this.details[i].value);
 
-			}
-			log('Функция поиска значения по имени закончила работать..');
-		}
+      }
+      log('Функция поиска значения по имени закончила работать..');
+    }
 
-	} //вызывает значения value объекта Detail по имени
+  } //вызывает значения value объекта Detail по имени
 
 }
 
@@ -265,6 +261,8 @@ extracted_html = init_html_array(); //забираем HTML
 
 let ct_request = new CT_request();
 
+ct_request.id = new Id();
+
 let detail_array_length = ct_request.set_details_signature_data()[1]; // объявляем длину массива объектов Details
 
 //============ DECLARE BLOCK END
@@ -272,68 +270,71 @@ let detail_array_length = ct_request.set_details_signature_data()[1]; // объ�
 //=====внеклассовые функции
 
 function log(txt){
-	console.log(txt);
-} //укрощение console.log
+  console.log(txt);}
+
+function extlog(txt,txt2){
+  console.log(txt+': ['+txt2+']');}
+
 
 function get_html_section ( section_name ) { //извлекает html секции по Details.section_id
 
-	let signature = `<div class="section_block" data-section="` + section_name + `">`; // подпись берём из параметра функции
+  let signature = `<div class="section_block" data-section="` + section_name + `">`; // подпись берём из параметра функции
 
-	let start_sec = extracted_html.indexOf (signature);// начальная позиция определена
+  let start_sec = extracted_html.indexOf (signature);// начальная позиция определена
 
-	let end_sec = null;
+  let end_sec = null;
 
-		for ( let i = start_sec+1; i <= extracted_html.length; i++ ) {
+  for ( let i = start_sec+1; i <= extracted_html.length; i++ ) {
 
-			if ( ( extracted_html.slice(i,i+40) ) === '<div class="section_block" data-section=') {
+    if ( ( extracted_html.slice(i,i+40) ) === '<div class="section_block" data-section=') {
 
-				end_sec = i; // конечная позиция определена
+      end_sec = i; // конечная позиция определена
 
-				break;
+      break;
 
-			}
+    }
 
-		}
+  }
 
-	return extracted_html.slice ( start_sec , end_sec );
+  return extracted_html.slice ( start_sec , end_sec );
 
 } 	//извлекает html секции по Details.section_id
 
 function get_detail_value ( section_id, signature ) { //ищет Detail.value по Detail.signature внутри секции Details.section_id
 
-		let html_section = get_html_section(section_id); // секция определена
+  let html_section = get_html_section(section_id); // секция определена
 
-		let start_value_position;
+  let start_value_position;
 
-	    let end_value_position;
+  let end_value_position;
 
-		if (html_section.includes(signature)) { // 11- это символы <td>:&nbsp;
+  if (html_section.includes(signature)) { // 11- это символы <td>:&nbsp;
 
-			start_value_position = (html_section.indexOf(signature) + signature.length + 11); //стартовая позиция для искомого значения
+    start_value_position = (html_section.indexOf(signature) + signature.length + 11); //стартовая позиция для искомого значения
 
-		} else {
+  } else {
 
-			return 'Вхождение не найдено';
+    return 'Вхождение не найдено';
 
-		}
+  }
 
-		for (let i = start_value_position; i <= html_section.length; i++) {
-				//log(html_section.slice(i,i+5));
-					if (( html_section.slice(i,i+5)  ) === '</td>') {
-						end_value_position = i; //конечная позиция определена
-						break;
-					}
-		}
-		
-		return html_section.slice ( start_value_position , end_value_position );
+  for (let i = start_value_position; i <= html_section.length; i++) {
+    //log(html_section.slice(i,i+5));
+    if (( html_section.slice(i,i+5)  ) === '</td>') {
+      end_value_position = i; //конечная позиция определена
+      break;
+    }
+  }
 
-	} 	//ищет Detail.value по Detail.signature внутри секции Details.section_id
+  return html_section.slice ( start_value_position , end_value_position );
+
+} 	//ищет Detail.value по Detail.signature внутри секции Details.section_id
 
 function init_html_array() {
 
-	console.log('HTML extracting started...');
+  console.log('HTML extracting started...');
 
-	let extracted_html = `<html class="js" lang="ru"><head>
+  let extracted_html = `<html class="js" lang="ru"><head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Детализация запроса 2588604be919b38f7c368e43b1fc5edb</title>
@@ -656,61 +657,82 @@ var night_mode = 'off';
 
 </body></html>`;
 
-	console.log('HTML extracted.')
-	return extracted_html;
+  console.log('HTML extracted.')
+  return extracted_html;
 } //извлекает outerHTML
 
 function add_html_tag_to_layout_window (position_tag_id, align, html) {
-	log('TAG COUNSTRUCTED POS ' + position_tag_id + ' ALGN ' + align + ' HTML ' + html);
-	layout_window.document.getElementById(position_tag_id).insertAdjacentHTML(align,html);
+  log('TAG COUNSTRUCTED POS ' + position_tag_id + ' ALGN ' + align + ' HTML ' + html);
+  layout_window.document.getElementById(position_tag_id).insertAdjacentHTML(align,html);
 
 } //добавляет тег к окну запроса
 
 function call_layout_window() { //вызов окна запроса
+  //счётчик строк в таблице
+  window.stringcounter = 0;
 
-	//счётчик строк в таблице
-	window.stringcounter = 0;
+  // собственно основное окно
+  window.layout_window = window.open('layout.html', 'blank', 'left=50, top=50, width=1000, height=700, status=no, toolbar=no, location=no');
 
-	// собственно основное окно
-	window.layout_window = window.open('about:blank', 'blank', 'left=50, top=50, width=1000, height=700, status=no, toolbar=no, location=no');
+  // действия после загрузки окна
+  layout_window.onload = function () {
+    // цвет боди
+    layout_window.document.body.style.backgroundColor = "#3090c7";
 
-	// действия после загрузки окна
-	layout_window.onload = function () {
+    //тестовый див
+    layout_window.document.body.insertAdjacentHTML("beforeend", ('<div id="test_div">Test div</div>'));
 
-		// цвет боди
-		layout_window.document.body.style.backgroundColor = "#3090c7";
+    //таблица и стили таблицы
+    layout_window.document.head.insertAdjacentHTML("beforeend", ('<style type="text/css"> table {font-size: 12px; font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif,serif;text-align: left;border-collapse: separate;border-spacing: 5px;background: #ECE9E0;color: #656665;border: 16px solid #ece9e0;border-radius: 20px;}th {font-size: 18px;padding: 10px;}td {background: #F5F5F5;padding: 10px;} </style>'));
 
-		//тестовый див
-		layout_window.document.body.insertAdjacentHTML("beforeend", ('<div id="test_div">Test div</div>'));
+    //тело таблицы
+    add_html_tag_to_layout_window('test_div', 'afterend', '<table id="main_table"><tbody id="main_tbody"></tbody></table>');
 
-		//таблица и стили таблицы
-		layout_window.document.head.insertAdjacentHTML("beforeend", ('<style type="text/css"> table {font-size: 12px; font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif,serif;text-align: left;border-collapse: separate;border-spacing: 5px;background: #ECE9E0;color: #656665;border: 16px solid #ece9e0;border-radius: 20px;}th {font-size: 18px;padding: 10px;}td {background: #F5F5F5;padding: 10px;} </style>'));
+    ct_request.construct_details_block_html();
 
-		//тело таблицы
-		add_html_tag_to_layout_window('test_div', 'afterend', '<table id="main_table"><tbody id="main_tbody"></tbody></table>');
-
-		ct_request.construct_details_block_html();
-
-	}//вызов окна запроса
+  }//вызов окна запроса
 
 }
 
-//=====конец внеклассовые функции
+//=====конец внеклассовых функций
 
 
 //=====начало работы с документом
-	document.body.onload = function () {
+window.document.body.onload = function () {
 
-		log('Документ загружен');
+  log('Документ загружен');
 
-		document.getElementById('show_details').onclick = function () {
 
-			ct_request.init_details_array();
+  //window.document.getElementById('get_html').onclick = function () {}
 
-			ct_request.set_values_to_details_array();
+  document.getElementById('show_details').onclick = function () {
 
-			call_layout_window();
+    ct_request.init_details_array();
 
-		}
+    ct_request.set_values_to_details_array();
 
-	}
+    call_layout_window();
+
+  }
+
+}
+
+
+
+/*window.document.body.onload = function(){
+
+  chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
+    alert(tabs[0].url);
+
+  });
+
+
+/!*    $.ajax({
+      url: "https://cleantalk.org/noc/requests?request_id=0c457eaaf903805f1d143a0d8e74df00",
+      success: function (result) {
+        alert(result);
+      }
+    });
+    alert ('get_html Onklick event finished')
+  }*!/
+};*/

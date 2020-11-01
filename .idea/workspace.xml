@@ -5,21 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/LARQA/layout.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/fg/content.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/implement/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/implement/.idea/larqa-request-parse.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/implement/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/implement/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/implement/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/implement/implement.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/implement/layout.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/implement/manifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/implement/popup.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LARQA/implement/implement.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/popup.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/popup/popup.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/popup/popup.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +40,7 @@
     </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="dev" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -89,14 +77,15 @@
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
+    <task id="Default" summary="Default task">
+      <branch name="dev" repository="D:\Megadisk\larqa\gitcopy" original="true" />
       <changelist id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="" />
       <created>1604134535335</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1604134535335</updated>
+      <updated>1604254471446</updated>
       <workItem from="1604134536468" duration="25593000" />
-      <workItem from="1604213951006" duration="25910000" />
+      <workItem from="1604213951006" duration="27407000" />
     </task>
     <task id="LOCAL-00001" summary="transfer 6 months changes to GIT">
       <created>1604134682357</created>
@@ -126,7 +115,34 @@
       <option name="project" value="LOCAL" />
       <updated>1604172362109</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="-мигрировал всё на модальное окно из расширения&#10;- убрал мусор">
+      <created>1604252828443</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1604252828443</updated>
+    </task>
+    <task id="LOCAL-00006" summary="- версировал файлы">
+      <created>1604252870133</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1604252870133</updated>
+    </task>
+    <task active="true" id="LOCAL-00007" summary="CURRENT">
+      <branch name="dev" repository="D:\Megadisk\larqa\gitcopy" />
+      <changelist id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="" />
+      <created>1604254444639</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1604254471446</updated>
+      <workItem from="1604254472083" duration="254000" />
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <option name="createChangelist" value="false" />
+    <option name="createBranch" value="false" />
+    <option name="useBranch" value="true" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,6 +165,8 @@
     <MESSAGE value="removed OLD folder" />
     <MESSAGE value="- перенёс конструктор блоков HTML в класс Ct_request&#10;- рефакторинг некоторых названий и переменных" />
     <MESSAGE value="- перенёс конструктор блоков HTML в класс Ct_request&#10;- рефакторинг некоторых названий и переменных&#10;- избавился от setdata.js и layout .js" />
-    <option name="LAST_COMMIT_MESSAGE" value="- перенёс конструктор блоков HTML в класс Ct_request&#10;- рефакторинг некоторых названий и переменных&#10;- избавился от setdata.js и layout .js" />
+    <MESSAGE value="-мигрировал всё на модальное окно из расширения&#10;- убрал мусор" />
+    <MESSAGE value="- версировал файлы" />
+    <option name="LAST_COMMIT_MESSAGE" value="- версировал файлы" />
   </component>
 </project>
