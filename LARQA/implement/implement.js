@@ -211,17 +211,63 @@ class CT_request {
 
 	}//конструирует блоки основываясь на Section ID из set_details_signature_data
 
+	set_values_to_details_array() { // Внесение результатов поиcка values в массив объектов Details
+
+		log('Функция заполнения values для маccива Details начала работать');
+		for (let i=0; i<detail_array_length; i++){
+
+			this.details[i].value = get_detail_value (this.details[i].section_id, this.details[i].signature);
+			log (this.details[i]);
+		}
+		log('Функция заполнения values для маccива Details закончила работать');
+	} // вносит результатов поиска values в массив объектов Details
+
+	init_details_array (){ //создаёт объекты Details в массиве (без values) на основе set_details_signature_data
+
+		log ('Создание массива Details началось');
+
+		this.details  =  [];
+
+		let values = this.set_details_signature_data()[0];
+
+		for (let i = 0; i < detail_array_length; i++) {
+
+			this.details.push  (   new   Detail  (  ( values[i][0]),(values[i][1]),(values[i][2]),(values[i][3]),(values[i][4]),(values[i][5] )  )  );
+
+		}
+
+		log ('Создание массива Details закончено.');
+
+		return ct_request.details;
+
+	} //создаёт объекты Details в массиве (без values)
+
+	call_detail_value_by_name (name) {
+		log('Функция поиска значния по имени начала работать..');
+		log('Ищем значение по:'+ name);
+		for (let i=0; i<detail_array_length; i++){
+
+			if (this.details[i].name === name) {
+
+				log('Найдено: ' + this.details[i].value);
+
+			}
+			log('Функция поиска значения по имени закончила работать..');
+		}
+
+	} //вызывает значения value объекта Detail по имени
+
 }
 
-//============HELPER BLOCK
+//============ DECLARE BLOCK
 
 extracted_html = init_html_array(); //забираем HTML
 
-let class_ct_request = new CT_request();
+let ct_request = new CT_request();
 
-let detail_array_length = class_ct_request.set_details_signature_data()[1]; // объявляем длину массива объектов Details
+let detail_array_length = ct_request.set_details_signature_data()[1]; // объявляем длину массива объектов Details
 
-//============HELPER BLOCK END
+//============ DECLARE BLOCK END
 
 //=====внеклассовые функции
 
@@ -229,7 +275,7 @@ function log(txt){
 	console.log(txt);
 } //укрощение console.log
 
-function get_html_sections ( section_name ) { //Разбивает outerHTML на секции для парсинга
+function get_html_section ( section_name ) { //извлекает html секции по Details.section_id
 
 	let signature = `<div class="section_block" data-section="` + section_name + `">`; // подпись берём из параметра функции
 
@@ -240,9 +286,9 @@ function get_html_sections ( section_name ) { //Разбивает outerHTML н�
 		for ( let i = start_sec+1; i <= extracted_html.length; i++ ) {
 
 			if ( ( extracted_html.slice(i,i+40) ) === '<div class="section_block" data-section=') {
-				
+
 				end_sec = i; // конечная позиция определена
-				
+
 				break;
 
 			}
@@ -251,11 +297,11 @@ function get_html_sections ( section_name ) { //Разбивает outerHTML н�
 
 	return extracted_html.slice ( start_sec , end_sec );
 
-} 	//Разбивает outerHTML на секции для парсинга
+} 	//извлекает html секции по Details.section_id
 
-function get_detail_value ( section_id, signature ) { //ищет Detail.value по Detail.block-id и Detail.signature внутри секции
+function get_detail_value ( section_id, signature ) { //ищет Detail.value по Detail.signature внутри секции Details.section_id
 
-		let html_section = get_html_sections(section_id); // секция определена
+		let html_section = get_html_section(section_id); // секция определена
 
 		let start_value_position;
 
@@ -281,53 +327,7 @@ function get_detail_value ( section_id, signature ) { //ищет Detail.value п
 		
 		return html_section.slice ( start_value_position , end_value_position );
 
-	} 	//ищет Detail.value по Detail.block-id и Detail.signature внутри секции
-
-function set_values_to_details_array(ct_request) { // Внесение результатов поиcка values в массив объектов Details
-	
-			log('Функция заполнения values для маccива Details начала работать');
-			for (let i=0; i<detail_array_length; i++){
-
-				ct_request[i].value = get_detail_value (ct_request[i].section_id,ct_request[i].signature);
-			log (ct_request[i]);
-			}
-			log('Функция заполнения values для маccива Details закончила работать');
-} // вносит результатов поиска values в массив объектов Details
-
-function init_details_array ( array ){ //создаёт объекты Details в массиве (без values) можно перенести в класс ct_request
-
-log ('Создание массива Details началось');
-
-class_ct_request.details  =  [];
-
-let values = array[0];
-
-	for (let i = 0; i < detail_array_length; i++) {
-
-		class_ct_request.details.push  (   new   Detail  (  ( values[i][0]),(values[i][1]),(values[i][2]),(values[i][3]),(values[i][4]),(values[i][5] )  )  );
-
-	}
-
-log ('Создание массива Details закончено.');
-
-return class_ct_request.details;
-
-} //создаёт объекты Details в массиве (без values)
-
-function call_detail_value_by_name (name) {
-	log('Функция поиска значния по имени начала работать..');
-	log('Ищем значение по:'+ name);
-	for (let i=0; i<detail_array_length; i++){
-
-		if (class_ct_request.details[i].name === name) {
-			
-			log('Найдено: ' + class_ct_request.details[i].value);
-			
-		}
-	log('Функция поиска значения по имени закончила работать..');
-	}
-	
-} //вызывает значения value объекта Detail по имени
+	} 	//ищет Detail.value по Detail.signature внутри секции Details.section_id
 
 function init_html_array() {
 
@@ -689,15 +689,9 @@ function call_layout_window() { //вызов окна запроса
 		//тело таблицы
 		add_html_tag_to_layout_window('test_div', 'afterend', '<table id="main_table"><tbody id="main_tbody"></tbody></table>');
 
-		//5 - это количество блоков, надо бы определять в динамике
+		ct_request.construct_details_block_html();
 
-
-		class_ct_request.construct_details_block_html();
-
-		//window.alert('J counter = ' + j);
-
-
-	}
+	}//вызов окна запроса
 
 }
 
@@ -711,9 +705,9 @@ function call_layout_window() { //вызов окна запроса
 
 		document.getElementById('show_details').onclick = function () {
 
-			init_details_array(class_ct_request.set_details_signature_data());
+			ct_request.init_details_array();
 
-			set_values_to_details_array(class_ct_request.details);
+			ct_request.set_values_to_details_array();
 
 			call_layout_window();
 
