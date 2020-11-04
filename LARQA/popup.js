@@ -4,25 +4,50 @@
 	//TODO анализ данных (можно выводить третьим td в блоке, потребуется ещё одно поле boolean в Details)
 */
 class Id {
+
   constructor(
+
       url,
       value,
-      link_staff,
+      link_noc,
       link_user
+
   ) {
     this.url = url;
     this.value = value;
-    this.link_staff = link_staff;
+    this.link_noc = link_noc;
     this.link_user = link_user;
   }
 
-  value_init(){
+  get_id_value_from_html () { // берёт request ID из массива HTML
 
-  }
+    let signature = `<div class="panel-heading">Запрос `;
 
-  link_init(){
+    if ( extracted_html.includes ( signature ) ) {
 
-  }
+      let start_position = ( (extracted_html.indexOf ( signature ) + (signature.length) ) )
+
+      this.value = ( extracted_html.slice ( start_position , ( parseInt ( start_position ) + 32 ) ) );
+
+    } else
+
+      alert('id.value_init - not found')
+
+  } // берёт request ID из массива HTML
+
+  set_links(){ // формирует ссылки на ПУ и на НОК
+
+    if (this.value) {
+
+      this.link_noc = 'https://cleantalk.org/noc/requests?request_id='+ this.value;
+
+      this.link_user = 'https://cleantalk.org/my/show_requests?request_id='+ this.value;
+
+    } else
+
+      alert('id.set_links - no data')
+
+  } //формирует ссылки на ПУ и на НОК
 
   url_init(){}
 }
@@ -42,7 +67,46 @@ class Status {
 
   init(){
 
+    if ( ct_request.details ) {
+
+      //поиск агента
+
+      this.agent = ct_request.call_detail_value_by_name ( 'ct_agent' );
+
+      console.log ( 'status.init - ct_agent = ' + this.agent );
+
+      //поиск одобрен/нет
+
+      this.isAllowed = ct_request.call_detail_value_by_name ( 'is_allowed' );
+
+      console.log ( 'status.init - is_allowed = ' + this.isAllowed);
+
+      //поиск типа запроса
+
+      switch ( ct_request.call_detail_value_by_name ( 'method_name' )) {
+
+        case 'check_newuser':  this.type = "registration";
+            //TODO вот тут можно допилить условия для поиска комментария по comment_type
+          break;
+
+        case 'check_message':  this.type = "comment or contact form";
+
+          break;
+
+        default: console.log('status.init - no method_name found');
+
+      }
+
+      this.type = ct_request.call_detail_value_by_name ( 'is_allowed' );
+
+      console.log ( 'status.init - is_allowed = ' + this.isAllowed);
+
+    } else console.log ( 'ct_request.details - details block not found' );
+
   }
+
+
+
 }
 
 class Detail {
@@ -155,8 +219,10 @@ class CT_request {
       ['links_detected','4','<td>links&nbsp;</td>','','default','details'],
       ['allowed_by_pl','4','<td>private_list_allow&nbsp;</td>','','default','details'],
       ['denied_by_pl','4','<td>private_list_deny&nbsp;</td>','','default','details'],
-      ['pl_has_records','4','<td>private_list_detected&nbsp;</td>','','default','details']
-    ];
+      ['pl_has_records','4','<td>private_list_detected&nbsp;</td>','','default','details'],
+      ['is_allowed','4','<td>allow&nbsp;</td>','','default','response'],
+      ['method_name','4','<td>method_name&nbsp;</td>','','default','details']
+  ];
 
     let length = (values.length); //длина массива данных для поиска определена
 
@@ -209,18 +275,19 @@ class CT_request {
 
   set_values_to_details_array() { // Внесение результатов поиcка values в массив объектов Details
 
-    log('Функция заполнения values для маccива Details начала работать');
+    console.log('Функция заполнения values для маccива Details начала работать');
     for (let i=0; i<detail_array_length; i++){
 
       this.details[i].value = get_detail_value (this.details[i].section_id, this.details[i].signature);
-      log (this.details[i]);
+      console.log (this.details[i]);
     }
-    log('Функция заполнения values для маccива Details закончила работать');
+    console.log('Функция заполнения values для маccива Details закончила работать');
+
   } // вносит результатов поиска values в массив объектов Details
 
   init_details_array (){ //создаёт объекты Details в массиве (без values) на основе set_details_signature_data
 
-    log ('Создание массива Details началось');
+    console.log ('Создание массива Details началось');
 
     this.details  =  [];
 
@@ -232,49 +299,55 @@ class CT_request {
 
     }
 
-    log ('Создание массива Details закончено.');
+    console.log ('Создание массива Details закончено.');
 
     return ct_request.details;
 
   } //создаёт объекты Details в массиве (без values)
 
   call_detail_value_by_name (name) {
-    log('Функция поиска значния по имени начала работать..');
-    log('Ищем значение по:'+ name);
+    console.log('Функция поиска значния по имени начала работать..');
+    console.log('Ищем значение по:'+ name);
     for (let i=0; i<detail_array_length; i++){
 
       if (this.details[i].name === name) {
 
-        log('Найдено: ' + this.details[i].value);
+        console.log('Найдено: ' + this.details[i].value);
 
+        return this.details[i].value
       }
-      log('Функция поиска значения по имени закончила работать..');
+      console.log('Функция поиска значения по имени закончила работать..');
+
     }
 
   } //вызывает значения value объекта Detail по имени
 
 }
 
+//============ test block
+
+
+
 //============ DECLARE BLOCK
 
-extracted_html = init_html_array(); //забираем HTML
+let extracted_html = init_html_array(); //забираем HTML
 
 let ct_request = new CT_request();
 
 ct_request.id = new Id();
 
+ct_request.status = new Status();
+
+ct_request.id.get_id_value_from_html(); console.log(ct_request.id.value);
+
+ct_request.id.set_links(); console.log(ct_request.id.link_noc); console.log(ct_request.id.link_user);
+
 let detail_array_length = ct_request.set_details_signature_data()[1]; // объявляем длину массива объектов Details
+
 
 //============ DECLARE BLOCK END
 
 //=====внеклассовые функции
-
-function log(txt){
-  console.log(txt);}
-
-function extlog(txt,txt2){
-  console.log(txt+': ['+txt2+']');}
-
 
 function get_html_section ( section_name ) { //извлекает html секции по Details.section_id
 
@@ -319,7 +392,7 @@ function get_detail_value ( section_id, signature ) { //ищет Detail.value п
   }
 
   for (let i = start_value_position; i <= html_section.length; i++) {
-    //log(html_section.slice(i,i+5));
+    //console.log(html_section.slice(i,i+5));
     if (( html_section.slice(i,i+5)  ) === '</td>') {
       end_value_position = i; //конечная позиция определена
       break;
@@ -662,7 +735,7 @@ var night_mode = 'off';
 } //извлекает outerHTML
 
 function add_html_tag_to_layout_window (position_tag_id, align, html) {
-  log('TAG COUNSTRUCTED POS ' + position_tag_id + ' ALGN ' + align + ' HTML ' + html);
+  console.log('TAG COUNSTRUCTED POS ' + position_tag_id + ' ALGN ' + align + ' HTML ' + html);
   layout_window.document.getElementById(position_tag_id).insertAdjacentHTML(align,html);
 
 } //добавляет тег к окну запроса
@@ -697,10 +770,11 @@ function call_layout_window() { //вызов окна запроса
 //=====конец внеклассовых функций
 
 
+
 //=====начало работы с документом
 window.document.body.onload = function () {
 
-  log('Документ загружен');
+  console.log('Документ загружен');
 
 
   //window.document.getElementById('get_html').onclick = function () {}
@@ -710,6 +784,8 @@ window.document.body.onload = function () {
     ct_request.init_details_array();
 
     ct_request.set_values_to_details_array();
+
+    ct_request.status.init();
 
     call_layout_window();
 
