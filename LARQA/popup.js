@@ -65,47 +65,110 @@ class Status {
     this.type = type;
   }
 
-  init(){
+  init() {
 
-    if ( ct_request.details ) {
+    if (ct_request.details) {
 
       //поиск агента
 
-      this.agent = ct_request.call_detail_value_by_name ( 'ct_agent' );
+      this.agent = ct_request.call_detail_value_by_name('ct_agent');
 
-      console.log ( 'status.init - ct_agent = ' + this.agent );
+      console.log('status.init - ct_agent = ' + this.agent);
 
       //поиск одобрен/нет
 
-      this.isAllowed = ct_request.call_detail_value_by_name ( 'is_allowed' );
+      this.isAllowed = ct_request.call_detail_value_by_name('is_allowed');
 
-      console.log ( 'status.init - is_allowed = ' + this.isAllowed);
+      console.log('status.init - is_allowed = ' + this.isAllowed);
 
       //поиск типа запроса
 
-      switch ( ct_request.call_detail_value_by_name ( 'method_name' )) {
+      switch (ct_request.call_detail_value_by_name('method_name')) {
 
-        case 'check_newuser':  this.type = "registration";
-            //TODO вот тут можно допилить условия для поиска комментария по comment_type
+        case 'check_newuser':
+          this.type = "registration";
+          //TODO вот тут можно допилить условия для поиска комментария по comment_type
           break;
 
-        case 'check_message':  this.type = "comment or contact form";
+        case 'check_message':
+          this.type = "comment or contact form";
 
           break;
 
-        default: console.log('status.init - no method_name found');
+        default:
+          console.log('status.init - no method_name found');
 
       }
 
-      this.type = ct_request.call_detail_value_by_name ( 'is_allowed' );
+      this.type = ct_request.call_detail_value_by_name('is_allowed');
 
-      console.log ( 'status.init - is_allowed = ' + this.isAllowed);
+      console.log('status.init - is_allowed = ' + this.isAllowed);
 
-    } else console.log ( 'ct_request.details - details block not found' );
+    } else console.log('ct_request.details - details block not found');
+
+
+    // поиск значения фильров - тот ещё неморрой
+    let signature = `"Добавить в произвольный блок"></span>&nbsp;</td>`;
+
+    let filters_section = get_html_section('filters');
+
+    let start_sec = filters_section.indexOf(signature)+49;
+
+    let end_sec = null;
+
+    for (let i = start_sec + 1; i <= filters_section.length; i++) {
+
+      if ((filters_section.slice(i, i + 2)) === 'R:') {
+
+        end_sec = i; // конечная позиция определена
+
+        break;
+      }
+    }
+
+    this.filters = (filters_section.slice ( start_sec , end_sec ) );
+
+    for (let i = 0; i <= this.filters.length; i++){
+
+      if (this.filters.slice(i, i+4) === '<td>') {
+
+        this.filters = this.filters.slice(0,i) + this.filters.slice(i+4,this.filters.length)
+
+        i--;
+
+      }
+
+      if (this.filters.slice(i, i+6) ==='&nbsp;') {
+
+        this.filters = this.filters.slice(0,i) + this.filters.slice(i+6,this.filters.length)
+
+        i--;
+      }
+
+      if (this.filters.slice(i, i+5) === '</td>') {
+
+        this.filters = this.filters.slice(0,i) + this.filters.slice(i+5,this.filters.length)
+
+        i--;
+      }
+
+      if (this.filters.slice(i, i+32) === '<a href="#" class="edit_filter">') {
+
+        this.filters = this.filters.slice(0,i) + this.filters.slice(i+32,this.filters.length);
+
+        i--;
+      }
+
+      if (this.filters.slice(i, i+4) ==='</a>') {
+
+        this.filters = this.filters.slice(0,i) + this.filters.slice(i+4,this.filters.length);
+
+        i--;
+      }
+
+    }
 
   }
-
-
 
 }
 
@@ -169,7 +232,10 @@ class Option {
 
   }
 
-  misc_show_option(){
+  get_options_value(){
+
+    this.value = JSON.parse(ct_request.call_detail_value_by_name("ct_options"));
+    console.log(this.value);
 
   }
 
@@ -338,11 +404,14 @@ ct_request.id = new Id();
 
 ct_request.status = new Status();
 
+ct_request.options = new Option();
+
 ct_request.id.get_id_value_from_html(); console.log(ct_request.id.value);
 
 ct_request.id.set_links(); console.log(ct_request.id.link_noc); console.log(ct_request.id.link_user);
 
 let detail_array_length = ct_request.set_details_signature_data()[1]; // объявляем длину массива объектов Details
+
 
 
 //============ DECLARE BLOCK END
@@ -787,7 +856,11 @@ window.document.body.onload = function () {
 
     ct_request.status.init();
 
+    ct_request.options.get_options_value();
+
     call_layout_window();
+
+
 
   }
 

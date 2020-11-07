@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/popup.html" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/popup.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/popup.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -140,6 +139,7 @@
       <workItem from="1604254472083" duration="347000" />
       <workItem from="1604306045214" duration="5698000" />
       <workItem from="1604377790985" duration="7148000" />
+      <workItem from="1604654240579" duration="28423000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -184,9 +184,9 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/LARQA/popup.js</url>
-          <line>196</line>
+          <line>262</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="6" />
+          <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
