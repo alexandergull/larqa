@@ -1,7 +1,7 @@
 /*
+    //TODO продолжить вёрстку prefilled
 	//TODO парсинг HTML через popup (пока только через ajax по URL могу)
-	//TODO инициализация классов
-	//TODO анализ данных (можно выводить третьим td в блоке, потребуется ещё одно поле boolean в Details)
+	//TODO анализ данных
 */
 class Id {
 
@@ -235,7 +235,6 @@ class Option {
   get_options_value(){
 
     this.value = JSON.parse(ct_request.call_detail_value_by_name("ct_options"));
-    console.log(this.value);
 
   }
 
@@ -314,7 +313,7 @@ class CT_request {
 
     for (block_id = 0; block_id !== number_of_blocks; block_id++) {
 
-      add_html_tag_to_layout_window('main_tbody', 'beforeend', ('<tr id="tier_block_' + block_id + '">SECTION ' + block_id + '</tr>'));
+      add_html_tag_to_window('details_table-tbody', 'beforeend', ('<tr id="details_tier_block_' + block_id + '">SECTION ' + block_id + '</tr>'));
 
       for (i = 0; i < detail_array_length - 1; i++) { //добавление строк
 
@@ -323,11 +322,11 @@ class CT_request {
           if (parseInt(this.details[stringcounter].block_id) === block_id) { // добавляем строки если block_id совпал
             stringcounter++;
 
-            add_html_tag_to_layout_window('main_tbody', 'beforeend', ('<tr id="tier_' + stringcounter + '"></tr>'));
+            add_html_tag_to_window('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + stringcounter + '"></tr>'));
 
-            add_html_tag_to_layout_window(('tier_' + stringcounter), 'beforeend', ('<td>' + this.details[stringcounter].name + ' #' + stringcounter + ':</td>'));
+            add_html_tag_to_window(('details_tier_' + stringcounter), 'beforeend', ('<td>' + this.details[stringcounter].name + ' #' + stringcounter + ':</td>'));
 
-            add_html_tag_to_layout_window(('tier_' + stringcounter), 'beforeend', ('<td>' + this.details[stringcounter].value + '</td>'));
+            add_html_tag_to_window(('details_tier_' + stringcounter), 'beforeend', ('<td>' + this.details[stringcounter].value + '</td>'));
 
           }
 
@@ -803,8 +802,8 @@ var night_mode = 'off';
   return extracted_html;
 } //извлекает outerHTML
 
-function add_html_tag_to_layout_window (position_tag_id, align, html) {
-  console.log('TAG COUNSTRUCTED POS ' + position_tag_id + ' ALGN ' + align + ' HTML ' + html);
+function add_html_tag_to_window (position_tag_id, align, html) {
+ console.log('TAG COUNSTRUCTED POS ' + position_tag_id + ' ALGN ' + align + ' HTML ' + html);
   layout_window.document.getElementById(position_tag_id).insertAdjacentHTML(align,html);
 
 } //добавляет тег к окну запроса
@@ -814,27 +813,18 @@ function call_layout_window() { //вызов окна запроса
   window.stringcounter = 0;
 
   // собственно основное окно
-  window.layout_window = window.open('layout.html', 'blank', 'left=50, top=50, width=1000, height=700, status=no, toolbar=no, location=no');
+  window.layout_window = window.open('prefilled.html', 'LARQA window', 'left=50, top=50, width=1000, height=700, status=no, toolbar=no, location=no');
 
   // действия после загрузки окна
   layout_window.onload = function () {
-    // цвет боди
-    layout_window.document.body.style.backgroundColor = "#3090c7";
-
-    //тестовый див
-    layout_window.document.body.insertAdjacentHTML("beforeend", ('<div id="test_div">Test div</div>'));
-
-    //таблица и стили таблицы
-    layout_window.document.head.insertAdjacentHTML("beforeend", ('<style type="text/css"> table {font-size: 12px; font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif,serif;text-align: left;border-collapse: separate;border-spacing: 5px;background: #ECE9E0;color: #656665;border: 16px solid #ece9e0;border-radius: 20px;}th {font-size: 18px;padding: 10px;}td {background: #F5F5F5;padding: 10px;} </style>'));
-
-    //тело таблицы
-    add_html_tag_to_layout_window('test_div', 'afterend', '<table id="main_table"><tbody id="main_tbody"></tbody></table>');
 
     ct_request.construct_details_block_html();
 
   }//вызов окна запроса
 
 }
+
+
 
 //=====конец внеклассовых функций
 
@@ -845,22 +835,18 @@ window.document.body.onload = function () {
 
   console.log('Документ загружен');
 
+  ct_request.init_details_array();
 
+  ct_request.set_values_to_details_array();
+
+  ct_request.status.init();
+
+  ct_request.options.get_options_value();
   //window.document.getElementById('get_html').onclick = function () {}
 
   document.getElementById('show_details').onclick = function () {
 
-    ct_request.init_details_array();
-
-    ct_request.set_values_to_details_array();
-
-    ct_request.status.init();
-
-    ct_request.options.get_options_value();
-
     call_layout_window();
-
-
 
   }
 

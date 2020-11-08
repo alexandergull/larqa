@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/LARQA/options.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LARQA/prefilled.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/popup.js" afterDir="false" />
     </list>
@@ -139,7 +141,7 @@
       <workItem from="1604254472083" duration="347000" />
       <workItem from="1604306045214" duration="5698000" />
       <workItem from="1604377790985" duration="7148000" />
-      <workItem from="1604654240579" duration="28423000" />
+      <workItem from="1604654240579" duration="48798000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -148,7 +150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604254763003</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="додела коассс статус начал options через JSON">
+      <created>1604772087901</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1604772087901</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -177,14 +186,15 @@
     <MESSAGE value="-мигрировал всё на модальное окно из расширения&#10;- убрал мусор" />
     <MESSAGE value="- версировал файлы" />
     <MESSAGE value="- передалал туду листы" />
-    <option name="LAST_COMMIT_MESSAGE" value="- передалал туду листы" />
+    <MESSAGE value="додела коассс статус начал options через JSON" />
+    <option name="LAST_COMMIT_MESSAGE" value="додела коассс статус начал options через JSON" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/LARQA/popup.js</url>
-          <line>262</line>
+          <line>261</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="15" />
         </line-breakpoint>

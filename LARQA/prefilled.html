@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    body{
+
+        font-family: Verdana;
+        background-color: #3090c7;
+    }
+
+    h1{
+        margin: 2%;
+        padding: 2%;
+        text-align: center;
+
+        font-size: 95%;
+    }
+    table, th, td{
+        border: 1px solid black;
+        border-radius: 7px;
+        background:#E9e9e1;
+        text-align:left;
+        padding: 1px;
+        margin: 1px;
+        font-size: 10px;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    tr, td{
+        width:50px;
+        max-width: 50%;
+    }
+
+    #line_block {
+        width:30%;
+        height:auto;
+        background:#f1f1f1;
+        float:left;
+        margin: 0 1% 1% 0;
+        text-align:center;
+        padding: 1%;
+        background-color: #ECE9E0;
+        border-radius: 15px;
+    }
+    #details_table{
+
+    }
+
+    #details_table-header{
+
+    }
+
+    #options_table{
+        width: 100%;
+    }
+
+    #options_table-header{
+
+    }
+
+</style>
+<!-- ---------- вставим блоки на страницу --------- -->
+<div style="width:100%; height:1px; clear:both;"></div> <!-- выравниваем без обтекания -->
+
+<div id="line_block">
+    <div id="details_block"><h1>REQUEST PARA</h1>
+        <table id='details_table'>
+            <tbody id="details_table-tbody">
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="line_block">
+    <div id="options_div">
+        <h1>CT OPTIONS</h1>
+        <table id="options_table">
+            <tbody id="options_table-tbody">
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="line_block">DIV 3</div>
+</body>
+</html>
