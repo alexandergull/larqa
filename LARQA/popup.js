@@ -211,35 +211,6 @@ class Detail {
 
 }
 
-class Option {
-
-  constructor(
-
-      name,
-      value,
-      signature,
-      priority,
-
-  )
-
-  {
-
-    //Init class
-    this.name  =  name;
-    this.value  =  value;
-    this.signature  =  signature;
-    this.priority =  priority;
-
-  }
-
-  get_options_value(){
-
-    this.value = JSON.parse(ct_request.call_detail_value_by_name("ct_options"));
-
-  }
-
-}
-
 class CT_request {
   constructor(
       id,
@@ -293,6 +264,7 @@ class CT_request {
 
     return [values,length]
 
+
   }// Установка данных для поиска
 
   construct_details_block_html () { //конструирует блоки основываясь на Section ID из
@@ -322,11 +294,15 @@ class CT_request {
           if (parseInt(this.details[stringcounter].block_id) === block_id) { // добавляем строки если block_id совпал
             stringcounter++;
 
-            add_html_tag_to_window('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + stringcounter + '"></tr>'));
+            if (this.details[stringcounter].name != 'ct_options') {
 
-            add_html_tag_to_window(('details_tier_' + stringcounter), 'beforeend', ('<td>' + this.details[stringcounter].name + ' #' + stringcounter + ':</td>'));
+              add_html_tag_to_window('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + stringcounter + '"></tr>'));
 
-            add_html_tag_to_window(('details_tier_' + stringcounter), 'beforeend', ('<td>' + this.details[stringcounter].value + '</td>'));
+              add_html_tag_to_window(('details_tier_' + stringcounter), 'beforeend', ('<td class="details-name">' + this.details[stringcounter].name + ':</td>'));
+
+              add_html_tag_to_window(('details_tier_' + stringcounter), 'beforeend', ('<td class="details-value">' + this.details[stringcounter].value + '</td>'));
+
+            }
 
           }
 
@@ -338,13 +314,39 @@ class CT_request {
 
   }//конструирует блоки основываясь на Section ID из set_details_signature_data
 
-  set_values_to_details_array() { // Внесение результатов поиcка values в массив объектов Details
+  construct_options_block_html () { //конструирует блоки основываясь на Section ID из
+
+    stringcounter = 0;
+
+    add_html_tag_to_window('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
+
+    //alert('this.options.length  ========' + this.options.length);
+
+    for (let i = 0; i < this.options.length; i++) { //добавление строк
+
+      if (stringcounter <= i) { //хуй знает как это работает и почему без этого не работает
+
+            add_html_tag_to_window('options_table-tbody', 'beforeend', ('<tr id="options_tier_' + stringcounter + '"></tr>'));
+
+            add_html_tag_to_window(('options_tier_' + stringcounter), 'beforeend', ('<td class="options-name">' + this.options[stringcounter].name + ':</td>'));
+
+            add_html_tag_to_window(('options_tier_' + stringcounter), 'beforeend', ('<td class="options-value">' + this.options[stringcounter].value + '</td>'));
+
+            stringcounter++;
+        }
+
+      }
+
+    }
+
+
+  set_values_to_details_array() { // Внесение результатов поиcка values в массив объектов Details TODO Убрать нахуй
 
     console.log('Функция заполнения values для маccива Details начала работать');
     for (let i=0; i<detail_array_length; i++){
 
       this.details[i].value = get_detail_value (this.details[i].section_id, this.details[i].signature);
-      console.log (this.details[i]);
+      //console.log (this.details[i]);
     }
     console.log('Функция заполнения values для маccива Details закончила работать');
 
@@ -370,6 +372,27 @@ class CT_request {
 
   } //создаёт объекты Details в массиве (без values)
 
+  init_options_array (){ //создаёт объекты Option в массиве ct_request.options
+
+    console.log('Началась инициация массива Options');
+
+    let jsonobj = JSON.parse(this.call_detail_value_by_name("ct_options"));
+
+    var temp = [];
+
+    $.each(jsonobj, function(name,value){
+
+      temp.push( new Option (name,value,0))
+
+    })
+
+    this.options = temp;
+
+    console.log('Закончена инициация массива Options');
+
+    }//создаёт объекты Option в массиве ct_request.options
+
+
   call_detail_value_by_name (name) {
     console.log('Функция поиска значния по имени начала работать..');
     console.log('Ищем значение по:'+ name);
@@ -389,6 +412,28 @@ class CT_request {
 
 }
 
+class Option {
+
+  constructor(
+
+      name,
+      value,
+      priority,
+
+  )
+
+  {
+
+    //Init class
+    this.name  =  name;
+    this.value  =  value;
+    this.priority =  priority;
+
+  }
+
+}
+
+
 //============ test block
 
 
@@ -402,8 +447,6 @@ let ct_request = new CT_request();
 ct_request.id = new Id();
 
 ct_request.status = new Status();
-
-ct_request.options = new Option();
 
 ct_request.id.get_id_value_from_html(); console.log(ct_request.id.value);
 
@@ -803,7 +846,7 @@ var night_mode = 'off';
 } //извлекает outerHTML
 
 function add_html_tag_to_window (position_tag_id, align, html) {
- console.log('TAG COUNSTRUCTED POS ' + position_tag_id + ' ALGN ' + align + ' HTML ' + html);
+ console.log('TAG COUNSTRUCTS... POS ' + position_tag_id + ' ALGN ' + align + ' HTML ' + html);
   layout_window.document.getElementById(position_tag_id).insertAdjacentHTML(align,html);
 
 } //добавляет тег к окну запроса
@@ -819,10 +862,12 @@ function call_layout_window() { //вызов окна запроса
   layout_window.onload = function () {
 
     ct_request.construct_details_block_html();
+    ct_request.construct_options_block_html();
 
   }//вызов окна запроса
 
 }
+
 
 
 
@@ -835,13 +880,19 @@ window.document.body.onload = function () {
 
   console.log('Документ загружен');
 
+  document.addEventListener('keyup', function(event) {
+    if (event.code == 'KeyA' && (event.shiftKey || event.metaKey)) {
+      call_layout_window();
+    }
+  });
+
   ct_request.init_details_array();
 
   ct_request.set_values_to_details_array();
 
   ct_request.status.init();
 
-  ct_request.options.get_options_value();
+  ct_request.init_options_array();
   //window.document.getElementById('get_html').onclick = function () {}
 
   document.getElementById('show_details').onclick = function () {
