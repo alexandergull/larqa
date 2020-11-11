@@ -416,11 +416,13 @@ class Analysis{
 	constructor(
 
 		options_default,
+		options_important,
 		details_normal_values
 
 	) {
 
 		this.options_default = options_default;
+		this.options_important = options_important;
 		this.details_normal_values = details_normal_values;
 	}
 
@@ -480,6 +482,8 @@ class Analysis{
 
 		})
 
+		layout_window.document.getElementById('options_header').innerHTML += ('<a style = "color: red"> (' + array.length + ')</a>');
+
 		return array;
 
 	}
@@ -498,7 +502,8 @@ class Analysis{
 
 		}
 
-										console.log('Проверка опций по умолчанию завершена.')
+										console.log('Проверка опций по умолчанию завершена.');
+
 
 	}
 
@@ -950,7 +955,7 @@ function call_layout_window() { //вызов окна запроса
 	window.layout_window = window.open( // собственно основное окно
 		'prefilled.html',
 		'LARQA window',
-		'left=50, top=50, width=1000, height=700, status=no, toolbar=no, location=no');
+		'left=50, top=50, width=1200, height=800, status=no, toolbar=no, location=no');
 
 	layout_window.onload = function () { // действия после загрузки окна
 

@@ -20,6 +20,12 @@
         font-size: 95%;
     }
 
+    #options_block{
+        overflow: auto;
+        height: 700px;
+        max-height: 700px;
+    }
+
     table, th, td{
         border: 1px solid black;
         border-radius: 7px;
@@ -88,12 +94,14 @@
     </div>
 </div>
 <div id="line_block">
-    <div id="options_div">
-        <h1>CT OPTIONS</h1>
-        <table id="options_table">
-            <tbody id="options_table-tbody">
-            </tbody>
-        </table>
+    <div>
+        <h1 id="options_header">CT OPTIONS</h1>
+        <div id="options_block">
+            <table id="options_table">
+                <tbody id="options_table-tbody">
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>
