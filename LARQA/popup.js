@@ -363,27 +363,17 @@ class CT {
 
 		console.log('Создание массива Details закончено.');
 
-	} //создаёт объекты Details в массиве (без values)
+	} 			//создаёт объекты Details в массиве (без values)
 
-	init_options_array() { //создаёт объекты Option в массиве ct.options
+	init_options_array() { 				//создаёт объекты Option в массиве ct.options
 
-		console.log('Началась инициация массива Options' + this.call_detail_value_by_name('ct_options'));
+										console.log('Началась инициация массива Options' + this.call_detail_value_by_name('ct_options'));
 
-		let jsonobj = JSON.parse(this.call_detail_value_by_name("ct_options"));
+		this.options = get_options_from_json(this.call_detail_value_by_name("ct_options"));
 
-		var temp = [];
+										console.log('Закончена инициация массива Options');
 
-		$.each(jsonobj, function (name, value) {
-
-			temp.push(new Option(name, value, 0))
-
-		})
-
-		this.options = temp;
-
-							console.log('Закончена инициация массива Options');
-
-	}//создаёт объекты Option в массиве ct.options
+	}			//создаёт объекты Option в массиве ct.options
 
 	call_detail_value_by_name(name) {
 
@@ -434,75 +424,82 @@ class Analysis{
 		this.details_normal_values = details_normal_values;
 	}
 
-	set_options_default() {
+	set_options_default() { 			//устанавлвает опций по умолчанию
 
-		this.options_default = {
+		this.options_default = { // объект опций
 			wordpress: '',
 			drupal: '',
 			joomla: '',
 
 		}
 
-		let jsonobj = JSON.parse('{"spam_firewall":"1","sfw__anti_flood":"0","sfw__anti_flood__view_limit":"10","sfw__anti_crawler":"0","apikey":"pyme7anenuha","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
+										//берёт массив опций из JSON
 
-
-		var temp = [];
-
-		$.each(jsonobj, function (name, value) {
-
-			temp.push(new Option(name, value, 0))
-
-		})
-
-		this.options_default.wordpress = temp;
+		this.options_default.wordpress = get_options_from_json('{"spam_firewall":"1","sfw__anti_flood":"0","sfw__anti_flood__view_limit":"10","sfw__anti_crawler":"0","apikey":"pyme7anenuha","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
 
 										console.log('WORDPRESS OPTIONS DEFAULT' + this.options_default.wordpress);
 
-		for (let i = 0; i<this.options_default.wordpress.length; i++){
-
-				if (this.options_default.wordpress[i].name === ct.options[i].name) {
-
-					console.log( 'yes');
-				}
-		}
 	}
+
 	set_details_normal_values(){
+
+	}
+
+	check_options_comparison(def_options_agent){
+
+		let array = [];
+
+		if (def_options_agent.length === ct.options.length ){
+
+			for (let i=0; i<=def_options_agent.length - 1; i++){
+
+				let x = def_options_agent[i].value.toString()
+
+				let y = ct.options[i].value.toString();
+
+				if (x !== y){
+
+					console.log('Изменены опции: '
+						+ def_options_agent[i].name + ' :'
+						+ x + ' '
+						+ y);
+
+					array.push(i);
+
+				}
+
+			}
+
+		}	else alert('Количество опций не совпало. Проверь агента.');
+
+		array.forEach(function(value,i){
+
+			let tr_name = ('options_tier_'+value);
+
+			layout_window.document.getElementById(tr_name).style.color = '#FF0000';
+
+		})
+
+		return array;
 
 	}
 
 	check_options(){
 
-							/*console.log('DEF OPT TEST 1:' + this.options_default.wordpress[0].name+ ' '
-								+ this.options_default.wordpress[0].value + ' '
-								+ ct.options[0].name + ' '
-								+ ct.options[0].value)*/
+										console.log('Проверка опций по умолчанию началась...');
 
-		switch (ct.status.agent){
+		switch (ct.status.agent){		// Выбор параметров по умолчанию по агенту
 
 			case 'wordpress-51471': {
 
-				if (this.options_default.wordpress.length === ct.options.length ){
-
-					for (let i=0; i<=this.options_default.wordpress.length - 1; i++){
-
-						if (this.options_default.wordpress[i].value !== ct.options[i].value){ //todo тут нужен trim
-
-									console.log('Difference: '
-										+ this.options_default.wordpress[i].name + ' :'
-										+ this.options_default.wordpress[i].value + ' '
-										+ ct.options[i].value);
-
-						}
-
-					}
-
-				}	else alert('Количество опций не совпало. Проверь агента.');
+				console.log(this.check_options_comparison(this.options_default.wordpress));
 
 			}
 
 		}
 
-									console.log('Check options завершена')
+										console.log('Проверка опций по умолчанию завершена.')
+
 	}
 
 	check_details(){
@@ -926,10 +923,26 @@ function get_detail_value(section_id, signature) { //ищет Detail.value по 
 } 	//ищет Detail.value по Detail.signature внутри секции Details.section_id
 
 function html_add_tag_to_window(position_tag_id, align, html) {
-	console.log('TAG COUNSTRUCTS... POS ' + position_tag_id + ' ALGN ' + align + ' HTML ' + html);
+	//console.log('TAG COUNSTRUCTS... POS ' + position_tag_id + ' ALGN ' + align + ' HTML ' + html);
 	layout_window.document.getElementById(position_tag_id).insertAdjacentHTML(align, html);
 
 } //добавляет тег
+
+function get_options_from_json (json){ //возвращает массив объектов OPTION из JSON настроек
+
+	let jsonobj = JSON.parse(json);
+
+	var temp = [];
+
+	$.each(jsonobj, function (name, value) {
+
+		temp.push(new Option(name, value, 0))
+
+	})
+
+	return temp;
+
+}
 
 function call_layout_window() { //вызов окна запроса
 
@@ -946,6 +959,8 @@ function call_layout_window() { //вызов окна запроса
 		ct.construct_details_block_html(); //собираю таблицу details
 
 		ct.construct_options_block_html(); // собираю таблицу options
+
+		ct.analysis.check_options();
 
 	}//вызов окна запроса
 
@@ -978,8 +993,6 @@ window.document.body.onload = function () {
 	ct.status.init();
 
 	ct.analysis.set_options_default();
-
-	ct.analysis.check_options();
 
 	document.getElementById('show_details').onclick = function () {
 

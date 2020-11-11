@@ -140,7 +140,7 @@
       <workItem from="1604306045214" duration="5698000" />
       <workItem from="1604377790985" duration="7148000" />
       <workItem from="1604654240579" duration="49357000" />
-      <workItem from="1604909412343" duration="39737000" />
+      <workItem from="1604909412343" duration="50067000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -170,7 +170,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604984205388</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию">
+      <created>1605030061480</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1605030061480</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -202,6 +209,7 @@
     <MESSAGE value="додела коассс статус начал options через JSON" />
     <MESSAGE value="- убрал отдельное окно для опций, буду делать всё в одном блоке&#10;&#10;- занимался вёрсткой prefilled" />
     <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна" />
-    <option name="LAST_COMMIT_MESSAGE" value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна" />
+    <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию" />
+    <option name="LAST_COMMIT_MESSAGE" value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию" />
   </component>
 </project>
