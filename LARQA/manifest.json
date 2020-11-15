@@ -1,24 +1,30 @@
 {
-  "name": "LaRqA",
-  "version": "1.0",
-  "description": "Lazy Request Analyser",
+  "description": "LAzy Request Analyzer",
   "manifest_version": 2,
-  "permissions": [
-    "tabs",
-    "storage"
-  ],
-  "browser_action": {
-    "default_popup": "popup.html"
+  "name": "LARA",
+  "version": "1.0",
+  "background": {
+    "scripts": [
+      "background.js",
+      "jquery.min.js"
+    ]
   },
-  "content_scripts": [
+  "browser_action": {
+    "default_icon": {
+      "16": "icons/off.svg",
+      "24": "icons/off.svg",
+      "32": "icons/off.svg"
+    }
+  },
+  "permissions": [
+    "activeTab",
+    "tabs"
+  ],
+  "content_scripts":
+  [
     {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": [
-        "popup.js"
-      ],
+      "matches":["https://cleantalk.org/"],
+      "js":["jquery.min.js"],
       "run_at": "document_start"
     }
   ]

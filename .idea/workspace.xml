@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/LARQA/setouterhtml.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/popup.html" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/popup.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/popup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LARQA/prefilled.html" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/prefilled.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LARQA/setouterhtml.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/setouterhtml.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,6 +142,8 @@
       <workItem from="1604254472083" duration="347000" />
       <workItem from="1604306045214" duration="5698000" />
       <workItem from="1604377790985" duration="7148000" />
+      <workItem from="1605287059931" duration="13710000" />
+      <workItem from="1605372597603" duration="332000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -150,7 +152,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604254763003</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="- вынес тестовый outerHTML во внешний файл&#10;- убрал лишнее логирование, почистил код">
+      <created>1605195953215</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1605195953215</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -179,6 +188,7 @@
     <MESSAGE value="-мигрировал всё на модальное окно из расширения&#10;- убрал мусор" />
     <MESSAGE value="- версировал файлы" />
     <MESSAGE value="- передалал туду листы" />
-    <option name="LAST_COMMIT_MESSAGE" value="- передалал туду листы" />
+    <MESSAGE value="- вынес тестовый outerHTML во внешний файл&#10;- убрал лишнее логирование, почистил код" />
+    <option name="LAST_COMMIT_MESSAGE" value="- вынес тестовый outerHTML во внешний файл&#10;- убрал лишнее логирование, почистил код" />
   </component>
 </project>
