@@ -1,7 +1,7 @@
 {
-  "name": "LARQA",
+  "name": "LaRqA",
   "version": "1.0",
-  "description": "LARQA",
+  "description": "Lazy Request Analyser",
   "manifest_version": 2,
   "permissions": [
     "tabs",
@@ -14,11 +14,7 @@
     {
       "matches": [
         "http://*/*",
-        "https://*/*",
-        "https://www.facebook.com/*",
-        "https://www.gsp.ro/*",
-        "https://www.nytimes.com/*",
-        "https://nytimes.com/*"
+        "https://*/*"
       ],
       "js": [
         "popup.js"
