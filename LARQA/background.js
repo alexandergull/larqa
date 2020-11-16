@@ -389,7 +389,9 @@ class Analysis{
     this.options_default = options_default;
     this.details_normal_values = details_normal_values;
   }
-
+//todo Проверить почем уне совпало количество опицй https://cleantalk.org/noc/requests?request_id=4d6d82ee9e7d3e7da409520725a9b6d4
+  //todo не отрабатывает post_info для comment type
+  //todo сделать "все запросы с этим IP "
   set_options_default() { 			//устанавлвает опций по умолчанию
 
     this.options_default = { // объект опций
