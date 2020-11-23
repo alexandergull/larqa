@@ -284,7 +284,13 @@ class CT {
 
 									+ ' <a href="https://cleantalk.org/noc/requests?sender_ip='
 
-									+ ip_trimmed +'"> Все запросы с этим IP </a></td>'));
+									+ ip_trimmed
+
+									+ '">  [Все запросы с этим IP]  </a><a href="https://ipinfo.io/'
+
+									+ ip_trimmed
+
+									+ '">  [IPINFO]</a></td>'));
 
 							}   else
 
