@@ -1,18 +1,16 @@
 class Id {
 
 	constructor(
-		url,
 		value,
 		link_noc,
 		link_user
 	) {
-		this.url = url;
 		this.value = value;
 		this.link_noc = link_noc;
 		this.link_user = link_user;
 	}
 
-	init_id() { // берёт request ID из массива HTML
+	init() { // берёт request ID из массива HTML
 
 		let signature = `<div class="panel-heading">Запрос `;
 
@@ -26,11 +24,9 @@ class Id {
 
 			alert('id.value_init - not found')
 
-	} // берёт request ID из массива HTML
+		// берёт request ID из массива HTML
 
-	set_links() { // формирует ссылки на ПУ и на НОК
-
-		if (this.value) {
+		if (this.value) { //формирует ссылки на ПУ и на НОК
 
 			this.link_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.value;
 
@@ -39,8 +35,7 @@ class Id {
 		} else
 
 			alert('id.set_links - no data')
-
-	} //формирует ссылки на ПУ и на НОК
+	}
 
 	url_init() {
 	}
@@ -94,7 +89,7 @@ class Status {
 
 		} else console.log('ct.details - details block not found');
 
-
+		this.isAllowed = ct.get_detail_value('is_allowed');
 		// поиск значения фильров - тот ещё геморрой
 
 		let signature = `"Добавить в произвольный блок"></span>&nbsp;</td>`;
@@ -247,9 +242,9 @@ class CT {
 		return [values, length]
 
 
-	}// ДАННЫЕ!! Установка данных для поиска
+	}// ДАННЫЕ!! Установка данных для поиска в HTML
 
-	construct_details_block_html() { //конструирует блоки основываясь на Section ID из
+	draw_details_block_html() { //конструирует блоки основываясь на Section ID из
 
 		let ar = [];
 
@@ -276,7 +271,7 @@ class CT {
 
 								html_add_tag_to_window(('details_tier_' + stringcounter), 'beforeend', ('<td class="details-name">' + this.details[stringcounter].name + ':</td>'));
 
-							if (this.details[stringcounter].name == 'sender_ip') {
+							if (this.details[stringcounter].name == 'sender_ip') { //допиливает строку sender IP (только для IPV4)
 
 								html_add_tag_to_window(('details_tier_' + stringcounter), 'beforeend', ('<td class="details-value">'
 
@@ -306,9 +301,9 @@ class CT {
 
 		}
 
-	}// конструирует блоки Details основываясь на Section ID из set_details_signature_data
+	}// рисует блоки Details основываясь на Section ID из set_details_signature_data
 
-	construct_options_block_html() { // конструирует блок опций
+	draw_options_block_html() { // конструирует блок опций
 
 		stringcounter = 0;
 
@@ -329,9 +324,23 @@ class CT {
 
 		}
 
-	} // конструирует блок опций
+	} // рисует блок опций
 
-	set_values_to_details_array() { // Внесение результатов поиcка values в массив объектов Details TODO Убрать нахуй
+	draw_status_block_html(){
+
+		layout_window.document.getElementById('status_table_status-class-column').innerHTML += (
+			' <p class="status_table_inner">' + ct.status.agent +
+			' <p class="status_table_inner">' + ct.status.isAllowed + //todo перенести в шапку stats и менять цвет в зависимости от состояния
+			' <p class="status_table_inner">Ссылки на запрос: <a href="' + ct.id.link_noc +'">[НОК] </a>'+
+			' <a href="' + ct.id.link_user +'">[ПУ] </a>' +
+			' </p>' );
+
+		layout_window.document.getElementById('status_table-filter-raw').innerHTML += ( //todo Сделать подсветку кастомных фильтров
+			'FILTERS: ' + ct.status.filters
+		);
+	} // рисует блок статуса
+
+	set_values_to_details_array() { // Внесение результатов поиcка values в массив объектов Details todo Убрать нахуй
 
 		console.log('Функция заполнения values для маccива Details начала работать');
 
@@ -364,7 +373,7 @@ class CT {
 
 		console.log('Создание массива Details закончено.');
 
-	} 			//создаёт объекты Details в массиве (без values)
+	} 			//создаёт объекты Details в массиве (без values) TODO Убрать деление на секции, нахуй оно не нужно
 
 	init_options_array() { 				//создаёт объекты Option в массиве ct.options
 
@@ -374,7 +383,7 @@ class CT {
 
 		console.log('Закончена инициация массива Options');
 
-	}			//создаёт объекты Option в массиве ct.options
+	}			//создаёт объекты Option в массиве ct.options TODO Добавить сортировку, сначала выводить изменённые
 
 	get_detail_value(name) { 	//вызывает значения value объекта Detail по имени
 
@@ -422,7 +431,7 @@ class Analysis {
 		this.details_normal_values = details_normal_values;
 
 	}
-//todo Проверить почем уне совпало количество опицй https://cleantalk.org/noc/requests?request_id=4d6d82ee9e7d3e7da409520725a9b6d4
+//todo Проверить почем уне совпало количество опицй https://cleantalk.org/noc/requests?request_id=4d6d82ee9e7d3e7da409520725a9b6d4, убрать проверку по количеству опций
   //todo не отрабатывает post_info для comment type
 
 	set_options_default() { 			//устанавлвает опций по умолчанию
@@ -629,15 +638,19 @@ function call_layout_window() { //вызов окна запроса
 
 		ct.init_options_array();
 
+		ct.id.init();
+
 		ct.status.init();
 
 		ct.analysis.set_options_default();
 
 		window.stringcounter = 0; //счётчик строк в таблице
 
-		ct.construct_details_block_html(); //собираю таблицу details
+		ct.draw_details_block_html(); //собираю таблицу details
 
-		ct.construct_options_block_html(); // собираю таблицу options
+		ct.draw_options_block_html(); // собираю таблицу options
+
+		ct.draw_status_block_html();
 
 		ct.analysis.check_options();
 
