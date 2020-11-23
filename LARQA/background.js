@@ -10,7 +10,7 @@ class Id {
 		this.link_user = link_user;
 	}
 
-	init() { // берёт request ID из массива HTML
+	init() { // берёт request ID из массива HTML и делает ссылки на него
 
 		let signature = `<div class="panel-heading">Запрос `;
 
@@ -23,8 +23,6 @@ class Id {
 		} else
 
 			alert('id.value_init - not found')
-
-		// берёт request ID из массива HTML
 
 		if (this.value) { //формирует ссылки на ПУ и на НОК
 
@@ -51,7 +49,7 @@ class Status {
 		this.agent = agent;
 		this.isAllowed = isAllowed;
 		this.filters = filters;
-		this.type = type;
+		this.type = type; //todo допилить status.type
 	}
 
 	init() {
@@ -90,6 +88,9 @@ class Status {
 		} else console.log('ct.details - details block not found');
 
 		this.isAllowed = ct.get_detail_value('is_allowed');
+
+		if (this.isAllowed) {this.isAllowed = 'ALLOWED'} else this.isAllowed = 'DENIED';
+
 		// поиск значения фильров - тот ещё геморрой
 
 		let signature = `"Добавить в произвольный блок"></span>&nbsp;</td>`;
@@ -329,15 +330,16 @@ class CT {
 	draw_status_block_html(){
 
 		layout_window.document.getElementById('status_table_status-class-column').innerHTML += (
-			' <p class="status_table_inner">' + ct.status.agent +
-			' <p class="status_table_inner">' + ct.status.isAllowed + //todo перенести в шапку stats и менять цвет в зависимости от состояния
 			' <p class="status_table_inner">Ссылки на запрос: <a href="' + ct.id.link_noc +'">[НОК] </a>'+
 			' <a href="' + ct.id.link_user +'">[ПУ] </a>' +
 			' </p>' );
 
 		layout_window.document.getElementById('status_table-filter-raw').innerHTML += ( //todo Сделать подсветку кастомных фильтров
-			'FILTERS: ' + ct.status.filters
+			'Агент: ['+ct.status.agent+'] Фильтры: [' + ct.status.filters +']'
 		);
+
+		layout_window.document.getElementById('layout_window_title').innerHTML += (' ['+ ct.id.value +'] ['+ ct.status.isAllowed+']'); //todo менять цвет в зависимости от состояния
+
 	} // рисует блок статуса
 
 	set_values_to_details_array() { // Внесение результатов поиcка values в массив объектов Details todo Убрать нахуй
