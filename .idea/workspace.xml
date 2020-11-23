@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_20_21__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_20_21__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_20_21_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_20_21__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_11_2020_12_22_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_11_2020_12_22__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LARQA/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/manifest.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +25,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -72,7 +77,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JavaScript" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -140,8 +145,9 @@
       <workItem from="1604254472083" duration="347000" />
       <workItem from="1604306045214" duration="5698000" />
       <workItem from="1604377790985" duration="7148000" />
-      <workItem from="1604654240579" duration="49357000" />
-      <workItem from="1604909412343" duration="57117000" />
+      <workItem from="1605287059931" duration="13710000" />
+      <workItem from="1605372597603" duration="332000" />
+      <workItem from="1606118099056" duration="6518000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -150,42 +156,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604254763003</updated>
     </task>
-    <task id="LOCAL-00009" summary="додела коассс статус начал options через JSON">
-      <created>1604772087901</created>
+    <task id="LOCAL-00009" summary="- вынес тестовый outerHTML во внешний файл&#10;- убрал лишнее логирование, почистил код">
+      <created>1605195953215</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1604772087901</updated>
+      <updated>1605195953215</updated>
     </task>
-    <task id="LOCAL-00010" summary="- убрал отдельное окно для опций, буду делать всё в одном блоке&#10;&#10;- занимался вёрсткой prefilled">
-      <created>1604856631854</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1604856631854</updated>
-    </task>
-    <task id="LOCAL-00011" summary="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна">
-      <created>1604984205388</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1604984205388</updated>
-    </task>
-    <task id="LOCAL-00012" summary="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию">
-      <created>1605030061480</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1605030061480</updated>
-    </task>
-    <task id="LOCAL-00013" summary="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций">
-      <created>1605080657468</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1605080657468</updated>
-    </task>
-    <option name="localTasksCounter" value="14" />
+    <option name="localTasksCounter" value="10" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -214,11 +192,8 @@
     <MESSAGE value="-мигрировал всё на модальное окно из расширения&#10;- убрал мусор" />
     <MESSAGE value="- версировал файлы" />
     <MESSAGE value="- передалал туду листы" />
-    <MESSAGE value="додела коассс статус начал options через JSON" />
-    <MESSAGE value="- убрал отдельное окно для опций, буду делать всё в одном блоке&#10;&#10;- занимался вёрсткой prefilled" />
-    <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна" />
-    <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию" />
-    <MESSAGE value="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций" />
-    <option name="LAST_COMMIT_MESSAGE" value="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций" />
+    <MESSAGE value="- вынес тестовый outerHTML во внешний файл&#10;- убрал лишнее логирование, почистил код" />
+    <MESSAGE value="- сделал &quot;Все запросы с этим IP&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="- сделал &quot;Все запросы с этим IP&quot;" />
   </component>
 </project>

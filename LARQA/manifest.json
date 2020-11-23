@@ -1,7 +1,7 @@
 {
   "description": "LAzy Request Analyzer",
   "manifest_version": 2,
-  "name": "LARA",
+  "name": "LARQA",
   "version": "1.0",
   "background": {
     "scripts": [
