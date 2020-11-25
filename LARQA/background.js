@@ -334,10 +334,7 @@ class CT {
 			' <a href="' + ct.id.link_user +'">[ПУ] </a>' +
 			' </p>' );
 
-
-		// test
-
-		let service = '';
+		let service_or_user_id = ''; // подсветка кастомных подмножеств
 
 		if (ct.status.filters.includes('service_') || ct.status.filters.includes('user_') ) {
 
@@ -365,7 +362,7 @@ class CT {
 
 						if (start!=='-' & end!=='-' ) {
 
-							service = ct.status.filters.slice(start,end)
+							service_or_user_id = ct.status.filters.slice(start,end)
 
 							service_regexp = new RegExp(ct.status.filters.slice(start,end), 'gi');
 
@@ -377,13 +374,10 @@ class CT {
 			}
 
 
-			ct.status.filters = ct.status.filters.replace(service_regexp,`<a style="color:#FF0000">` + service + `</a>`);
+			ct.status.filters = ct.status.filters.replace(service_regexp,`<a style="color:#FF0000">` + service_or_user_id + `</a>`);
 
 
 		} // подсветка кастомных подмножеств
-
-		//test
-
 
 		layout_window.document.getElementById('status_table-filter-raw').innerHTML += (
 			'Агент: ['+ct.status.agent+'] Фильтры: [' + ct.status.filters +']'
