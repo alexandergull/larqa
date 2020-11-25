@@ -379,6 +379,7 @@ class CT {
 
 			ct.status.filters = ct.status.filters.replace(service_regexp,`<a style="color:#FF0000">` + service + `</a>`);
 
+
 		} // подсветка кастомных подмножеств
 
 		//test
