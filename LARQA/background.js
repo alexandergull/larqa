@@ -334,27 +334,63 @@ class CT {
 			' <a href="' + ct.id.link_user +'">[ПУ] </a>' +
 			' </p>' );
 
-		layout_window.document.getElementById('status_table-filter-raw').innerHTML += ( //todo Сделать подсветку кастомных фильтров
+
+		// test
+
+		let service = '';
+
+		if (ct.status.filters.includes('service_') || ct.status.filters.includes('user_') ) {
+
+			let start = '-';
+
+			let end = 0;
+
+			let service_regexp;
+
+			for (let i = 0; i < ct.status.filters.length; i++) {
+
+				if (  ((ct.status.filters.slice(i,i+8)) === 'service_') || ((ct.status.filters.slice(i,i+5)) === 'user_') ) {
+
+					start = i;
+
+				}
+
+				if ( start !== '-' ) {
+
+					if (ct.status.filters[i]==':') {
+
+						let end = i;
+
+						//console.log('end =' + end);
+
+						if (start!=='-' & end!=='-' ) {
+
+							service = ct.status.filters.slice(start,end)
+
+							service_regexp = new RegExp(ct.status.filters.slice(start,end), 'gi');
+
+							end = 0;
+
+						} start = '-';
+					}
+				}
+			}
+
+
+			ct.status.filters = ct.status.filters.replace(service_regexp,`<a style="color:#FF0000">` + service + `</a>`);
+
+		} // подсветка кастомных подмножеств
+
+		//test
+
+
+		layout_window.document.getElementById('status_table-filter-raw').innerHTML += (
 			'Агент: ['+ct.status.agent+'] Фильтры: [' + ct.status.filters +']'
 		);
 
 		layout_window.document.getElementById('layout_window_title').innerHTML += (' ['+ ct.id.value +'] ['+ ct.status.isAllowed+']'); //todo менять цвет в зависимости от состояния
 
 	} // рисует блок статуса
-
-	set_values_to_details_array() { // Внесение результатов поиcка values в массив объектов Details todo Убрать нахуй
-
-		console.log('Функция заполнения values для маccива Details начала работать');
-
-		for (let i = 0; i < detail_array_length; i++) {
-
-			this.details[i].value = get_detail_signature_for_blocks(this.details[i].section_id, this.details[i].signature);
-
-		}
-
-		console.log('Функция заполнения values для маccива Details закончила работать');
-
-	} // вносит результатов поиска values в массив объектов Details
 
 	init_details_array() { //создаёт объекты Details в массиве (без values) на основе set_details_signature_data
 
@@ -371,7 +407,19 @@ class CT {
 
 		}
 
-		this.set_values_to_details_array();
+		//Внесение результатов поиcка values в массив объектов Details
+
+		console.log('Функция заполнения values для маccива Details начала работать');
+
+		for (let i = 0; i < detail_array_length; i++) {
+
+			this.details[i].value = get_detail_signature_for_blocks(this.details[i].section_id, this.details[i].signature);
+
+		}
+
+		console.log('Функция заполнения values для маccива Details закончила работать');
+
+		//
 
 		console.log('Создание массива Details закончено.');
 
