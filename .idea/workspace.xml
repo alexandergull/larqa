@@ -5,6 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_11_2020_9_32_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_11_2020_9_32__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +65,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Documents/MEGAsync/larqa/gitcopy/LARQA" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -78,7 +81,10 @@
       <recent name="C:\Users\Александр\Documents\MEGAsync\larqa\gitcopy\LARQA" />
     </key>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task id="Default" summary="Default task">
       <branch name="dev" repository="D:\Megadisk\larqa\gitcopy" original="true" />
@@ -145,7 +151,10 @@
       <workItem from="1604377790985" duration="7148000" />
       <workItem from="1604654240579" duration="49357000" />
       <workItem from="1604909412343" duration="57117000" />
-      <workItem from="1606284307013" duration="479000" />
+      <workItem from="1606284307013" duration="4498000" />
+      <workItem from="1610429510145" duration="21000" />
+      <workItem from="1610429572428" duration="169000" />
+      <workItem from="1610430016117" duration="58000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -210,14 +219,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606284688059</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="- добавил подсветку кастомных множеств (правки)">
+      <created>1606284817917</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1606284817917</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
+    <option name="version" value="2" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -245,6 +261,7 @@
     <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию" />
     <MESSAGE value="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций" />
     <MESSAGE value="- добавил подсветку кастомных множеств" />
-    <option name="LAST_COMMIT_MESSAGE" value="- добавил подсветку кастомных множеств" />
+    <MESSAGE value="- добавил подсветку кастомных множеств (правки)" />
+    <option name="LAST_COMMIT_MESSAGE" value="- добавил подсветку кастомных множеств (правки)" />
   </component>
 </project>
