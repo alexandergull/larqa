@@ -237,9 +237,10 @@ class CT {
 						if (this.details[pub_strcnt].name !== 'ct_options') { //пропускаем блок options
 							
 								draw_html_tag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
-								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-name">' + this.details[pub_strcnt].name + ':</td>'));
 
 							if (this.details[pub_strcnt].name == 'sender_ip') { //допиливает строку sender IP (только для IPV4)
+
+								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-name">' + this.details[pub_strcnt].name + ':</td>'));
 								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-value">'
 									+ this.details[pub_strcnt].value
 									+ ' <a href="https://cleantalk.org/noc/requests?sender_ip='
@@ -248,8 +249,12 @@ class CT {
 									+ pub_ip_trimmed
 									+ '">  [IPINFO]</a></td>'));
 
-							}   else
+								}   else if (this.details[pub_strcnt].value !== 'invisible') {
+
+								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-name">' + this.details[pub_strcnt].name + ':</td>'));
 								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-value">' + this.details[pub_strcnt].value + '</td>'));
+
+							}
 							}
 					}
 				}
@@ -478,6 +483,28 @@ class Analysis {
 
 	check_details() {
 
+		let array_of_details = [];
+		for (let i=0; i<=ct.details.length-1; i++){
+
+			switch (ct.details[i].name) {
+
+				case 'js_status': {
+
+					if (ct.details[i].value === 0) {
+
+						ct.details[i].css_id= 'BAD';
+
+					} else if (ct.details[i].value === 1) {
+
+						ct.details[i].css_id= 'GOOD';
+
+					} else ct.details[i].css_id= 'INCORRECT';
+				}
+
+			}
+
+		}
+		alert(array_of_details);
 	}
 
 
@@ -526,7 +553,7 @@ function get_detail_signature_for_blocks(section_id, signature) { //ищет Det
 	if (html_section.includes(signature)) { // 11- это символы <td>:&nbsp;
 		start_value_position = (html_section.indexOf(signature) + signature.length + 11); //стартовая позиция для искомого значения
 	} else {
-		return 'Вхождение не найдено';
+		return 'invisible';
 	}
 
 	for (let i = start_value_position; i <= html_section.length; i++) {
@@ -574,6 +601,7 @@ function call_layout_window() { //вызов окна запроса
 
 		ct.init_details_array();
 		ct.init_options_array();
+		ct.analysis.check_details();
 
 		ct.id.init();
 		ct.status.init();

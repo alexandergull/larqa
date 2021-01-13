@@ -171,7 +171,7 @@
       <workItem from="1610429510145" duration="21000" />
       <workItem from="1610429572428" duration="169000" />
       <workItem from="1610430016117" duration="58000" />
-      <workItem from="1610430088063" duration="8778000" />
+      <workItem from="1610430088063" duration="13938000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -257,7 +257,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610520530822</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Правки в подсветке опций">
+      <created>1610525730850</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1610525730850</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -295,7 +302,8 @@
     <MESSAGE value="- добавил подсветку кастомных множеств (правки)" />
     <MESSAGE value="Refacotred commit" />
     <MESSAGE value="сделал обход при несовпадении количества опций в агенте" />
-    <option name="LAST_COMMIT_MESSAGE" value="сделал обход при несовпадении количества опций в агенте" />
+    <MESSAGE value="Правки в подсветке опций" />
+    <option name="LAST_COMMIT_MESSAGE" value="Правки в подсветке опций" />
   </component>
   <component name="WindowStateProjectService">
     <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1610520564391">
