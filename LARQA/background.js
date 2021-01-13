@@ -49,6 +49,13 @@ class Status {
 			//поиск агента
 			this.agent = ct.get_detail_value_by_name('ct_agent');
 
+			if (this.agent !== CURRENT_VERSIONS.get('wordpress'))  {
+				this.agent = '<a title="Плагин устарел" style  = "color: red">'+this.agent+'</a>';
+				ct.analysis.add_to_issues_list('Версия плагина устарела','3');
+			} else {
+				this.agent = '<a title="Версия в порядке" style = "color: green">'+this.agent+'</a>';
+			}
+
 			//поиск одобрен/нет
 			this.isAllowed = ct.get_detail_value_by_name('is_allowed');
 
@@ -176,32 +183,32 @@ class CT {
 
 		const values = [
 			// имя параметра, номер блока, сигнатура, РЕЗЕРВ, стиль, где искать
-			['sender_email', '0', '<td>email&nbsp;</td>', '', 'default', 'sender'],
-			['sender_email_is_bl', '0', '<td>email_in_list&nbsp;</td>', '', 'default', 'details'],
-			['sender_email_is_sc', '0', '<td>short_cache_email&nbsp;</td>', '', 'default', 'details'],
-			['sender_email_is_disp', '0', '<td>mail_domain_one_raz&nbsp;</td>', '', 'default', 'details'],
-			['sender_ip', '1', '<td>ip&nbsp;</td>', '', 'default', 'sender'],
-			['sender_ip_is_bl', '1', '<td>ip_in_list&nbsp;</td>', '', 'default', 'details'],
-			['sender_ip_is_sc', '1', '<td>short_cache_ip&nbsp;</td>', '', 'default', 'details'],
-			['ct_options', '2', '<td>ct_options&nbsp;</td>', '', 'default', 'sender'],
-			['ct_agent', '3', '<td>agent&nbsp;</td>', '', 'default', 'params'],
-			['js_status', '4', '<td>js_on&nbsp;</td>', '', 'default', 'params'],
-			['submit_time', '4', '<td>submit_time&nbsp;</td>', '', 'default', 'params'],
-			['cookies_enabled', '4', '<td>cookies_enabled&nbsp;</td>', '', 'default', 'sender'],
-			['page_referrer', '4', '<td>REFFERRER&nbsp;</td>', '', 'default', 'sender'],
-			['page_pre_referrer', '4', '<td>REFFERRER_PREVIOUS&nbsp;</td>', '', 'default', 'sender'],
-			['page_url', '4', '<td>page_url&nbsp;</td>', '', 'default', 'sender'],
-			['sender_url', '4', '<td>sender_url&nbsp;</td>', '', 'default', 'sender'],
-			['comment_type', '4', '<td>comment_type&nbsp;</td>', '', 'default', 'sender'],
-			['hook_type', '4', '<td>hook&nbsp;</td>', '', 'default', 'sender'],
-			['is_greylisted', '4', '<td>grey_list_stop&nbsp;</td>', '', 'default', 'details'],
-			['is_mobile_ua', '4', '<td>is_mobile_UA&nbsp;</td>', '', 'default', 'details'],
-			['links_detected', '4', '<td>links&nbsp;</td>', '', 'default', 'details'],
-			['allowed_by_pl', '4', '<td>private_list_allow&nbsp;</td>', '', 'default', 'details'],
-			['denied_by_pl', '4', '<td>private_list_deny&nbsp;</td>', '', 'default', 'details'],
-			['pl_has_records', '4', '<td>private_list_detected&nbsp;</td>', '', 'default', 'details'],
-			['is_allowed', '4', '<td>allow&nbsp;</td>', '', 'default', 'response'],
-			['method_name', '4', '<td>method_name&nbsp;</td>', '', 'default', 'details']
+			['sender_email', '0', '<td>email&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['sender_email_is_bl', '0', '<td>email_in_list&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['sender_email_is_sc', '0', '<td>short_cache_email&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['sender_email_is_disp', '0', '<td>mail_domain_one_raz&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['sender_ip', '1', '<td>ip&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['sender_ip_is_bl', '1', '<td>ip_in_list&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['sender_ip_is_sc', '1', '<td>short_cache_ip&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['ct_options', '2', '<td>ct_options&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['ct_agent', '3', '<td>agent&nbsp;</td>', '', 'DEFAULT', 'params'],
+			['js_status', '4', '<td>js_on&nbsp;</td>', '', 'DEFAULT', 'params'],
+			['submit_time', '4', '<td>submit_time&nbsp;</td>', '', 'DEFAULT', 'params'],
+			['cookies_enabled', '4', '<td>cookies_enabled&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['page_referrer', '4', '<td>REFFERRER&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['page_pre_referrer', '4', '<td>REFFERRER_PREVIOUS&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['page_url', '4', '<td>page_url&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['sender_url', '4', '<td>sender_url&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['comment_type', '4', '<td>comment_type&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['hook_type', '4', '<td>hook&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['is_greylisted', '4', '<td>grey_list_stop&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['is_mobile_ua', '4', '<td>is_mobile_UA&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['links_detected', '4', '<td>links&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['allowed_by_pl', '4', '<td>private_list_allow&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['denied_by_pl', '4', '<td>private_list_deny&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['pl_has_records', '4', '<td>private_list_detected&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['is_allowed', '4', '<td>allow&nbsp;</td>', '', 'DEFAULT', 'response'],
+			['method_name', '4', '<td>method_name&nbsp;</td>', '', 'DEFAULT', 'details']
 		];
 
 //длина массива данных для поиска определена
@@ -239,7 +246,6 @@ class CT {
 								draw_html_tag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
 
 							if (this.details[pub_strcnt].name == 'sender_ip') { //допиливает строку sender IP (только для IPV4)
-
 								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-name">' + this.details[pub_strcnt].name + ':</td>'));
 								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-value">'
 									+ this.details[pub_strcnt].value
@@ -248,14 +254,55 @@ class CT {
 									+ '">  [Все запросы с этим IP]  </a><a href="https://ipinfo.io/'
 									+ pub_ip_trimmed
 									+ '">  [IPINFO]</a></td>'));
+								}
 
-								}   else if (this.details[pub_strcnt].value !== 'invisible') {
+							else if (this.details[pub_strcnt].value !== 'invisible') {
 
-								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-name">' + this.details[pub_strcnt].name + ':</td>'));
-								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-value">' + this.details[pub_strcnt].value + '</td>'));
+								switch (this.details[pub_strcnt].css_id){			//светит details
 
+									case 'DEFAULT':{
+										draw_html_tag(('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-name">' + this.details[pub_strcnt].name + ':</td>'));
+										draw_html_tag(
+											('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-value">' + this.details[pub_strcnt].value + '</a></td>'));
+									} break;
+
+									case 'BAD':{
+										draw_html_tag(('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-name"><a style="color:#FF0000">' + this.details[pub_strcnt].name + ':</a></td>'));
+										draw_html_tag(
+											('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-value"><a style="color:#FF0000">' + this.details[pub_strcnt].value + '</a></td>'));
+									} break;
+
+									case 'GOOD':{
+										draw_html_tag(('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-name"><a style="color:#00FF00">' + this.details[pub_strcnt].name + ':</a></td>'));
+										draw_html_tag(
+											('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-value"><a style="color:#00FF00">' + this.details[pub_strcnt].value + '</a></td>'));
+									} break;
+
+									case 'INCORRECT':{
+										draw_html_tag(('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-name"><a style="color:#33FF33">' + this.details[pub_strcnt].name + ':</a></td>'));
+										draw_html_tag(
+											('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-value"><a style="color:#33FF33">' + this.details[pub_strcnt].value + '</a></td>'));
+									}
+								}
 							}
-							}
+
+						}
 					}
 				}
 			}
@@ -286,11 +333,27 @@ class CT {
 
 	draw_status_block(){
 
+		let list_of_issues ='';
+		let amount_of_issues = 0;
+		let issues_number = 0;
+		for (let entry of ISSUES.keys()) {
+			list_of_issues += ' - '+entry +'<br>';
+		}
+		for (let entry of ISSUES.values()) {
+			amount_of_issues += Number(entry);
+			issues_number++;
+		}
+
+
 		//Ссылки в ПУ
 		layout_window.document.getElementById('status_table_status-class-column').innerHTML += (
 			' <p class="status_table_inner">Ссылки на запрос: <a href="' + ct.id.link_noc +'">[НОК] </a>'+
 			' <a href="' + ct.id.link_user +'">[ПУ] </a>' +
-			' </p>' );
+			' </p>' +
+			' <p class="status_table_inner">Найденные проблемы в запросе('+issues_number+'): <br><b>' + list_of_issues +
+			' </b></p>' +
+			' <p class="status_table_inner">Итоговый вес проблем: <b>' + amount_of_issues + '</b>'
+			);
 		
 
 		if (ct.status.filters != null) { // Подсветка фильтров с правками если фильтры вообще есть
@@ -328,6 +391,7 @@ class CT {
 				ct.status.filters = ct.status.filters.replace(id_regexp, `<a style="color:#FF0000">` + service_or_user_id + `</a>`);
 
 			} // Подсветка фильтров с правками
+
 			layout_window.document.getElementById('status_table-filter-raw').innerHTML += (
 				'Агент: [' + ct.status.agent + '] Фильтры: [' + ct.status.filters + ']'
 			);
@@ -407,6 +471,10 @@ class Analysis {
 
 	}
 
+	add_to_issues_list(issue,weight) {
+		ISSUES.set(issue,weight);
+	}
+
 	trim_and_low (option_value) { //todo Унести в options_from_json
 
 		let resstring = option_value;
@@ -415,7 +483,7 @@ class Analysis {
 		return (resstring);
 
 	}
-//todo Проверить почему не совпало количество опицй https://cleantalk.org/noc/requests?request_id=4d6d82ee9e7d3e7da409520725a9b6d4, убрать проверку по количеству опций
+
   //todo не отрабатывает post_info для comment type
 
 	init_options_default() { 			//устанавлвает опции по умолчанию
@@ -476,9 +544,11 @@ class Analysis {
 
 	check_options() { // проверяет опции по умолчанию, вызывая check_options_comparison для кейсов по агенту
 		//todo Дублирование опций обойти https://cleantalk.org/noc/requests?request_id=460ecc492b54f98b5b5bbf26a3629848
-				if (ct.status.agent.includes('wordpress')) {
-					this.compare_ct_options_with_default_agent(this.options_default.wordpress);
-				}
+
+		if (ct.status.agent.includes('wordpress')) {
+			this.compare_ct_options_with_default_agent(this.options_default.wordpress);
+		}
+
 	}
 
 	check_details() {
@@ -486,25 +556,52 @@ class Analysis {
 		let array_of_details = [];
 		for (let i=0; i<=ct.details.length-1; i++){
 
+//para analysis start
+
 			switch (ct.details[i].name) {
 
+				//JS
 				case 'js_status': {
 
-					if (ct.details[i].value === 0) {
+					if (ct.details[i].value == -1){
+						ct.details[i].css_id= 'BAD';
+						this.add_to_issues_list('JS отключен в браузере', '3');
+						}
+
+					else if (ct.details[i].value == 1){
+						ct.details[i].css_id= 'GOOD';
+						}
+
+					else if(ct.details[i].value == 0){
+						ct.details[i].css_id= 'BAD'
+						this.add_to_issues_list('Тест JS провален', '3');
+						}
+
+					else {
+						ct.details[i].css_id= 'INCORRECT';
+						this.add_to_issues_list('Не смогли определить JS', '10');
+						}
+					} break;
+
+				//IP
+				case 'sender_ip': {
+
+					if (ct.details[i].value === '') {
 
 						ct.details[i].css_id= 'BAD';
+						this.add_to_issues_list('IP адрес пустой', '3');
 
-					} else if (ct.details[i].value === 1) {
+					} else if (ct.details[i].value === null) {
 
-						ct.details[i].css_id= 'GOOD';
+						ct.details[i].css_id= 'INCORRECT';
+						this.add_to_issues_list('Не смогли определить IP адрес', '10');
 
-					} else ct.details[i].css_id= 'INCORRECT';
-				}
+					} else ct.details[i].css_id= 'GOOD';
+
+				}break;
 
 			}
-
 		}
-		alert(array_of_details);
 	}
 
 
@@ -515,6 +612,13 @@ class Analysis {
 //==== TEST BLOCK END
 
 //==== DECLARE BLOCK
+const CURRENT_VERSIONS = new Map(
+	[
+		['wordpress','wordpress-51512']
+	]
+)
+
+const ISSUES = new Map();
 
 let extracted_html;
 let pub_ip_trimmed;
@@ -583,19 +687,18 @@ function get_options_from_json(json) { //возвращает массив об�
 
 } //возвращает массив объектов OPTION из JSON настроек
 
+function OpenInNewTabWinBrowser(url) {
+	const win = window.open(url, '_blank');
+	win.focus();
+}
+
 function call_layout_window() { //вызов окна запроса
 
+	//OpenInNewTabWinBrowser('https://www.mail.ru');
 
 	window.layout_window = window.open( // собственно основное окно
 		'prefilled.html',
-		'LARQA window',
-		'left=50, ' +
-		'top=50, ' +
-		'width=1200, ' +
-		'height=800, ' +
-		'status=no, ' +
-		'toolbar=no, ' +
-		'location=no');
+		'_blank');
 
 	layout_window.onload = function () { // действия после загрузки окна
 
@@ -615,9 +718,13 @@ function call_layout_window() { //вызов окна запроса
 		ct.analysis.init_options_default();
 		ct.analysis.check_options();
 
+		layout_window.focus();
+
 	}//вызов окна запроса
 
 } //вызов рабочего окна
+
+
 
 chrome.runtime.onMessage.addListener(function (message) {
 	switch (message.command) {
@@ -637,3 +744,5 @@ function logHtmlCode(tab) {
 }
 
 chrome.browserAction.onClicked.addListener(logHtmlCode);
+
+
