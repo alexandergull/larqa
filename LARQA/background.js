@@ -429,33 +429,30 @@ class Analysis {
 
 		let changes_array = [];
 
-		if (def_options_agent.length === ct.options.length) {
+		if (def_options_agent.length === ct.options.length) { //todo убрать этот блок, оставить только проверку по именам поций
 
-			for (let i = 0; i <= def_options_agent.length - 1; i++) {
-
-				let x = def_options_agent[i].value.toString()
-				let y = ct.options[i].value.toString();
-				if (x !== y) {
-					changes_array.push(i);
-
-				}
-			}
 		} else {
 
 			alert('Количество опций не совпало. Ничего страшного, возможно плагин устарел. По умолчанию : ' + def_options_agent.length + ', в запросе = ' + ct.options.length);
 
-			for (let i = 0; i <= def_options_agent.length - 1; i++) {
+		}
 
-				for (let j = 0; j<= ct.options.length -1; j++) {
+		for (let i = 0; i <= def_options_agent.length - 1; i++) {
 
-					if ( (def_options_agent[i].name === ct.options[j].name) && ( this.trim_and_low(def_options_agent[i].value) !== this.trim_and_low(ct.options[j].value) )) {
+			const def_value = this.trim_and_low(def_options_agent[i].value);
 
-						changes_array.push(j);
+			for (let j = 0; j<= ct.options.length -1; j++) {
 
-					}
+				const req_value = this.trim_and_low(ct.options[j].value);
+
+				if ( (def_options_agent[i].name === ct.options[j].name) && ( def_value !== req_value )) {
+
+					changes_array.push(j);
+
 				}
 			}
 		}
+
 
 		// подсветка изменённых опций
 
