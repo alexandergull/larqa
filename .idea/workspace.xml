@@ -3,10 +3,26 @@
   <component name="AnalysisUIOptions">
     <option name="SCOPE_TYPE" value="10" />
   </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_11_2020_9_32_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_11_2020_9_32__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
     </list>
@@ -155,6 +171,7 @@
       <workItem from="1610429510145" duration="21000" />
       <workItem from="1610429572428" duration="169000" />
       <workItem from="1610430016117" duration="58000" />
+      <workItem from="1610430088063" duration="6530000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -226,7 +243,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606284817917</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Refacotred commit">
+      <created>1610430176398</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1610430176398</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -262,6 +286,13 @@
     <MESSAGE value="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций" />
     <MESSAGE value="- добавил подсветку кастомных множеств" />
     <MESSAGE value="- добавил подсветку кастомных множеств (правки)" />
-    <option name="LAST_COMMIT_MESSAGE" value="- добавил подсветку кастомных множеств (правки)" />
+    <MESSAGE value="Refacotred commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refacotred commit" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1610430221537">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1610430221537" />
   </component>
 </project>

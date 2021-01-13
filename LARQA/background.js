@@ -401,6 +401,15 @@ class Analysis {
 		this.details_normal_values = details_normal_values;
 
 	}
+
+	trim_and_low (option_value) { //todo Унести в options_from_json
+
+		let resstring = option_value;
+		resstring = resstring.toString().trim();
+		resstring = resstring.toLowerCase();
+		return (resstring);
+
+	}
 //todo Проверить почему не совпало количество опицй https://cleantalk.org/noc/requests?request_id=4d6d82ee9e7d3e7da409520725a9b6d4, убрать проверку по количеству опций
   //todo не отрабатывает post_info для comment type
 
@@ -431,13 +440,28 @@ class Analysis {
 
 				}
 			}
-		} else alert('Количество опций не совпало. Проверь агента. def_options_agent.length = ' + def_options_agent.length + 'ct.options.length = ' + ct.options.length);
+		} else {
+
+			alert('Количество опций не совпало. Ничего страшного, возможно плагин устарел. По умолчанию : ' + def_options_agent.length + ', в запросе = ' + ct.options.length);
+
+			for (let i = 0; i <= def_options_agent.length - 1; i++) {
+
+				for (let j = 0; j<= ct.options.length -1; j++) {
+
+					if ( (def_options_agent[i].name === ct.options[j].name) && ( this.trim_and_low(def_options_agent[i].value) !== this.trim_and_low(ct.options[j].value) )) {
+
+						changes_array.push(j);
+
+					}
+				}
+			}
+		}
 
 		// подсветка изменённых опций
 
 		changes_array.forEach(function (value) {
 
-			alert('Array '+changes_array);
+			//alert('Array '+changes_array);
 			let tr_name = ('options_tier_' + value);
 			layout_window.document.getElementById(tr_name).style.color = '#FF0000';
 
