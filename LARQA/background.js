@@ -82,7 +82,7 @@ class Status {
 		// поиск значения фильтров - тот ещё геморрой
 
 		const signature = `"Добавить в произвольный блок"></span>&nbsp;</td>`;
-		const filters_section = html_get_section('filters');
+		const filters_section = helper_get_html_section('filters');
 		const start_fs = filters_section.indexOf(signature) + 49;
 
 		let end_fs = null;
@@ -192,7 +192,7 @@ class CT {
 			['sender_ip_is_sc', '1', '<td>short_cache_ip&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['ct_options', '2', '<td>ct_options&nbsp;</td>', '', 'DEFAULT', 'sender'],
 			['ct_agent', '3', '<td>agent&nbsp;</td>', '', 'DEFAULT', 'params'],
-			['js_status', '4', '<td>js_on&nbsp;</td>', '', 'DEFAULT', 'params'],
+			['js_status', '4', '<td>js_passed&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['submit_time', '4', '<td>submit_time&nbsp;</td>', '', 'DEFAULT', 'params'],
 			['cookies_enabled', '4', '<td>cookies_enabled&nbsp;</td>', '', 'DEFAULT', 'sender'],
 			['page_referrer', '4', '<td>REFFERRER&nbsp;</td>', '', 'DEFAULT', 'sender'],
@@ -236,81 +236,128 @@ class CT {
 			ar.push(parseInt(this.details[j].block_id));
 		}
 
-		const number_of_blocks = Math.max.apply(null, ar) + 1; //колчество блоков определено
+		const number_of_blocks = Math.max.apply(null, ar) + 1; 						//колчество блоков определено
 
 		for (let block_id = 0; block_id !== number_of_blocks; block_id++) {
 			
-			draw_html_tag('details_table-tbody', 'beforeend', ('<tr id="details_tier_block_' + block_id + '">SECTION ' + block_id + '</tr>'));
+			helper_add_tag('details_table-tbody', 'beforeend', ('<tr id="details_tier_block_' + block_id + '">SECTION ' + block_id + '</tr>'));
 
-			for (let i = 0; i < pub_details_array_length - 1; i++) { //добавление строк
+			for (let i = 0; i < pub_details_array_length - 1; i++) { 						//добавление строк
 				
-				if (pub_strcnt <= i) { //хуй знает как это работает и почему без этого не работает
+				if (pub_strcnt <= i) { 														//хуй знает как это работает и почему без этого не работает
 
-					if (parseInt(this.details[pub_strcnt].block_id) === block_id) { // добавляем строки если block_id совпал
+					if (parseInt(this.details[pub_strcnt].block_id) === block_id) { 		// добавляем строки если block_id совпал
 
-						if (this.details[pub_strcnt].name !== 'ct_options') { //пропускаем блок options
+						if (this.details[pub_strcnt].name !== 'ct_options') { 				//пропускаем блок options
 							
-								draw_html_tag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
+							helper_add_tag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
 
-							if (this.details[pub_strcnt].name == 'sender_ip') { //допиливает строку sender IP (только для IPV4)
-								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-name">' + this.details[pub_strcnt].name + ':</td>'));
-								draw_html_tag(('details_tier_' + pub_strcnt), 'beforeend', ('<td class="details-value">'
-									+ this.details[pub_strcnt].value
-									+ ' <a href="https://cleantalk.org/noc/requests?sender_ip='
-									+ pub_ip_trimmed
-									+ '">  [Все запросы с этим IP]  </a><a href="https://ipinfo.io/'
-									+ pub_ip_trimmed
-									+ '">  [IPINFO]</a></td>'));
-								}
-
-							else if (this.details[pub_strcnt].value !== 'INVISIBLE') {
-
-								switch (this.details[pub_strcnt].css_id){			//светит details
-
-									case 'DEFAULT':{
-										draw_html_tag(('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-name">' + this.details[pub_strcnt].name + ':</td>'));
-										draw_html_tag(
-											('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-value">' + this.details[pub_strcnt].value + '</a></td>'));
-									} break;
-
-									case 'BAD':{
-										draw_html_tag(('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-name"><a style="color:#905000">' + this.details[pub_strcnt].name + ':</a></td>'));
-										draw_html_tag(
-											('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-value"><a style="color:#905000">' + this.details[pub_strcnt].value + '</a></td>'));
-									} break;
-
-									case 'GOOD':{
-										draw_html_tag(('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-name"><a style="color:#009000">' + this.details[pub_strcnt].name + ':</a></td>'));
-										draw_html_tag(
-											('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-value"><a style="color:#009000">' + this.details[pub_strcnt].value + '</a></td>'));
-									} break;
-
-									case 'INCORRECT':{
-										draw_html_tag(('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-name"><a style="color:#CC0000">' + this.details[pub_strcnt].name + ':</a></td>'));
-										draw_html_tag(
-											('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-value"><a style="color:#CC0000">' + this.details[pub_strcnt].value + '</a></td>'));
-									}
-								}
+							if (this.details[pub_strcnt].value !== 'INVISIBLE') {
+																							//
+// Подготовка шаблона ссылки для sender_email и sender_ip
+							let href = '';
+							if (this.details[pub_strcnt].name === 'sender_ip'||'sender_email') {
+								href = 'href=https://cleantalk.org/blacklists/'+ this.details[pub_strcnt].value + ' ';
 							}
 
+							let ip_additional_hrefs = '';
+							let email_additional_hrefs = '';
+							if (this.details[pub_strcnt].name === 'sender_ip'){
+								ip_additional_hrefs = '<a href="https://cleantalk.org/noc/requests?sender_ip=' +
+									this.details[pub_strcnt].value +
+									'">  [Все запросы с этим IP]  </a><a href="https://ipinfo.io/' +
+									this.details[pub_strcnt].value +
+									'">  [IPINFO]</a></td>'
+							}
+
+							if (this.details[pub_strcnt].name === 'sender_email'){
+								email_additional_hrefs = '<a href="https://cleantalk.org/noc/requests?sender_email=' +
+									this.details[pub_strcnt].value +
+									'">  [Все запросы с этим EMAIL]  </a><a href="https://cleantalk.org/email-checker/' +
+									this.details[pub_strcnt].value +
+									'">  [CHECKER]</a></td>'
+							}
+//
+// Подсветка параметров
+								switch (this.details[pub_strcnt].css_id){
+	//по умолчанию чёрный
+									case 'DEFAULT':{
+										helper_add_tag(('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-name">'
+												+ this.details[pub_strcnt].name
+												+ ':</td>'));
+										helper_add_tag(
+											('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-value">'
+												+ this.details[pub_strcnt].value
+												+ '</a>'+ ip_additional_hrefs
+												+ email_additional_hrefs +'</td>'));
+									} break;
+	//плохой - красный
+									case 'BAD':{
+
+										helper_add_tag(('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-name"><a style="color:#C02000">'
+												+ this.details[pub_strcnt].name + ':</td>'));
+
+										helper_add_tag(
+											('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-value"><a '+href+'style="color:#C02000">' +
+												this.details[pub_strcnt].value
+												+ '</a>'+ ip_additional_hrefs
+												+ email_additional_hrefs
+												+'</td>'));
+
+									} break;
+	//хорошиий - зелёный
+									case 'GOOD':{
+
+										helper_add_tag(('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-name"><a style="color:#009000">'
+												+ this.details[pub_strcnt].name
+												+ ':</a></td>'));
+
+										helper_add_tag(
+											('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-value"><a '
+												+ href
+												+'style="color:#009000">'
+												+ this.details[pub_strcnt].value
+												+ '</a>'
+												+ ip_additional_hrefs
+												+ email_additional_hrefs +'</td>'));
+
+									} break;
+	//некорректный - бордовый
+									case 'INCORRECT':{
+
+										helper_add_tag(('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-name"><a style="color:#CC0000">'
+												+ this.details[pub_strcnt].name
+												+ ':</a></td>'));
+
+										helper_add_tag(
+											('details_tier_' + pub_strcnt),
+											'beforeend',
+											('<td class="details-value"><a style="color:#CC0000">'
+												+ this.details[pub_strcnt].value
+												+ '</a>'
+												+ ip_additional_hrefs
+												+ email_additional_hrefs
+												+'</td>'));
+									}
+								}
+//
+							}
 						}
-						pub_strcnt++;
+						pub_strcnt++; //счётчик строк увеличен в конце цикла
 					}
 				}
 			}
@@ -322,15 +369,15 @@ class CT {
 
 		pub_strcnt = 0;
 
-		draw_html_tag('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
+		helper_add_tag('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
 
 		for (let i = 0; i < this.options.length; i++) { //добавление строк
 
 			if (pub_strcnt <= i) { //хуй знает как это работает и почему без этого не работает
 
-				draw_html_tag('options_table-tbody', 'beforeend', ('<tr id="options_tier_' + pub_strcnt + '"></tr>'));
-				draw_html_tag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-name">' + this.options[pub_strcnt].name + ':</td>'));
-				draw_html_tag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-value">' + this.options[pub_strcnt].value + '</td>'));
+				helper_add_tag('options_table-tbody', 'beforeend', ('<tr id="options_tier_' + pub_strcnt + '"></tr>'));
+				helper_add_tag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-name">' + this.options[pub_strcnt].name + ':</td>'));
+				helper_add_tag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-value">' + this.options[pub_strcnt].value + '</td>'));
 
 				pub_strcnt++;
 
@@ -371,7 +418,6 @@ class CT {
 			if (ct.status.filters.includes('service_') || ct.status.filters.includes('user_')) {
 
 				let start = '-';
-				let end = 0;
 				let id_regexp;
 
 				for (let i = 0; i < ct.status.filters.length; i++) {
@@ -396,7 +442,7 @@ class CT {
 					}
 				}
 
-				ct.status.filters = ct.status.filters.replace(id_regexp, `<a style="color:#FF0000">` + service_or_user_id + `</a>`);
+				ct.status.filters = ct.status.filters.replace(id_regexp, `<a style="color:#990000">` + service_or_user_id + `</a>`);
 
 			} // Подсветка фильтров с правками
 
@@ -410,35 +456,32 @@ class CT {
 	init_details_array() { //создаёт объекты Details в массиве (без values) на основе set_details_signature_data
 
 		this.details = [];
-		let values = this.init_details_signature_data();
+		let details_draft = this.init_details_signature_data();
 
 		for (let i = 0; i < pub_details_array_length; i++) {
 			this.details.push (
 				new Detail(
-					(values[i][0]),
-					(values[i][1]),
-					(values[i][2]),
-					(values[i][3]),
-					(values[i][4]),
-					(values[i][5])
+					(details_draft[i][0]),
+					(details_draft[i][1]),
+					(details_draft[i][2]),
+					(details_draft[i][3]),
+					(details_draft[i][4]),
+					(details_draft[i][5])
 				)
 			);
-		}
-		//Внесение результатов поиcка values в массив объектов Details
-		for (let i = 0; i < pub_details_array_length; i++) {
-			this.details[i].value = get_detail_signature_for_blocks(this.details[i].section_id, this.details[i].signature);
+			//Внесение результатов поиcка values в массив объектов Details
+			this.details[i].value = helper_get_detail_signature_for_section(this.details[i].section_id, this.details[i].signature);
 
-			if (this.details[i].name === 'sender_email') {
-
-				this.details[i].value = find_between(this.details[i].value,'"_blank">','</a>');
-
+			if (this.details[i].name === 'sender_email'||'sender_ip') {
+				this.details[i].value =  helper_find_between(this.details[i].value,'"_blank">','</a>');
 			}
 		}
+
 	}//создаёт объекты Detail в массиве (без values) на основе set_details_signature_data TODO Убрать деление на секции, нахуй оно не нужно
 
 	init_options_array () { 				//создаёт объекты Option в массиве ct.options
 
-		this.options = get_options_from_json(this.get_detail_value_by_name("ct_options"));
+		this.options = helper_get_options_from_json(this.get_detail_value_by_name("ct_options"));
 
 	}			//создаёт объекты Option в массиве ct.options TODO Добавить сортировку, сначала выводить изменённые
 
@@ -489,14 +532,6 @@ class Analysis {
 		ISSUES.set(issue,weight);
 	}
 
-	trim_and_low (option_value) { //todo Унести в options_from_json
-
-		let resstring = option_value;
-		resstring = resstring.toString().trim();
-		resstring = resstring.toLowerCase();
-		return (resstring);
-
-	}
 
   //todo не отрабатывает post_info для comment type
 
@@ -508,49 +543,41 @@ class Analysis {
 			joomla: '',
 		}
 		//берёт массив опций из JSON
-		this.options_default.wordpress = get_options_from_json('{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"10","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
+		this.options_default.wordpress = helper_get_options_from_json('{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"10","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
 
 	}
 
 	compare_ct_options_with_default_agent(def_options_agent) { //сравнение опций из запроса с опциями по умолчанию
 
 		let changes_array = [];
-
 		if (def_options_agent.length === ct.options.length) { //todo убрать этот блок, оставить только проверку по именам поций
 
 		} else {
-
 			alert('Количество опций не совпало. Ничего страшного, возможно плагин устарел. По умолчанию : ' + def_options_agent.length + ', в запросе = ' + ct.options.length);
-
 		}
+
+
 
 		for (let i = 0; i <= def_options_agent.length - 1; i++) {
 
-			const def_value = this.trim_and_low(def_options_agent[i].value);
+			const def_value = helper_trim_and_low(def_options_agent[i].value);
 
 			for (let j = 0; j<= ct.options.length -1; j++) {
 
-				const req_value = this.trim_and_low(ct.options[j].value);
+				const req_value = helper_trim_and_low(ct.options[j].value);
 
 				if ( (def_options_agent[i].name === ct.options[j].name) && ( def_value !== req_value )) {
 
 					changes_array.push(j);
-
 				}
 			}
 		}
 
 
-		// подсветка изменённых опций
-
-		changes_array.forEach(function (value) {
-
-			//alert('Array '+changes_array);
+		changes_array.forEach(function (value) { // подсветка изменённых опций
 			let tr_name = ('options_tier_' + value);
 			layout_window.document.getElementById(tr_name).style.color = '#FF0000';
-
 		})
-
 		layout_window.document.getElementById('options_header').innerHTML += ('<a style = "color: red"> (' + changes_array.length + ')</a>');
 
 		return changes_array;
@@ -558,19 +585,15 @@ class Analysis {
 
 	check_options() { // проверяет опции по умолчанию, вызывая check_options_comparison для кейсов по агенту
 		//todo Дублирование опций обойти https://cleantalk.org/noc/requests?request_id=460ecc492b54f98b5b5bbf26a3629848
-
 		if (ct.status.agent.includes('wordpress')) {
 			this.compare_ct_options_with_default_agent(this.options_default.wordpress);
 		}
-
+		//тут будут другие агенты
 	}
 
-	check_details() { //todo Есть проблемы с определением https://cleantalk.org/noc/requests?request_id=7622593829a882af90ad5291dfdf59ac
+	check_details() {
 
-		let array_of_details = [];
 		for (let i=0; i<=ct.details.length-1; i++){
-
-//para analysis start
 
 			switch (ct.details[i].name) {
 
@@ -587,7 +610,12 @@ class Analysis {
 						ct.details[i].css_id = 'INCORRECT';
 						this.add_to_issues_list('Не смогли определить EMAIL', '10');
 
+					} else if (ct.get_detail_value_by_name('sender_email_is_bl')==2){
+
+						ct.details[i].css_id = 'BAD';
+
 					} else ct.details[i].css_id = 'GOOD';
+
 
 				} break;
 
@@ -627,7 +655,12 @@ class Analysis {
 						ct.details[i].css_id= 'INCORRECT';
 						this.add_to_issues_list('Не смогли определить IP адрес', '10');
 
-					} else ct.details[i].css_id= 'GOOD';
+					} else if (ct.get_detail_value_by_name('sender_ip_is_bl')==2){
+
+					ct.details[i].css_id = 'BAD';
+
+					}
+					else ct.details[i].css_id= 'GOOD';
 
 				}break;
 
@@ -668,12 +701,9 @@ class Analysis {
 						ct.details[i].css_id= 'GOOD';
 					}
 				} break;
-
 			}
 		}
 	}
-
-
 }
 
 //==== TEST BLOCK
@@ -686,9 +716,7 @@ const CURRENT_VERSIONS = new Map(
 		['wordpress','wordpress-51512']
 	]
 )
-
 const ISSUES = new Map();
-
 let extracted_html;
 let pub_ip_trimmed;
 let pub_details_array_length;
@@ -697,12 +725,10 @@ let ct = new CT();
 ct.id = new Id();
 ct.status = new Status();
 ct.analysis = new Analysis();
-
 //==== DECLARE BLOCK END
 
 //==== NON CLASS FUNCTIONS
-
-function find_between(string,left,right){
+function helper_find_between(string,left,right){
 	let startfrom;
 	let endwith;
 	for (let i=0; i<string.length; i++){
@@ -716,8 +742,7 @@ function find_between(string,left,right){
 	return (string.slice(startfrom,endwith))
 }
 
-
-function html_get_section(section_name) { //извлекает html секции по Details.section_id
+function helper_get_html_section(section_name) { //извлекает html секции по Details.section_id
 
 	const signature = `<div class="section_block" data-section="` + section_name + `">`; // подпись берём из параметра функции
 	const start_section_position = extracted_html.indexOf(signature);// начальная позиция определена
@@ -732,9 +757,9 @@ function html_get_section(section_name) { //извлекает html секции
 
 } 	//извлекает html секции по Details.section_id
 
-function get_detail_signature_for_blocks(section_id, signature) { //ищет Detail.value по Detail.signature внутри секции Details.section_id
+function helper_get_detail_signature_for_section(section_id, signature) { //ищет Detail.value по Detail.signature внутри секции Details.section_id
 
-	const html_section = html_get_section(section_id); // секция определена
+	const html_section = helper_get_html_section(section_id); // секция определена
 	let start_value_position;
 	let end_value_position;
 
@@ -754,13 +779,13 @@ function get_detail_signature_for_blocks(section_id, signature) { //ищет Det
 
 } 	//ищет Detail.value по Detail.signature внутри секции Details.section_id
 
-function draw_html_tag(position_tag_id, align, html) { // добавляет тег на страницу
+function helper_add_tag(position_tag_id, align, html) { // добавляет тег на страницу
 
 	layout_window.document.getElementById(position_tag_id).insertAdjacentHTML(align, html);
 
 } //добавляет тег на страницу
 
-function get_options_from_json(json) { //возвращает массив объектов OPTION из JSON настроек
+function helper_get_options_from_json(json) { //возвращает массив объектов OPTION из JSON настроек
 
 	const jsonobj = JSON.parse(json);
 	let temp = [];
@@ -771,12 +796,7 @@ function get_options_from_json(json) { //возвращает массив об�
 
 } //возвращает массив объектов OPTION из JSON настроек
 
-function OpenInNewTabWinBrowser(url) {
-	const win = window.open(url, '_blank');
-	win.focus();
-}
-
-function call_layout_window() { //вызов окна запроса
+function helper_call_window() { //вызов окна запроса
 
 	//OpenInNewTabWinBrowser('https://www.mail.ru');
 
@@ -808,14 +828,23 @@ function call_layout_window() { //вызов окна запроса
 
 } //вызов рабочего окна
 
+function helper_trim_and_low (option_value) { //todo Унести в options_from_json
 
+	let resstring = option_value;
+	resstring = resstring.toString().trim();
+	resstring = resstring.toLowerCase();
+	return (resstring);
 
+}
+//==== NON CLASS FUNCTIONS END
+
+//==== LISTENERS
 chrome.runtime.onMessage.addListener(function (message) {
 	switch (message.command) {
 
 		case "pageHtml":
 			extracted_html = message.html;
-			call_layout_window();
+			helper_call_window();
 			break;
 
 		default:
@@ -828,5 +857,6 @@ function logHtmlCode(tab) {
 }
 
 chrome.browserAction.onClicked.addListener(logHtmlCode);
+//==== LISTENERS END
 
-
+//CODE END
