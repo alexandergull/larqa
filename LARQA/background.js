@@ -221,6 +221,15 @@ class CT {
 
 	draw_details_block() { //рисует блоки основываясь на Section ID
 
+/*		let debug_alert = '';
+		for (let i=0; i <= this.details.length-1; i++){
+			debug_alert +=
+				'name ' + this.details[i].name +
+				' value ' + this.details[i].value +
+				' block ' + this.details[i].block_id + '\n'
+		}
+		alert(debug_alert);*/
+
 		let ar = [];
 
 		for (let j = 0; j < pub_details_array_length; j++) {
@@ -239,8 +248,6 @@ class CT {
 
 					if (parseInt(this.details[pub_strcnt].block_id) === block_id) { // добавляем строки если block_id совпал
 
-						pub_strcnt++;
-
 						if (this.details[pub_strcnt].name !== 'ct_options') { //пропускаем блок options
 							
 								draw_html_tag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
@@ -256,7 +263,7 @@ class CT {
 									+ '">  [IPINFO]</a></td>'));
 								}
 
-							else if (this.details[pub_strcnt].value !== 'invisible') {
+							else if (this.details[pub_strcnt].value !== 'INVISIBLE') {
 
 								switch (this.details[pub_strcnt].css_id){			//светит details
 
@@ -273,36 +280,37 @@ class CT {
 									case 'BAD':{
 										draw_html_tag(('details_tier_' + pub_strcnt),
 											'beforeend',
-											('<td class="details-name"><a style="color:#FF0000">' + this.details[pub_strcnt].name + ':</a></td>'));
+											('<td class="details-name"><a style="color:#905000">' + this.details[pub_strcnt].name + ':</a></td>'));
 										draw_html_tag(
 											('details_tier_' + pub_strcnt),
 											'beforeend',
-											('<td class="details-value"><a style="color:#FF0000">' + this.details[pub_strcnt].value + '</a></td>'));
+											('<td class="details-value"><a style="color:#905000">' + this.details[pub_strcnt].value + '</a></td>'));
 									} break;
 
 									case 'GOOD':{
 										draw_html_tag(('details_tier_' + pub_strcnt),
 											'beforeend',
-											('<td class="details-name"><a style="color:#00FF00">' + this.details[pub_strcnt].name + ':</a></td>'));
+											('<td class="details-name"><a style="color:#009000">' + this.details[pub_strcnt].name + ':</a></td>'));
 										draw_html_tag(
 											('details_tier_' + pub_strcnt),
 											'beforeend',
-											('<td class="details-value"><a style="color:#00FF00">' + this.details[pub_strcnt].value + '</a></td>'));
+											('<td class="details-value"><a style="color:#009000">' + this.details[pub_strcnt].value + '</a></td>'));
 									} break;
 
 									case 'INCORRECT':{
 										draw_html_tag(('details_tier_' + pub_strcnt),
 											'beforeend',
-											('<td class="details-name"><a style="color:#33FF33">' + this.details[pub_strcnt].name + ':</a></td>'));
+											('<td class="details-name"><a style="color:#CC0000">' + this.details[pub_strcnt].name + ':</a></td>'));
 										draw_html_tag(
 											('details_tier_' + pub_strcnt),
 											'beforeend',
-											('<td class="details-value"><a style="color:#33FF33">' + this.details[pub_strcnt].value + '</a></td>'));
+											('<td class="details-value"><a style="color:#CC0000">' + this.details[pub_strcnt].value + '</a></td>'));
 									}
 								}
 							}
 
 						}
+						pub_strcnt++;
 					}
 				}
 			}
@@ -419,6 +427,12 @@ class CT {
 		//Внесение результатов поиcка values в массив объектов Details
 		for (let i = 0; i < pub_details_array_length; i++) {
 			this.details[i].value = get_detail_signature_for_blocks(this.details[i].section_id, this.details[i].signature);
+
+			if (this.details[i].name === 'sender_email') {
+
+				this.details[i].value = find_between(this.details[i].value,'"_blank">','</a>');
+
+			}
 		}
 	}//создаёт объекты Detail в массиве (без values) на основе set_details_signature_data TODO Убрать деление на секции, нахуй оно не нужно
 
@@ -551,7 +565,7 @@ class Analysis {
 
 	}
 
-	check_details() {
+	check_details() { //todo Есть проблемы с определением https://cleantalk.org/noc/requests?request_id=7622593829a882af90ad5291dfdf59ac
 
 		let array_of_details = [];
 		for (let i=0; i<=ct.details.length-1; i++){
@@ -559,6 +573,23 @@ class Analysis {
 //para analysis start
 
 			switch (ct.details[i].name) {
+
+				//EMAIL
+				case 'sender_email': {
+
+					if (ct.details[i].value === '') {
+
+						ct.details[i].css_id = 'BAD';
+						this.add_to_issues_list('EMAIL передан, но пустой', '3');
+
+					} else if (ct.details[i].value === null) {
+
+						ct.details[i].css_id = 'INCORRECT';
+						this.add_to_issues_list('Не смогли определить EMAIL', '10');
+
+					} else ct.details[i].css_id = 'GOOD';
+
+				} break;
 
 				//JS
 				case 'js_status': {
@@ -600,6 +631,44 @@ class Analysis {
 
 				}break;
 
+				//SUBMIT_TIME
+				case 'submit_time': {
+
+					if ( (ct.details[i].value === undefined) || (ct.details[i].value === '') ){
+						ct.details[i].css_id= 'INCORRECT';
+						this.add_to_issues_list('SUBMIT_TIME отсутствует.', '10');
+					}
+
+					else if (Number(ct.details[i].value) === 0){
+						ct.details[i].css_id= 'BAD';
+						this.add_to_issues_list('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
+					}
+
+					else if(Number(ct.details[i].value) === 1){
+						ct.details[i].css_id= 'INCORRECT'
+						this.add_to_issues_list('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
+					}
+
+					else if(1 < Number(ct.details[i].value) <= 5){
+						ct.details[i].css_id= 'BAD'
+						this.add_to_issues_list('1 < SUBMIT_TIME < 5, слишком низкий.', '3');
+					}
+
+					else if(500 > Number(ct.details[i].value) >= 3000){
+						ct.details[i].css_id= 'BAD'
+						this.add_to_issues_list('SUBMIT_TIME > 500, странно.', '3');
+					}
+
+					else if(Number(ct.details[i].value) > 3000){
+						ct.details[i].css_id= 'BAD'
+						this.add_to_issues_list('SUBMIT_TIME > 3000, есть проблемы.', '3');
+					}
+
+					else {
+						ct.details[i].css_id= 'GOOD';
+					}
+				} break;
+
 			}
 		}
 	}
@@ -633,6 +702,21 @@ ct.analysis = new Analysis();
 
 //==== NON CLASS FUNCTIONS
 
+function find_between(string,left,right){
+	let startfrom;
+	let endwith;
+	for (let i=0; i<string.length; i++){
+		if (string.slice(i,i+left.length) === left) {
+			startfrom = i+left.length;
+		}
+		if (string.slice(i,i+right.length) === right) {
+			endwith = i;
+		}
+	}
+	return (string.slice(startfrom,endwith))
+}
+
+
 function html_get_section(section_name) { //извлекает html секции по Details.section_id
 
 	const signature = `<div class="section_block" data-section="` + section_name + `">`; // подпись берём из параметра функции
@@ -657,7 +741,7 @@ function get_detail_signature_for_blocks(section_id, signature) { //ищет Det
 	if (html_section.includes(signature)) { // 11- это символы <td>:&nbsp;
 		start_value_position = (html_section.indexOf(signature) + signature.length + 11); //стартовая позиция для искомого значения
 	} else {
-		return 'invisible';
+		return 'INVISIBLE';
 	}
 
 	for (let i = start_value_position; i <= html_section.length; i++) {

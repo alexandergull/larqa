@@ -25,7 +25,6 @@
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/send-page-code.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/send-page-code.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,6 +174,8 @@
       <workItem from="1610430016117" duration="58000" />
       <workItem from="1610430088063" duration="13938000" />
       <workItem from="1610535513450" duration="14960000" />
+      <workItem from="1610606240104" duration="2972000" />
+      <workItem from="1610624796123" duration="3236000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
