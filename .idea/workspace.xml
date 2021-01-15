@@ -23,7 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_9_19__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_9_19__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_19_02__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_19_02__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
     </list>
@@ -176,7 +176,7 @@
       <workItem from="1610430088063" duration="13938000" />
       <workItem from="1610535513450" duration="14960000" />
       <workItem from="1610606240104" duration="2972000" />
-      <workItem from="1610624796123" duration="3236000" />
+      <workItem from="1610624796123" duration="10445000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -269,7 +269,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610525730850</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Новое:&#10;- запилил функцию поиска между строками в строке find_between&#10;- продолжил логику аналитики (есть проблемы с параметрами)">
+      <created>1610628389302</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1610628389302</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -309,16 +316,21 @@
     <MESSAGE value="сделал обход при несовпадении количества опций в агенте" />
     <MESSAGE value="Правки в подсветке опций" />
     <MESSAGE value="Допилил подсветку плохих параметров, сделал вывод обнаруженных проблем через ISSUES в status_block" />
-    <option name="LAST_COMMIT_MESSAGE" value="Допилил подсветку плохих параметров, сделал вывод обнаруженных проблем через ISSUES в status_block" />
+    <MESSAGE value="Новое:&#10;- запилил функцию поиска между строками в строке find_between&#10;- продолжил логику аналитики (есть проблемы с параметрами)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Новое:&#10;- запилил функцию поиска между строками в строке find_between&#10;- продолжил логику аналитики (есть проблемы с параметрами)" />
   </component>
   <component name="WindowStateProjectService">
     <state x="533" y="201" key="SettingsEditor" timestamp="1610536724367">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="533" y="201" key="SettingsEditor/0.0.2048.1112@0.0.2048.1112" timestamp="1610536724367" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1610520564391">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1610628400578">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1610520564391" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1610628400578" />
+    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1610704012495">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1610704012495" />
   </component>
 </project>

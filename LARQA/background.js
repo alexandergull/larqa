@@ -52,6 +52,7 @@ class Status {
 			if (this.agent !== CURRENT_VERSIONS.get('wordpress'))  {
 				this.agent = '<a title="Плагин устарел" style  = "color: red">'+this.agent+'</a>';
 				ct.analysis.add_to_issues_list('Версия плагина устарела','3');
+
 			} else {
 				this.agent = '<a title="Версия в порядке" style = "color: green">'+this.agent+'</a>';
 			}
@@ -246,52 +247,58 @@ class CT {
 				
 				if (pub_strcnt <= i) { 														//хуй знает как это работает и почему без этого не работает
 
-					if (parseInt(this.details[pub_strcnt].block_id) === block_id) { 		// добавляем строки если block_id совпал
+					let detail = this.details[pub_strcnt];
 
-						if (this.details[pub_strcnt].name !== 'ct_options') { 				//пропускаем блок options
+					if (parseInt(detail.block_id) === block_id) { 		// добавляем строки если block_id совпал
+
+						if (detail.name !== 'ct_options') { 				//пропускаем блок options
 							
 							helper_add_tag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
 
-							if (this.details[pub_strcnt].value !== 'INVISIBLE') {
+							if (detail.value !== 'INVISIBLE') {
 																							//
 // Подготовка шаблона ссылки для sender_email и sender_ip
+
 							let href = '';
-							if (this.details[pub_strcnt].name === 'sender_ip'||'sender_email') {
+							let ip_additional_hrefs = '';
+							let email_additional_hrefs = '';
+
+							if (detail.name === 'sender_ip' || this.details[pub_strcnt].name ==='sender_email') {
 								href = 'href=https://cleantalk.org/blacklists/'+ this.details[pub_strcnt].value + ' ';
 							}
 
-							let ip_additional_hrefs = '';
-							let email_additional_hrefs = '';
-							if (this.details[pub_strcnt].name === 'sender_ip'){
+							if (detail.name === 'sender_ip'){
 								ip_additional_hrefs = '<a href="https://cleantalk.org/noc/requests?sender_ip=' +
-									this.details[pub_strcnt].value +
+									detail.value +
 									'">  [Все запросы с этим IP]  </a><a href="https://ipinfo.io/' +
-									this.details[pub_strcnt].value +
+									detail.value +
 									'">  [IPINFO]</a></td>'
 							}
 
-							if (this.details[pub_strcnt].name === 'sender_email'){
+							if (detail.name === 'sender_email'){
 								email_additional_hrefs = '<a href="https://cleantalk.org/noc/requests?sender_email=' +
-									this.details[pub_strcnt].value +
+									detail.value +
 									'">  [Все запросы с этим EMAIL]  </a><a href="https://cleantalk.org/email-checker/' +
-									this.details[pub_strcnt].value +
+									detail.value +
 									'">  [CHECKER]</a></td>'
 							}
+
+
 //
 // Подсветка параметров
-								switch (this.details[pub_strcnt].css_id){
+								switch (detail.css_id){
 	//по умолчанию чёрный
 									case 'DEFAULT':{
 										helper_add_tag(('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-name">'
-												+ this.details[pub_strcnt].name
+												+ detail.name
 												+ ':</td>'));
 										helper_add_tag(
 											('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-value">'
-												+ this.details[pub_strcnt].value
+												+ detail.value
 												+ '</a>'+ ip_additional_hrefs
 												+ email_additional_hrefs +'</td>'));
 									} break;
@@ -301,13 +308,13 @@ class CT {
 										helper_add_tag(('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-name"><a style="color:#C02000">'
-												+ this.details[pub_strcnt].name + ':</td>'));
+												+ detail.name + ':</td>'));
 
 										helper_add_tag(
 											('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-value"><a '+href+'style="color:#C02000">' +
-												this.details[pub_strcnt].value
+												detail.value
 												+ '</a>'+ ip_additional_hrefs
 												+ email_additional_hrefs
 												+'</td>'));
@@ -319,7 +326,7 @@ class CT {
 										helper_add_tag(('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-name"><a style="color:#009000">'
-												+ this.details[pub_strcnt].name
+												+ detail.name
 												+ ':</a></td>'));
 
 										helper_add_tag(
@@ -328,7 +335,7 @@ class CT {
 											('<td class="details-value"><a '
 												+ href
 												+'style="color:#009000">'
-												+ this.details[pub_strcnt].value
+												+ detail.value
 												+ '</a>'
 												+ ip_additional_hrefs
 												+ email_additional_hrefs +'</td>'));
@@ -340,18 +347,19 @@ class CT {
 										helper_add_tag(('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-name"><a style="color:#CC0000">'
-												+ this.details[pub_strcnt].name
+												+ detail.name
 												+ ':</a></td>'));
 
 										helper_add_tag(
 											('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-value"><a style="color:#CC0000">'
-												+ this.details[pub_strcnt].value
+												+ detail.value
 												+ '</a>'
 												+ ip_additional_hrefs
 												+ email_additional_hrefs
 												+'</td>'));
+
 									}
 								}
 //
@@ -477,13 +485,13 @@ class CT {
 			}
 		}
 
-	}//создаёт объекты Detail в массиве (без values) на основе set_details_signature_data TODO Убрать деление на секции, нахуй оно не нужно
+	}	//создаёт объекты Detail в массиве (без values) на основе set_details_signature_data TODO Убрать деление на секции, нахуй оно не нужно
 
 	init_options_array () { 				//создаёт объекты Option в массиве ct.options
 
 		this.options = helper_get_options_from_json(this.get_detail_value_by_name("ct_options"));
 
-	}			//создаёт объекты Option в массиве ct.options TODO Добавить сортировку, сначала выводить изменённые
+	}	//создаёт объекты Option в массиве ct.options TODO Добавить сортировку, сначала выводить изменённые
 
 	get_detail_value_by_name(name) { 	//вызывает значения value объекта Detail по имени
 
@@ -494,6 +502,30 @@ class CT {
 			}
 		}
 	} //вызывает значения value объекта Detail по имени
+
+	set_detail_prop_by_name(detail_name,property,new_value) { 	//вызывает значения value объекта Detail по имени
+
+
+		for (let i = 0; i < pub_details_array_length; i++) {
+
+			if (this.details[i].name === detail_name) {
+
+				switch (property) {
+
+					case 'css_id':{
+						this.details[i].css_id = new_value;
+					}
+
+					case 'value':{
+						this.details[i].value = new_value;
+					}
+
+				}
+			}
+		}
+	} //вызывает значения value объекта Detail по имени
+
+
 
 }
 
@@ -518,13 +550,10 @@ class Analysis {
 	constructor(
 
 		options_default,
-		options_important,
-		details_normal_values
 
 	) {
 
 		this.options_default = options_default;
-		this.details_normal_values = details_normal_values;
 
 	}
 
@@ -701,6 +730,72 @@ class Analysis {
 						ct.details[i].css_id= 'GOOD';
 					}
 				} break;
+
+				//COOKIES
+				case 'cookies_enabled': {
+
+					if (ct.details[i].value === '' || null) {
+
+						ct.details[i].css_id= 'BAD';
+						this.add_to_issues_list('Не смогли определить наличие COOKIES', '3');
+
+					} else if (ct.details[i].value == 0){
+
+						ct.details[i].css_id = 'BAD';
+						this.add_to_issues_list('COOKIES отключены', '10');
+
+					}
+					else ct.details[i].css_id= 'GOOD';
+
+				}break;
+
+				//GREYLIST
+				case 'is_greylisted': {
+
+					if (ct.details[i].value == 1) {
+
+						ct.details[i].css_id= 'BAD';
+						this.add_to_issues_list('Сработал GREYLIST. Смотри SUBMIT_TIME.', '3');
+
+					}
+					else ct.details[i].value= 'INVISIBLE';
+
+				}break;
+
+				//MOBILE_UA
+				case 'is_mobile_ua': {
+
+					if (ct.details[i].value == 1) {
+
+						ct.details[i].css_id= 'GOOD';
+						this.add_to_issues_list('USERAGENT - мобильное устройство', '0');
+
+					}
+					else ct.details[i].value= 'INVISIBLE';
+
+				}break;
+
+				//PAGE_URL
+				case 'page_url': {
+
+					if (ct.details[i].value.includes('.php') ||
+						ct.details[i].value.includes('wp-') ||
+						ct.details[i].value.includes('admin') ||
+						ct.details[i].value.includes('login')
+					) {
+
+						ct.details[i].css_id= 'BAD';
+						this.add_to_issues_list('Возможен перехват админки, смотри PAGE_URL', '0');
+
+					} else if(ct.details[i].value == ''||null){
+
+						ct.details[i].css_id= 'BAD';
+						this.add_to_issues_list('Пустой PAGE_URL. Это странно.', '0');
+
+					}
+					else ct.details[i].value= 'GOOD';
+
+				}break;
 			}
 		}
 	}
