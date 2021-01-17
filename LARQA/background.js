@@ -480,9 +480,13 @@ class CT {
 			//Внесение результатов поиcка values в массив объектов Details
 			this.details[i].value = helper_get_detail_signature_for_section(this.details[i].section_id, this.details[i].signature);
 
-			if (this.details[i].name === 'sender_email'||'sender_ip') {
-				this.details[i].value =  helper_find_between(this.details[i].value,'"_blank">','</a>');
-			}
+			if (
+				this.details[i].name === 'sender_email'
+				||
+				this.details[i].name === 'sender_ip'
+				){
+					this.details[i].value =  helper_find_between(this.details[i].value,'"_blank">','</a>');
+				}
 		}
 
 	}	//создаёт объекты Detail в массиве (без values) на основе set_details_signature_data TODO Убрать деление на секции, нахуй оно не нужно
@@ -504,7 +508,6 @@ class CT {
 	} //вызывает значения value объекта Detail по имени
 
 	set_detail_prop_by_name(detail_name,property,new_value) { 	//вызывает значения value объекта Detail по имени
-
 
 		for (let i = 0; i < pub_details_array_length; i++) {
 
@@ -651,16 +654,16 @@ class Analysis {
 				//JS
 				case 'js_status': {
 
-					if (ct.details[i].value == -1){
+					if (Number(ct.details[i].value) === -1){
 						ct.details[i].css_id= 'BAD';
 						this.add_to_issues_list('JS отключен в браузере', '3');
 						}
 
-					else if (ct.details[i].value == 1){
+					else if (Number(ct.details[i].value) === 1){
 						ct.details[i].css_id= 'GOOD';
 						}
 
-					else if(ct.details[i].value == 0){
+					else if(Number(ct.details[i].value) === 0){
 						ct.details[i].css_id= 'BAD'
 						this.add_to_issues_list('Тест JS провален', '3');
 						}
@@ -696,45 +699,54 @@ class Analysis {
 				//SUBMIT_TIME
 				case 'submit_time': {
 
-					if ( (ct.details[i].value === undefined) || (ct.details[i].value === '') ){
+					if ( ct.details[i].value === undefined || ct.details[i].value === '' ){
 						ct.details[i].css_id= 'INCORRECT';
 						this.add_to_issues_list('SUBMIT_TIME отсутствует.', '10');
+						alert('SUBMIT_TIME отсутствует.', '10');
 					}
 
 					else if (Number(ct.details[i].value) === 0){
 						ct.details[i].css_id= 'BAD';
 						this.add_to_issues_list('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
+						alert('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
 					}
 
 					else if(Number(ct.details[i].value) === 1){
 						ct.details[i].css_id= 'INCORRECT'
 						this.add_to_issues_list('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
+						alert('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
 					}
 
-					else if(1 < Number(ct.details[i].value) <= 5){
+					else if(1 <= Number(ct.details[i].value) && Number(ct.details[i].value <= 5) ){
 						ct.details[i].css_id= 'BAD'
-						this.add_to_issues_list('1 < SUBMIT_TIME < 5, слишком низкий.', '3');
+						this.add_to_issues_list('1 <= SUBMIT_TIME < 5, слишком низкий.', '3');
+						alert('1 < SUBMIT_TIME < 5, слишком низкий.', '3');
 					}
 
-					else if(500 > Number(ct.details[i].value) >= 3000){
+					else if(500 >= Number(ct.details[i].value) >= 3000){
 						ct.details[i].css_id= 'BAD'
 						this.add_to_issues_list('SUBMIT_TIME > 500, странно.', '3');
+						alert('SUBMIT_TIME > 500, странно.', '3');
 					}
 
 					else if(Number(ct.details[i].value) > 3000){
 						ct.details[i].css_id= 'BAD'
 						this.add_to_issues_list('SUBMIT_TIME > 3000, есть проблемы.', '3');
+						alert('SUBMIT_TIME > 3000, есть проблемы.', '3');
 					}
 
 					else {
 						ct.details[i].css_id= 'GOOD';
 					}
+
+					alert(ct.details[i].name +' '+ ct.details[i].value +' '+ ct.details[i].css_id);
 				} break;
 
 				//COOKIES
 				case 'cookies_enabled': {
 
-					if (ct.details[i].value === '' || null) {
+					if (ct.details[i].value === '' ||
+						ct.details[i].value === null) {
 
 						ct.details[i].css_id= 'BAD';
 						this.add_to_issues_list('Не смогли определить наличие COOKIES', '3');
@@ -779,21 +791,23 @@ class Analysis {
 				case 'page_url': {
 
 					if (ct.details[i].value.includes('.php') ||
-						ct.details[i].value.includes('wp-') ||
+						//ct.details[i].value.includes('') ||
 						ct.details[i].value.includes('admin') ||
 						ct.details[i].value.includes('login')
-					) {
+					){
 
 						ct.details[i].css_id= 'BAD';
 						this.add_to_issues_list('Возможен перехват админки, смотри PAGE_URL', '0');
 
-					} else if(ct.details[i].value == ''||null){
+					} else if(ct.details[i].value == '' ||
+						ct.details[i].value === null
+					){
 
 						ct.details[i].css_id= 'BAD';
 						this.add_to_issues_list('Пустой PAGE_URL. Это странно.', '0');
 
 					}
-					else ct.details[i].value= 'GOOD';
+					else ct.details[i].css_id= 'GOOD';
 
 				}break;
 			}
