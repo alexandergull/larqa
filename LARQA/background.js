@@ -25,12 +25,12 @@ class Helper{
 
 		layout_window.onload = function () { // действия после загрузки окна
 
+			ct.analysis.initOptionsDefaults();
 			ct.initDetailsArray();
 			ct.initOptionsArray();
-			ct.analysis.checkDetails();
-
 			ct.id.initId();
 			ct.status.initStatus();
+			ct.analysis.initOptionsDefaults();
 
 			window.pub_strcnt = 0; //счётчик строк в таблице
 
@@ -38,12 +38,12 @@ class Helper{
 			ct.drawOptionsBlock();
 			ct.drawStatusBlock();
 
-
-			ct.analysis.initOptionsDefaults();
+			ct.analysis.checkDetails();
 			ct.analysis.checkOptions();
 
-			helper.showDebugMsgList();
 			helper.showIssuesList();
+			helper.showDebugMsgList();
+
 
 			layout_window.focus();
 
@@ -51,16 +51,7 @@ class Helper{
 
 	} //вызов рабочего окна
 
-	debugMessage(msg){
-		this.debug_list += ('<p id="debug">' + msg + '</p>');
-	}
 
-	showDebugMsgList(){
-		if (this.debug_list !==''){
-			helper.addTag('status_table-tbody', 'beforeend', ('<tr id="debug"><td>DEBUG:'+this.debug_list+'</td></tr>'));
-			this.debug_list = '';
-		}
-	}
 
 	findBetween(string, left, right){
 		let startfrom;
@@ -161,6 +152,17 @@ class Helper{
 				' </b></p>' +
 				' <p class="status_table_inner">Итоговый вес проблем: <b>' + amount_of_issues + '</b>'
 			));
+			list_of_issues = '';
+		}
+	}
+
+	debugMessage(msg){
+		this.debug_list += ('<p id="debug">Debug message: ' + msg + '</p>');
+	}
+
+	showDebugMsgList(){
+		if (this.debug_list !==''){
+			helper.addTag('status_table-tbody', 'beforeend', ('<tr id="debug"><td>'+this.debug_list+'</td></tr>'));
 			this.debug_list = '';
 		}
 	}
@@ -388,6 +390,42 @@ class CT {
 
 	}// ДАННЫЕ!! Установка данных для поиска в HTML лапше, возвращает массив и длину массива
 
+	initDetailsArray() { //создаёт объекты Details в массиве (без values) на основе set_details_signature_data
+
+		this.details = [];
+		let details_draft = this.initDetailsSignatureData();
+
+		for (let i = 0; i < pub_details_array_length; i++) {
+			this.details.push (
+				new Detail(
+					(details_draft[i][0]),
+					(details_draft[i][1]),
+					(details_draft[i][2]),
+					(details_draft[i][3]),
+					(details_draft[i][4]),
+					(details_draft[i][5])
+				)
+			);
+			//Внесение результатов поиcка values в массив объектов Details
+			this.details[i].value = helper.getDetailSignatureForSection(this.details[i].section_id, this.details[i].signature);
+
+			if (
+				this.details[i].name === 'sender_email'
+				||
+				this.details[i].name === 'sender_ip'
+			){
+				this.details[i].value =  helper.findBetween(this.details[i].value,'"_blank">','</a>');
+			}
+		}
+
+	}	//создаёт объекты Detail в массиве (без values) на основе set_details_signature_data
+
+	initOptionsArray () { 				//создаёт объекты Option в массиве ct.options
+
+		this.options = helper.getOptionsFromJSON(this.getDetailValueByName("ct_options"));
+
+	}	//создаёт объекты Option в массиве ct.options TODO Добавить сортировку, сначала выводить изменённые
+
 	drawDetailsBlock() { //рисует блоки основываясь на Section ID
 
 		let ar = [];
@@ -589,42 +627,6 @@ class CT {
 		}
 	} // рисует блок статуса
 
-	initDetailsArray() { //создаёт объекты Details в массиве (без values) на основе set_details_signature_data
-
-		this.details = [];
-		let details_draft = this.initDetailsSignatureData();
-
-		for (let i = 0; i < pub_details_array_length; i++) {
-			this.details.push (
-				new Detail(
-					(details_draft[i][0]),
-					(details_draft[i][1]),
-					(details_draft[i][2]),
-					(details_draft[i][3]),
-					(details_draft[i][4]),
-					(details_draft[i][5])
-				)
-			);
-			//Внесение результатов поиcка values в массив объектов Details
-			this.details[i].value = helper.getDetailSignatureForSection(this.details[i].section_id, this.details[i].signature);
-
-			if (
-				this.details[i].name === 'sender_email'
-				||
-				this.details[i].name === 'sender_ip'
-			){
-				this.details[i].value =  helper.findBetween(this.details[i].value,'"_blank">','</a>');
-			}
-		}
-
-	}	//создаёт объекты Detail в массиве (без values) на основе set_details_signature_data
-
-	initOptionsArray () { 				//создаёт объекты Option в массиве ct.options
-
-		this.options = helper.getOptionsFromJSON(this.getDetailValueByName("ct_options"));
-
-	}	//создаёт объекты Option в массиве ct.options TODO Добавить сортировку, сначала выводить изменённые
-
 	getDetailValueByName(name) { 	//вызывает значения value объекта Detail по имени
 
 		for (let i = 0; i < pub_details_array_length; i++) {
@@ -700,7 +702,7 @@ class Analysis {
 			joomla: '',
 		}
 		//берёт массив опций из JSON
-		this.options_default.wordpress = helper.getOptionsFromJSON('{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"10","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
+		this.options_default.wordpress = helper.getOptionsFromJSON('{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"20","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
 
 	}
 
@@ -940,21 +942,19 @@ class Analysis {
 //==== DECLARE BLOCK
 const CURRENT_VERSIONS = new Map(
 	[
-		['wordpress','wordpress-51513']
+		['wordpress','wordpress-51514']
 	]
 )
-let ISSUES = new Map();
 let extracted_html;
 let pub_ip_trimmed;
 let pub_details_array_length;
 let ct = new CT();
-
-helper = new Helper();
-helper.initHelperData();
 ct.id = new Id();
 ct.analysis = new Analysis();
 ct.status = new Status();
 
+helper = new Helper();
+helper.initHelperData();
 
 //==== DECLARE BLOCK END
 
@@ -978,5 +978,4 @@ function logHtmlCode(tab) {
 
 chrome.browserAction.onClicked.addListener(logHtmlCode);
 //==== LISTENERS END
-
 //CODE END
