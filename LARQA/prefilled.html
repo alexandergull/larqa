@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title id="layout_window_title">LARQA WINDOW</title>
+    <script type="text/javascript" src="jquery.min.js"></script>
 </head>
 <body>
 <style>
@@ -13,8 +14,8 @@
     }
 
     h1{
-        margin: 2%;
-        padding: 2%;
+        margin: 2px;
+        padding: 3px;
         text-align: center;
 
         font-size: 95%;
@@ -47,6 +48,23 @@
         background-color: #ECE9E0;
         border-radius: 15px;
     }
+
+    #debug{
+        font-size: 2px;
+        margin: 1px;
+    }
+
+    #status_block {
+        display: block;
+        height:auto;
+        background:#f1f1f1;
+        margin: 0 1% 1% 0;
+        text-align:center;
+        padding: 1%;
+        background-color: #ECE9E0;
+        border-radius: 15px;
+    }
+
     #details_table {
         word-wrap: break-word;
         table-layout: fixed;
@@ -75,18 +93,59 @@
         width: 100%;
 
     }
-    }
+
 
     #options_table-header{
 
     }
 
-</style>
-<!-- ---------- вставим блоки на страницу --------- -->
-<div style="width:100%; height:1px; clear:both;"></div> <!-- выравниваем без обтекания -->
+    #status_table{
+        width: 100%;
+        border: 1px solid black;
+        border-radius: 7px;
+        background:#E9e9e1;
+        text-align:left;
+        padding: 1px;
+        margin: 1px;
+        font-size: 10px;
+    }
 
+    .status_table_inner{
+
+        border: hidden;
+        background:#E9e9e1;
+        text-align:left;
+        padding: 1px;
+        margin: 1px;
+        font-size: 10px;
+
+    }
+
+</style>
+<div style="width:100%; height:1px; clear:both;"></div>
+<div style=" display: block;">
+    <div id="status_block"><h1>STATUS</h1>
+        <table id='status_table'>
+            <tbody id="status_table-tbody">
+                <tr id="status_table-filter-raw" class="status_table_inner"></tr>
+                <tr class="status_table_inner">
+                    <td id="status_table_status-class-column" class="status_table_inner"></td>
+                </tr>
+                <tr class="status_table_inner">
+
+                </tr>
+                <tr class="status_table_inner">
+
+                </tr>
+                <tr class="status_table_inner">
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 <div id="line_block">
-    <div id="details_block"><h1>REQUEST PARA</h1>
+    <div id="details_block"><h1>Параметры запроса</h1>
         <table id='details_table'>
             <tbody id="details_table-tbody">
             </tbody>
@@ -95,7 +154,7 @@
 </div>
 <div id="line_block">
     <div>
-        <h1 id="options_header">CT OPTIONS</h1>
+        <h1 id="options_header">Набор опций плагина</h1>
         <div id="options_block">
             <table id="options_table">
                 <tbody id="options_table-tbody">

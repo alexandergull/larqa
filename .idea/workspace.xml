@@ -3,12 +3,29 @@
   <component name="AnalysisUIOptions">
     <option name="SCOPE_TYPE" value="10" />
   </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/LARQA/setouterhtml.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/popup.html" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/popup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/popup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LARQA/prefilled.html" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/prefilled.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,10 +91,28 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.language" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Александр\Documents\MEGAsync\larqa\gitcopy\LARQA" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="background.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/LARQA/background.js" working-dir="$PROJECT_DIR$/LARQA">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Node.js.background.js" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task id="Default" summary="Default task">
       <branch name="dev" repository="D:\Megadisk\larqa\gitcopy" original="true" />
@@ -142,6 +177,18 @@
       <workItem from="1604254472083" duration="347000" />
       <workItem from="1604306045214" duration="5698000" />
       <workItem from="1604377790985" duration="7148000" />
+      <workItem from="1604654240579" duration="49357000" />
+      <workItem from="1604909412343" duration="57117000" />
+      <workItem from="1606284307013" duration="4498000" />
+      <workItem from="1610429510145" duration="21000" />
+      <workItem from="1610429572428" duration="169000" />
+      <workItem from="1610430016117" duration="58000" />
+      <workItem from="1610430088063" duration="13938000" />
+      <workItem from="1610535513450" duration="14960000" />
+      <workItem from="1610606240104" duration="2972000" />
+      <workItem from="1610624796123" duration="10445000" />
+      <workItem from="1610943539998" duration="16283000" />
+      <workItem from="1610963158787" duration="102000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -150,14 +197,119 @@
       <option name="project" value="LOCAL" />
       <updated>1604254763003</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="додела коассс статус начал options через JSON">
+      <created>1604772087901</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1604772087901</updated>
+    </task>
+    <task id="LOCAL-00010" summary="- убрал отдельное окно для опций, буду делать всё в одном блоке&#10;&#10;- занимался вёрсткой prefilled">
+      <created>1604856631854</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1604856631854</updated>
+    </task>
+    <task id="LOCAL-00011" summary="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна">
+      <created>1604984205388</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1604984205388</updated>
+    </task>
+    <task id="LOCAL-00012" summary="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию">
+      <created>1605030061480</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1605030061480</updated>
+    </task>
+    <task id="LOCAL-00013" summary="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций">
+      <created>1605080657468</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1605080657468</updated>
+    </task>
+    <task id="LOCAL-00014" summary="- добавил подсветку кастомных множеств">
+      <created>1606284551870</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1606284551870</updated>
+    </task>
+    <task id="LOCAL-00015" summary="- добавил подсветку кастомных множеств">
+      <created>1606284620917</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1606284620917</updated>
+    </task>
+    <task id="LOCAL-00016" summary="- добавил подсветку кастомных множеств">
+      <created>1606284688059</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1606284688059</updated>
+    </task>
+    <task id="LOCAL-00017" summary="- добавил подсветку кастомных множеств (правки)">
+      <created>1606284817917</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1606284817917</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Refacotred commit">
+      <created>1610430176398</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1610430176398</updated>
+    </task>
+    <task id="LOCAL-00019" summary="сделал обход при несовпадении количества опций в агенте">
+      <created>1610520530822</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1610520530822</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Правки в подсветке опций">
+      <created>1610525730850</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1610525730850</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Новое:&#10;- запилил функцию поиска между строками в строке find_between&#10;- продолжил логику аналитики (есть проблемы с параметрами)">
+      <created>1610628389302</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1610628389302</updated>
+    </task>
+    <task id="LOCAL-00022" summary="//todo перенести в класс Helper внеклассовые методы, начать с ISSUES&#10;// останавливаю разработку до наведения порядка в коде&#10;// нет поля username...">
+      <created>1610952745615</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1610952745616</updated>
+    </task>
+    <task id="LOCAL-00023" summary="-find_between moved to helper&#10;-debugger refractored">
+      <created>1610953528392</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1610953528392</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
+    <option name="version" value="2" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -179,6 +331,46 @@
     <MESSAGE value="-мигрировал всё на модальное окно из расширения&#10;- убрал мусор" />
     <MESSAGE value="- версировал файлы" />
     <MESSAGE value="- передалал туду листы" />
-    <option name="LAST_COMMIT_MESSAGE" value="- передалал туду листы" />
+    <MESSAGE value="додела коассс статус начал options через JSON" />
+    <MESSAGE value="- убрал отдельное окно для опций, буду делать всё в одном блоке&#10;&#10;- занимался вёрсткой prefilled" />
+    <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна" />
+    <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию" />
+    <MESSAGE value="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций" />
+    <MESSAGE value="- добавил подсветку кастомных множеств" />
+    <MESSAGE value="- добавил подсветку кастомных множеств (правки)" />
+    <MESSAGE value="Refacotred commit" />
+    <MESSAGE value="сделал обход при несовпадении количества опций в агенте" />
+    <MESSAGE value="Правки в подсветке опций" />
+    <MESSAGE value="Допилил подсветку плохих параметров, сделал вывод обнаруженных проблем через ISSUES в status_block" />
+    <MESSAGE value="Новое:&#10;- запилил функцию поиска между строками в строке find_between&#10;- продолжил логику аналитики (есть проблемы с параметрами)" />
+    <MESSAGE value="//todo перенести в класс Helper внеклассовые методы, начать с ISSUES&#10;// останавливаю разработку до наведения порядка в коде&#10;// нет поля username..." />
+    <MESSAGE value="-find_between moved to helper&#10;-debugger refractored" />
+    <option name="LAST_COMMIT_MESSAGE" value="-find_between moved to helper&#10;-debugger refractored" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="484" y="71" key="#background.js" timestamp="1610947327296">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="484" y="71" key="#background.js/0.0.1536.824@0.0.1536.824" timestamp="1610947327296" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1610947540679">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1610947540679" />
+    <state x="533" y="201" key="SettingsEditor" timestamp="1610983626278">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="533" y="201" key="SettingsEditor/0.0.2048.1112@0.0.2048.1112" timestamp="1610983626278" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1610953540630">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1610953540630" />
+    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1610943547952">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1610943547951" />
+    <state x="1004" y="271" key="refactoring.ChangeSignatureDialog" timestamp="1610986063921">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="1004" y="271" key="refactoring.ChangeSignatureDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1610986063921" />
   </component>
 </project>
