@@ -1,3 +1,21 @@
+//todo перенести в класс Helper внеклассовые методы, начать с ISSUES
+// останавливаю разработку до наведения порядка в коде
+// нет поля username...
+
+class Helper{
+
+	debugMessage(msg){
+		DEBUG_LIST += ('<p id="debug">' + msg + '</p>');
+	}
+
+	showDebugMsgList(){
+		if (DEBUG_LIST !==''){
+			helper_add_tag('status_table-tbody', 'beforeend', ('<tr id="debug"><td>DEBUG:'+DEBUG_LIST+'</td></tr>'));
+			DEBUG_LIST = '';
+		}
+	}
+}
+
 class Id {
 
 	constructor(
@@ -18,13 +36,11 @@ class Id {
 			let start_position = ( (extracted_html.indexOf(signature) + (signature.length) ) )
 			this.value = (extracted_html.slice (start_position, (parseInt(start_position) + 32) ) );
 		} else
-			alert('id.init - value not found')
 
 		if (this.value) { //формирует ссылки на ПУ и на НОК
 			this.link_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.value;
 			this.link_user = 'https://cleantalk.org/my/show_requests?request_id=' + this.value;
-		} else
-			alert('id.init - no links data')
+		}
 	} // берёт request ID из массива HTML и делает ссылки на него
 }
 
@@ -52,6 +68,7 @@ class Status {
 			if (this.agent !== CURRENT_VERSIONS.get('wordpress'))  {
 				this.agent = '<a title="Плагин устарел" style  = "color: red">'+this.agent+'</a>';
 				ct.analysis.add_to_issues_list('Версия плагина устарела','3');
+				ct.set_detail_prop_by_name('ct_agent','css_id','BAD');
 
 			} else {
 				this.agent = '<a title="Версия в порядке" style = "color: green">'+this.agent+'</a>';
@@ -72,7 +89,6 @@ class Status {
 					break;
 
 				default:
-					alert('status.init - no method_name found');
 
 			}
 
@@ -129,9 +145,11 @@ class Status {
 		}
 
 		//экстракция IP адреса по регулярке
-		pub_ip_trimmed = ct.get_detail_value_by_name('sender_ip',);
-		pub_ip_trimmed = pub_ip_trimmed.match(/(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/);
-		pub_ip_trimmed = pub_ip_trimmed[0];
+		if (ct.get_detail_value_by_name('sender_ip',) !== '') {
+			pub_ip_trimmed = ct.get_detail_value_by_name('sender_ip',);
+			pub_ip_trimmed = pub_ip_trimmed.match(/(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/);
+			pub_ip_trimmed = pub_ip_trimmed[0];
+		}
 
 	}
 
@@ -221,15 +239,6 @@ class CT {
 	}// ДАННЫЕ!! Установка данных для поиска в HTML лапше, возвращает массив и длину массива
 
 	draw_details_block() { //рисует блоки основываясь на Section ID
-
-/*		let debug_alert = '';
-		for (let i=0; i <= this.details.length-1; i++){
-			debug_alert +=
-				'name ' + this.details[i].name +
-				' value ' + this.details[i].value +
-				' block ' + this.details[i].block_id + '\n'
-		}
-		alert(debug_alert);*/
 
 		let ar = [];
 
@@ -451,6 +460,7 @@ class CT {
 				}
 
 				ct.status.filters = ct.status.filters.replace(id_regexp, `<a style="color:#990000">` + service_or_user_id + `</a>`);
+				ct.analysis.add_to_issues_list('Для пользователя правились фильтры.','0');
 
 			} // Подсветка фильтров с правками
 
@@ -517,12 +527,11 @@ class CT {
 
 					case 'css_id':{
 						this.details[i].css_id = new_value;
-					}
+					} break;
 
 					case 'value':{
 						this.details[i].value = new_value;
-					}
-
+					} break;
 				}
 			}
 		}
@@ -585,7 +594,7 @@ class Analysis {
 		if (def_options_agent.length === ct.options.length) { //todo убрать этот блок, оставить только проверку по именам поций
 
 		} else {
-			alert('Количество опций не совпало. Ничего страшного, возможно плагин устарел. По умолчанию : ' + def_options_agent.length + ', в запросе = ' + ct.options.length);
+			helper.debugMessage('Количество опций не совпало. Ничего страшного, возможно плагин устарел. По умолчанию : ' + def_options_agent.length + ', в запросе = ' + ct.options.length);
 		}
 
 
@@ -701,45 +710,38 @@ class Analysis {
 
 					if ( ct.details[i].value === undefined || ct.details[i].value === '' ){
 						ct.details[i].css_id= 'INCORRECT';
-						this.add_to_issues_list('SUBMIT_TIME отсутствует.', '10');
-						alert('SUBMIT_TIME отсутствует.', '10');
+						this.add_to_issues_list('Не смогли определить SUBMIT_TIME.', '10');
 					}
 
 					else if (Number(ct.details[i].value) === 0){
 						ct.details[i].css_id= 'BAD';
 						this.add_to_issues_list('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
-						alert('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
 					}
 
 					else if(Number(ct.details[i].value) === 1){
 						ct.details[i].css_id= 'INCORRECT'
 						this.add_to_issues_list('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
-						alert('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
 					}
 
 					else if(1 <= Number(ct.details[i].value) && Number(ct.details[i].value <= 5) ){
 						ct.details[i].css_id= 'BAD'
 						this.add_to_issues_list('1 <= SUBMIT_TIME < 5, слишком низкий.', '3');
-						alert('1 < SUBMIT_TIME < 5, слишком низкий.', '3');
 					}
 
-					else if(500 >= Number(ct.details[i].value) >= 3000){
+					else if(500 <= Number(ct.details[i].value) && Number(ct.details[i].value) <= 3000){
 						ct.details[i].css_id= 'BAD'
-						this.add_to_issues_list('SUBMIT_TIME > 500, странно.', '3');
-						alert('SUBMIT_TIME > 500, странно.', '3');
+						this.add_to_issues_list('3000 > SUBMIT_TIME > 500, многовато.', '3');
 					}
 
 					else if(Number(ct.details[i].value) > 3000){
 						ct.details[i].css_id= 'BAD'
 						this.add_to_issues_list('SUBMIT_TIME > 3000, есть проблемы.', '3');
-						alert('SUBMIT_TIME > 3000, есть проблемы.', '3');
 					}
 
 					else {
 						ct.details[i].css_id= 'GOOD';
 					}
 
-					alert(ct.details[i].name +' '+ ct.details[i].value +' '+ ct.details[i].css_id);
 				} break;
 
 				//COOKIES
@@ -822,18 +824,22 @@ class Analysis {
 //==== DECLARE BLOCK
 const CURRENT_VERSIONS = new Map(
 	[
-		['wordpress','wordpress-51512']
+		['wordpress','wordpress-51513']
 	]
 )
-const ISSUES = new Map();
+let ISSUES = new Map();
+let DEBUG_LIST ='';
 let extracted_html;
 let pub_ip_trimmed;
 let pub_details_array_length;
 let ct = new CT();
 
+helper = new Helper();
 ct.id = new Id();
-ct.status = new Status();
 ct.analysis = new Analysis();
+ct.status = new Status();
+
+
 //==== DECLARE BLOCK END
 
 //==== NON CLASS FUNCTIONS
@@ -928,8 +934,11 @@ function helper_call_window() { //вызов окна запроса
 		ct.draw_options_block();
 		ct.draw_status_block();
 
+
 		ct.analysis.init_options_default();
 		ct.analysis.check_options();
+
+		helper.showDebugMsgList();
 
 		layout_window.focus();
 
