@@ -4,15 +4,39 @@
 
 class Helper{
 
+	constructor(
+		debug_list
+	) {
+		this.debug_list = debug_list;
+	}
+
+	initHelperData(){
+		this.debug_list = '';
+	}
+
 	debugMessage(msg){
-		DEBUG_LIST += ('<p id="debug">' + msg + '</p>');
+		this.debug_list += ('<p id="debug">' + msg + '</p>');
 	}
 
 	showDebugMsgList(){
-		if (DEBUG_LIST !==''){
-			helper_add_tag('status_table-tbody', 'beforeend', ('<tr id="debug"><td>DEBUG:'+DEBUG_LIST+'</td></tr>'));
-			DEBUG_LIST = '';
+		if (this.debug_list !==''){
+			helper_add_tag('status_table-tbody', 'beforeend', ('<tr id="debug"><td>DEBUG:'+this.debug_list+'</td></tr>'));
+			this.debug_list = '';
 		}
+	}
+
+	find_between(string, left, right){
+		let startfrom;
+		let endwith;
+		for (let i=0; i<string.length; i++){
+			if (string.slice(i,i+left.length) === left) {
+				startfrom = i+left.length;
+			}
+			if (string.slice(i,i+right.length) === right) {
+				endwith = i;
+			}
+		}
+		return (string.slice(startfrom,endwith))
 	}
 }
 
@@ -495,7 +519,7 @@ class CT {
 				||
 				this.details[i].name === 'sender_ip'
 				){
-					this.details[i].value =  helper_find_between(this.details[i].value,'"_blank">','</a>');
+					this.details[i].value =  helper.find_between(this.details[i].value,'"_blank">','</a>');
 				}
 		}
 
@@ -828,13 +852,13 @@ const CURRENT_VERSIONS = new Map(
 	]
 )
 let ISSUES = new Map();
-let DEBUG_LIST ='';
 let extracted_html;
 let pub_ip_trimmed;
 let pub_details_array_length;
 let ct = new CT();
 
 helper = new Helper();
+helper.initHelperData();
 ct.id = new Id();
 ct.analysis = new Analysis();
 ct.status = new Status();
@@ -843,19 +867,6 @@ ct.status = new Status();
 //==== DECLARE BLOCK END
 
 //==== NON CLASS FUNCTIONS
-function helper_find_between(string,left,right){
-	let startfrom;
-	let endwith;
-	for (let i=0; i<string.length; i++){
-		if (string.slice(i,i+left.length) === left) {
-			startfrom = i+left.length;
-		}
-		if (string.slice(i,i+right.length) === right) {
-			endwith = i;
-		}
-	}
-	return (string.slice(startfrom,endwith))
-}
 
 function helper_get_html_section(section_name) { //извлекает html секции по Details.section_id
 
