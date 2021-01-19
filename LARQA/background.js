@@ -1,20 +1,23 @@
-// todo останавливаю разработку до наведения порядка в коде
-// todo нет поля username...
-// todo выводить изменения в опциях списком, так же как для параметров
+//todo Выводить изменения в опциях и параметрах красиво
+//todo Допилить проверку параметров
+//todo Допилить статус, отображать одобрен\нет, менять цвет в зависимости от этого, отражать allowed by PL
 
 class Helper{
 
 	constructor(
 		debug_list,
-		issues_list
+		issues_list,
+		changed_options_list,
 	) {
 		this.debug_list = debug_list;
 		this.issues_list = issues_list;
+		this.changed_options_list = changed_options_list;
 	}
 
 	initHelperData(){
 		this.debug_list = '';
 		this.issues_list = new Map();
+		this.changed_options_list = '';
 	}
 
 	callWindow() { //вызов окна запроса
@@ -28,7 +31,7 @@ class Helper{
 			ct.analysis.initOptionsDefaults();
 			ct.initDetailsArray();
 			ct.initOptionsArray();
-			ct.id.initId();
+			ct.status.initId();
 			ct.status.initStatus();
 			ct.analysis.initOptionsDefaults();
 
@@ -45,6 +48,7 @@ class Helper{
 
 			helper.showIssuesList();
 			helper.showDebugMsgList();
+			helper.showChangedOptionsList();
 
 
 			layout_window.focus();
@@ -52,8 +56,6 @@ class Helper{
 		}//вызов окна запроса
 
 	} //вызов рабочего окна
-
-
 
 	findBetween(string, left, right){
 		let startfrom;
@@ -93,7 +95,7 @@ class Helper{
 		if (html_section.includes(signature)) { // 11- это символы <td>:&nbsp;
 			start_value_position = (html_section.indexOf(signature) + signature.length + 11); //стартовая позиция для искомого значения
 		} else {
-			helper.debugMessage('Signature not found :<a href="'+ signature +'">SIGNATURE</a>');
+			//helper.debugMessage('Signature not found :<a href="'+ signature +'">SIGNATURE</a>');
 			return 'INVISIBLE';
 		}
 
@@ -150,10 +152,10 @@ class Helper{
 		}
 
 		if (list_of_issues !==''){
-			helper.addTag('status_table-tbody', 'beforeend', (
-				' <p class="status_table_inner">Обратить внимание!('+issues_number+'): <br><b>' + list_of_issues +
-				' </b></p>' +
-				' <p class="status_table_inner">Итоговый вес проблем: <b>' + amount_of_issues + '</b>'
+			helper.addTag('details_table-tbody', 'afterbegin', (
+				' <tr class="status_table_inner">Обратить внимание!('+issues_number+'): <br><b>' + list_of_issues +
+				' </b></tr>' +
+				' <tr class="status_table_inner">Итоговый вес: <b>' + amount_of_issues + '</b></tr>'
 			));
 			list_of_issues = '';
 		}
@@ -167,6 +169,17 @@ class Helper{
 		if (this.debug_list !==''){
 			helper.addTag('status_table-tbody', 'beforeend', ('<tr id="debug"><td>'+this.debug_list+'</td></tr>'));
 			this.debug_list = '';
+		}
+	}
+
+	addToChangedOptionsList(msg){
+		this.changed_options_list += ('<p id="debug">' + msg + '</p>');
+	}
+
+	showChangedOptionsList(){
+		if (this.changed_options_list !==''){
+			helper.addTag('options_table-tbody', 'afterbegin', ('<div>Изменены опции:'+this.changed_options_list+'</div>'));
+			this.changed_options_list = '';
 		}
 	}
 }
@@ -734,6 +747,7 @@ class Analysis {
 				if ( (def_options_agent[i].name === ct.options[j].name) && ( def_value !== req_value )) {
 
 					changes_array.push(j);
+					helper.addToChangedOptionsList(ct.options[j].name);
 				}
 			}
 		}
@@ -975,7 +989,7 @@ class Analysis {
 				//PAGE_URL
 				case 'page_url': {
 
-					if (detail.value.includes('.php') ||
+					if (detail.value.includes('members') ||
 						//detail.value.includes('') ||
 						detail.value.includes('admin') ||
 						detail.value.includes('login')

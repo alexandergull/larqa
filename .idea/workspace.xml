@@ -23,7 +23,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_01_2021_18_24__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_01_2021_18_24__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
     </list>
@@ -188,7 +187,7 @@
       <workItem from="1610606240104" duration="2972000" />
       <workItem from="1610624796123" duration="10445000" />
       <workItem from="1610943539998" duration="16283000" />
-      <workItem from="1610963158787" duration="7990000" />
+      <workItem from="1610963158787" duration="10668000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -309,7 +308,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610963278586</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Новое:&#10;- вывел message и username в блок details">
+      <created>1611042926995</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1611042926995</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -353,7 +359,8 @@
     <MESSAGE value="//todo перенести в класс Helper внеклассовые методы, начать с ISSUES&#10;// останавливаю разработку до наведения порядка в коде&#10;// нет поля username..." />
     <MESSAGE value="-find_between moved to helper&#10;-debugger refractored" />
     <MESSAGE value="Новое:&#10;- убрал все неклассовые методы в класс Helper&#10;- рефакторинг кода, привёл все методы к каноническому виду&#10;- сделал issueslist как в debugMessages - новой строкой в таблицу status" />
-    <option name="LAST_COMMIT_MESSAGE" value="Новое:&#10;- убрал все неклассовые методы в класс Helper&#10;- рефакторинг кода, привёл все методы к каноническому виду&#10;- сделал issueslist как в debugMessages - новой строкой в таблицу status" />
+    <MESSAGE value="Новое:&#10;- вывел message и username в блок details" />
+    <option name="LAST_COMMIT_MESSAGE" value="Новое:&#10;- вывел message и username в блок details" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">
@@ -391,7 +398,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/LARQA/background.js</url>
-          <line>357</line>
+          <line>370</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
