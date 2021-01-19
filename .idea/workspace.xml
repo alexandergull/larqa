@@ -23,6 +23,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_19_02__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_19_02__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_9_19__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_01_2021_9_19__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_9_06__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_01_2021_9_06__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_01_2021_11_46__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_01_2021_11_46__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_01_2021_18_24__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_01_2021_18_24__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_01_2021_10_54__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_01_2021_10_54__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -187,6 +194,7 @@
       <workItem from="1610624796123" duration="10445000" />
       <workItem from="1610943539998" duration="16283000" />
       <workItem from="1610963158787" duration="10903000" />
+      <workItem from="1611049671519" duration="1189000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -374,10 +382,11 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="484" y="71" key="#background.js/0.0.1536.824@0.0.1536.824" timestamp="1610947327296" />
-    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog" timestamp="1611038145093">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="124" y="126" width="1800" height="861" key="DiffContextDialog" timestamp="1611050055232">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="93" y="93" width="1350" height="638" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1611038145093" />
+    <state x="124" y="126" width="1800" height="861" key="DiffContextDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1611050055232" />
     <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1610947540679">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -405,8 +414,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/LARQA/background.js</url>
-          <line>370</line>
-          <properties lambdaOrdinal="-1" />
+          <line>363</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

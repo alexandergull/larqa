@@ -31,7 +31,7 @@ class Helper{
 			ct.analysis.initOptionsDefaults();
 			ct.initDetailsArray();
 			ct.initOptionsArray();
-			ct.id.initId();
+			ct.status.initId();
 			ct.status.initStatus();
 			ct.analysis.initOptionsDefaults();
 
@@ -74,15 +74,15 @@ class Helper{
 	getHtmlSection(section_name) { //извлекает html секции по Details.section_id
 
 		const signature = `<div class="section_block" data-section="` + section_name + `">`; // подпись берём из параметра функции
-		const start_section_position = extracted_html.indexOf(signature);// начальная позиция определена
+		const start_section_position = EXTRACTED_HTML.indexOf(signature);// начальная позиция определена
 		let end_section_position = null;
-		for (let i = start_section_position + 1; i <= extracted_html.length; i++) {
-			if ((extracted_html.slice(i, i + 40)) === '<div class="section_block" data-section=') {
+		for (let i = start_section_position + 1; i <= EXTRACTED_HTML.length; i++) {
+			if ((EXTRACTED_HTML.slice(i, i + 40)) === '<div class="section_block" data-section=') {
 				end_section_position = i; // конечная позиция определена
 				break;
 			}
 		}
-		return extracted_html.slice(start_section_position, end_section_position);
+		return EXTRACTED_HTML.slice(start_section_position, end_section_position);
 
 	}
 
@@ -184,46 +184,24 @@ class Helper{
 	}
 }
 
-class Id {
-
-	constructor(
-		value,
-		link_noc,
-		link_user
-	) {
-		this.value = value;
-		this.link_noc = link_noc;
-		this.link_user = link_user;
-	}
-
-	initId() { // берёт request ID из массива HTML и делает ссылки на него
-
-		const signature = `<div class="panel-heading">Запрос `;
-
-		if (extracted_html.includes(signature)) {
-			let start_position = ( (extracted_html.indexOf(signature) + (signature.length) ) )
-			this.value = (extracted_html.slice (start_position, (parseInt(start_position) + 32) ) );
-		} else
-
-		if (this.value) { //формирует ссылки на ПУ и на НОК
-			this.link_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.value;
-			this.link_user = 'https://cleantalk.org/my/show_requests?request_id=' + this.value;
-		}
-	} // берёт request ID из массива HTML и делает ссылки на него
-}
-
 class Status {
 
 	constructor(
 		agent,
 		isAllowed,
 		filters,
-		type
+		type,
+		value,
+		link_noc,
+		link_user
 	) {
 		this.agent = agent;
 		this.isAllowed = isAllowed;
 		this.filters = filters;
 		this.type = type; //todo допилить status.type
+		this.id_value = value;
+		this.link_noc = link_noc;
+		this.link_user = link_user;
 	}
 
 	initStatus() {
@@ -313,13 +291,28 @@ class Status {
 		}
 
 		//экстракция IP адреса по регулярке
-		if (ct.getDetailValueByName('sender_ip',) !== '') {
-			pub_ip_trimmed = ct.getDetailValueByName('sender_ip',);
-			pub_ip_trimmed = pub_ip_trimmed.match(/(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/);
-			pub_ip_trimmed = pub_ip_trimmed[0];
-		}
+/*		if (ct.getDetailValueByName('sender_ip',) !== '') {
+			IP_TRIMMED = ct.getDetailValueByName('sender_ip',);
+			IP_TRIMMED = IP_TRIMMED.match(/(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/);
+			IP_TRIMMED = IP_TRIMMED[0];
+		}*/
 
 	}
+
+	initId() { // берёт request ID из массива HTML и делает ссылки на него
+
+		const signature = `<div class="panel-heading">Запрос `;
+
+		if (EXTRACTED_HTML.includes(signature)) {
+			let start_position = ( (EXTRACTED_HTML.indexOf(signature) + (signature.length) ) )
+			this.id_value = (EXTRACTED_HTML.slice (start_position, (parseInt(start_position) + 32) ) );
+		} else
+
+		if (this.value) { //формирует ссылки на ПУ и на НОК
+			this.link_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.value;
+			this.link_user = 'https://cleantalk.org/my/show_requests?request_id=' + this.value;
+		}
+	} // берёт request ID из массива HTML и делает ссылки на него
 
 }
 
@@ -401,7 +394,7 @@ class CT {
 		];
 
 //длина массива данных для поиска определена
-		pub_details_array_length = values.length;
+		DETAILS_LENGTH = values.length;
 
 		return values;
 
@@ -413,7 +406,7 @@ class CT {
 		this.details = [];
 		let details_draft = this.initDetailsSignatureData();
 
-		for (let i = 0; i < pub_details_array_length; i++) {
+		for (let i = 0; i < DETAILS_LENGTH; i++) {
 			this.details.push (
 				new Detail(
 					(details_draft[i][0]),
@@ -449,7 +442,7 @@ class CT {
 
 		let ar = [];
 
-		for (let j = 0; j < pub_details_array_length; j++) {
+		for (let j = 0; j < DETAILS_LENGTH; j++) {
 			ar.push(parseInt(this.details[j].block_id));
 		}
 
@@ -459,7 +452,7 @@ class CT {
 
 			//helper.addTag('details_table-tbody', 'beforeend', ('<tr id="details_tier_block_' + block_id + '">SECTION ' + block_id + '</tr>')); todo Деление на секции, тут разобратсья нужно оно или нет
 
-			for (let i = 0; i < pub_details_array_length; i++) { 						//добавление строк
+			for (let i = 0; i < DETAILS_LENGTH; i++) { 						//добавление строк
 
 				if (pub_strcnt <= i) { 														//хуй знает как это работает и почему без этого не работает
 
@@ -611,7 +604,13 @@ class CT {
 
 	} // рисует блок опций
 
-	drawStatusBlock(){
+	drawStatusBlock(){ //todo всё переделать под рисование как в showDebugMessage
+
+		layout_window.document.getElementById('status_table_status-class-column').innerHTML += (
+			' <p class="status_table_inner">Ссылки на запрос: <a href="' + ct.status.link_noc +'">[НОК] </a>'+
+			' <a href="' + ct.status.link_user +'">[ПУ] </a>' +
+			' </p>'
+		);
 
 		if (ct.status.filters != null) { // Подсветка фильтров с правками если фильтры вообще есть
 			let service_or_user_id = '';
@@ -643,13 +642,18 @@ class CT {
 			layout_window.document.getElementById('status_table-filter-raw').innerHTML += (
 				'Агент: [' + ct.status.agent + '] Фильтры: [' + ct.status.filters + ']'
 			);
-			layout_window.document.getElementById('layout_window_title').innerHTML += (' [' + ct.id.value + '] [' + ct.status.isAllowed + ']'); //todo менять цвет в зависимости от состояния
+			layout_window.document.getElementById('layout_window_title').innerHTML = (
+				' ID=..' +
+				ct.status.id_value.slice(ct.status.id_value.length-5,ct.status.id_value.length) +
+				' [' + ct.status.isAllowed +
+				']');
+			//todo менять цвет в зависимости от состояния
 		}
 	} // рисует блок статуса
 
 	getDetailValueByName(name) { 	//вызывает значения value объекта Detail по имени
 
-		for (let i = 0; i < pub_details_array_length; i++) {
+		for (let i = 0; i < DETAILS_LENGTH; i++) {
 
 			if (this.details[i].name === name) {
 				return this.details[i].value
@@ -659,7 +663,7 @@ class CT {
 
 	setDetailPropertyByName(detail_name, property, new_value) { 	//вызывает значения value объекта Detail по имени
 
-		for (let i = 0; i < pub_details_array_length; i++) {
+		for (let i = 0; i < DETAILS_LENGTH; i++) {
 
 			if (this.details[i].name === detail_name) {
 
@@ -1014,21 +1018,17 @@ class Analysis {
 	}
 }
 
-//==== TEST BLOCK
-
-//==== TEST BLOCK END
-
 //==== DECLARE BLOCK
 const CURRENT_VERSIONS = new Map(
 	[
 		['wordpress','wordpress-51514']
 	]
 )
-let extracted_html;
-let pub_ip_trimmed;
-let pub_details_array_length;
+let EXTRACTED_HTML;
+let IP_TRIMMED;
+let DETAILS_LENGTH;
+
 let ct = new CT();
-ct.id = new Id();
 ct.analysis = new Analysis();
 ct.status = new Status();
 
@@ -1042,7 +1042,7 @@ chrome.runtime.onMessage.addListener(function (message) {
 	switch (message.command) {
 
 		case "pageHtml":
-			extracted_html = message.html;
+			EXTRACTED_HTML = message.html;
 			helper.callWindow();
 			break;
 
