@@ -34,11 +34,13 @@ class Helper{
 
 			window.pub_strcnt = 0; //счётчик строк в таблице
 
+			ct.analysis.checkDetails();
+
 			ct.drawDetailsBlock();
 			ct.drawOptionsBlock();
 			ct.drawStatusBlock();
 
-			ct.analysis.checkDetails();
+
 			ct.analysis.checkOptions();
 
 			helper.showIssuesList();
@@ -91,6 +93,7 @@ class Helper{
 		if (html_section.includes(signature)) { // 11- это символы <td>:&nbsp;
 			start_value_position = (html_section.indexOf(signature) + signature.length + 11); //стартовая позиция для искомого значения
 		} else {
+			helper.debugMessage('Signature not found :<a href="'+ signature +'">SIGNATURE</a>');
 			return 'INVISIBLE';
 		}
 
@@ -361,6 +364,8 @@ class CT {
 			['sender_ip', '1', '<td>ip&nbsp;</td>', '', 'DEFAULT', 'sender'],
 			['sender_ip_is_bl', '1', '<td>ip_in_list&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['sender_ip_is_sc', '1', '<td>short_cache_ip&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['username', '1', '<td>username&nbsp;</td>', '', 'DEFAULT', 'sender'],
+			['message', '1', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params'],
 			['ct_options', '2', '<td>ct_options&nbsp;</td>', '', 'DEFAULT', 'sender'],
 			['ct_agent', '3', '<td>agent&nbsp;</td>', '', 'DEFAULT', 'params'],
 			['js_status', '4', '<td>js_passed&nbsp;</td>', '', 'DEFAULT', 'details'],
@@ -409,6 +414,7 @@ class CT {
 			//Внесение результатов поиcка values в массив объектов Details
 			this.details[i].value = helper.getDetailSignatureForSection(this.details[i].section_id, this.details[i].signature);
 
+			//helper.debugMessage(this.details[i].name +' *** '+ this.details[i].value +' '+this.details[i].css_id);
 			if (
 				this.details[i].name === 'sender_email'
 				||
@@ -440,7 +446,7 @@ class CT {
 
 			//helper.addTag('details_table-tbody', 'beforeend', ('<tr id="details_tier_block_' + block_id + '">SECTION ' + block_id + '</tr>')); todo Деление на секции, тут разобратсья нужно оно или нет
 
-			for (let i = 0; i < pub_details_array_length - 1; i++) { 						//добавление строк
+			for (let i = 0; i < pub_details_array_length; i++) { 						//добавление строк
 
 				if (pub_strcnt <= i) { 														//хуй знает как это работает и почему без этого не работает
 
@@ -483,6 +489,7 @@ class CT {
 
 //
 // Подсветка параметров
+
 								switch (detail.css_id){
 									//по умолчанию чёрный
 									case 'DEFAULT':{
@@ -712,7 +719,6 @@ class Analysis {
 		if (def_options_agent.length === ct.options.length) { //todo убрать этот блок, оставить только проверку по именам поций
 
 		} else {
-			helper.debugMessage('Количество опций не совпало. Ничего страшного, возможно плагин устарел. По умолчанию : ' + def_options_agent.length + ', в запросе = ' + ct.options.length);
 		}
 
 
@@ -753,27 +759,52 @@ class Analysis {
 	checkDetails() {
 
 		for (let i=0; i<=ct.details.length-1; i++){
+			let detail = ct.details[i];
+			switch (detail.name) {
 
-			switch (ct.details[i].name) {
+				//SHORTCACHE
+
+				case 'sender_email_is_sc': {
+
+					if (Number(detail.value) >= 30) {
+
+						detail.css_id = 'BAD';
+						helper.addToIssuesList('EMAIL в шорткэше', '0');
+
+					} else detail.value = 'INVISIBLE';
+
+				} break;
+
+				case 'sender_ip_is_sc': {
+
+					if (Number(detail.value) >= 30) {
+
+						detail.css_id = 'BAD';
+						helper.addToIssuesList('IP в шорткэше', '0');
+
+					} else detail.value = 'INVISIBLE';
+
+				} break;
+
 
 				//EMAIL
 				case 'sender_email': {
 
-					if (ct.details[i].value === '') {
+					if (detail.value === '') {
 
-						ct.details[i].css_id = 'BAD';
+						detail.css_id = 'BAD';
 						helper.addToIssuesList('EMAIL передан, но пустой', '3');
 
-					} else if (ct.details[i].value === null) {
+					} else if (detail.value === null) {
 
-						ct.details[i].css_id = 'INCORRECT';
+						detail.css_id = 'INCORRECT';
 						helper.addToIssuesList('Не смогли определить EMAIL', '10');
 
 					} else if (ct.getDetailValueByName('sender_email_is_bl')==2){
 
-						ct.details[i].css_id = 'BAD';
+						detail.css_id = 'BAD';
 
-					} else ct.details[i].css_id = 'GOOD';
+					} else detail.css_id = 'GOOD';
 
 
 				} break;
@@ -781,22 +812,22 @@ class Analysis {
 				//JS
 				case 'js_status': {
 
-					if (Number(ct.details[i].value) === -1){
-						ct.details[i].css_id= 'BAD';
+					if (Number(detail.value) === -1){
+						detail.css_id= 'BAD';
 						helper.addToIssuesList('JS отключен в браузере', '3');
 					}
 
-					else if (Number(ct.details[i].value) === 1){
-						ct.details[i].css_id= 'GOOD';
+					else if (Number(detail.value) === 1){
+						detail.css_id= 'GOOD';
 					}
 
-					else if(Number(ct.details[i].value) === 0){
-						ct.details[i].css_id= 'BAD'
+					else if(Number(detail.value) === 0){
+						detail.css_id= 'BAD'
 						helper.addToIssuesList('Тест JS провален', '3');
 					}
 
 					else {
-						ct.details[i].css_id= 'INCORRECT';
+						detail.css_id= 'INCORRECT';
 						helper.addToIssuesList('Не смогли определить JS', '10');
 					}
 				} break;
@@ -804,60 +835,94 @@ class Analysis {
 				//IP
 				case 'sender_ip': {
 
-					if (ct.details[i].value === '') {
+					if (detail.value === '') {
 
-						ct.details[i].css_id= 'BAD';
+						detail.css_id= 'BAD';
 						helper.addToIssuesList('IP адрес пустой', '3');
 
-					} else if (ct.details[i].value === null) {
+					} else if (detail.value === null) {
 
-						ct.details[i].css_id= 'INCORRECT';
+						detail.css_id= 'INCORRECT';
 						helper.addToIssuesList('Не смогли определить IP адрес', '10');
 
 					} else if (ct.getDetailValueByName('sender_ip_is_bl')==2){
 
-						ct.details[i].css_id = 'BAD';
+						detail.css_id = 'BAD';
 
 					}
-					else ct.details[i].css_id= 'GOOD';
+					else detail.css_id= 'GOOD';
+
+				}break;
+
+				//REFERRER
+				case 'page_referrer': {
+
+					if (detail.value === '') {
+
+						detail.css_id= 'BAD';
+						helper.addToIssuesList('REFERRER  пустой', '3');
+
+					} else if (detail.value.includes('google')) {
+
+						detail.css_id= 'BAD';
+						helper.addToIssuesList('Поисковик в REFERRER', '10');
+
+					}  else detail.css_id= 'GOOD';
+
+				}break;
+
+				//PRE-REFERRER
+				case 'page_pre_referrer': {
+
+					if (detail.value === '') {
+
+						detail.css_id= 'BAD';
+						helper.addToIssuesList('PRE-REFERRER  пустой', '3');
+
+					} else if (detail.value.includes('google')) {
+
+						detail.css_id= 'BAD';
+						helper.addToIssuesList('Поисковик в PRE-REFERRER', '10');
+
+					}  else detail.css_id= 'GOOD';
 
 				}break;
 
 				//SUBMIT_TIME
 				case 'submit_time': {
 
-					if ( ct.details[i].value === undefined || ct.details[i].value === '' ){
-						ct.details[i].css_id= 'INCORRECT';
+					if ( detail.value === undefined || detail.value === '' ){
+						detail.css_id= 'INCORRECT';
 						helper.addToIssuesList('Не смогли определить SUBMIT_TIME.', '10');
 					}
 
-					else if (Number(ct.details[i].value) === 0){
-						ct.details[i].css_id= 'BAD';
+					else if (Number(detail.value) === 0){
+						detail.css_id= 'BAD';
 						helper.addToIssuesList('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
 					}
 
-					else if(Number(ct.details[i].value) === 1){
-						ct.details[i].css_id= 'INCORRECT'
+					else if(Number(detail.value) === 1){
+						detail.css_id= 'INCORRECT'
 						helper.addToIssuesList('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
 					}
 
-					else if(1 <= Number(ct.details[i].value) && Number(ct.details[i].value <= 5) ){
-						ct.details[i].css_id= 'BAD'
+					else if(1 <= Number(detail.value) && Number(detail.value <= 5) ){
+						detail.css_id= 'BAD'
 						helper.addToIssuesList('1 <= SUBMIT_TIME < 5, слишком низкий.', '3');
 					}
 
-					else if(500 <= Number(ct.details[i].value) && Number(ct.details[i].value) <= 3000){
-						ct.details[i].css_id= 'BAD'
+					else if(500 <= Number(detail.value) && Number(detail.value) <= 3000){
+						detail.css_id= 'BAD'
 						helper.addToIssuesList('3000 > SUBMIT_TIME > 500, многовато.', '3');
 					}
 
-					else if(Number(ct.details[i].value) > 3000){
-						ct.details[i].css_id= 'BAD'
+					else if(Number(detail.value) > 3000){
+						detail.css_id= 'BAD'
 						helper.addToIssuesList('SUBMIT_TIME > 3000, есть проблемы.', '3');
 					}
 
 					else {
-						ct.details[i].css_id= 'GOOD';
+						detail.css_id= 'GOOD';
 					}
 
 				} break;
@@ -865,69 +930,69 @@ class Analysis {
 				//COOKIES
 				case 'cookies_enabled': {
 
-					if (ct.details[i].value === '' ||
-						ct.details[i].value === null) {
+					if (detail.value === '' ||
+						detail.value === null) {
 
-						ct.details[i].css_id= 'BAD';
+						detail.css_id= 'BAD';
 						helper.addToIssuesList('Не смогли определить наличие COOKIES', '3');
 
-					} else if (ct.details[i].value == 0){
+					} else if (detail.value == 0){
 
-						ct.details[i].css_id = 'BAD';
+						detail.css_id = 'BAD';
 						helper.addToIssuesList('COOKIES отключены', '10');
 
 					}
-					else ct.details[i].css_id= 'GOOD';
+					else detail.css_id= 'GOOD';
 
 				}break;
 
 				//GREYLIST
 				case 'is_greylisted': {
 
-					if (ct.details[i].value == 1) {
+					if (detail.value == 1) {
 
-						ct.details[i].css_id= 'BAD';
+						detail.css_id= 'BAD';
 						helper.addToIssuesList('Сработал GREYLIST. Смотри SUBMIT_TIME.', '3');
 
 					}
-					else ct.details[i].value= 'INVISIBLE';
+					else detail.value= 'INVISIBLE';
 
 				}break;
 
 				//MOBILE_UA
 				case 'is_mobile_ua': {
 
-					if (ct.details[i].value == 1) {
+					if (detail.value == 1) {
 
-						ct.details[i].css_id= 'GOOD';
+						detail.css_id= 'GOOD';
 						helper.addToIssuesList('USERAGENT - мобильное устройство', '0');
 
 					}
-					else ct.details[i].value= 'INVISIBLE';
+					else detail.value= 'INVISIBLE';
 
 				}break;
 
 				//PAGE_URL
 				case 'page_url': {
 
-					if (ct.details[i].value.includes('.php') ||
-						//ct.details[i].value.includes('') ||
-						ct.details[i].value.includes('admin') ||
-						ct.details[i].value.includes('login')
+					if (detail.value.includes('.php') ||
+						//detail.value.includes('') ||
+						detail.value.includes('admin') ||
+						detail.value.includes('login')
 					){
 
-						ct.details[i].css_id= 'BAD';
+						detail.css_id= 'BAD';
 						helper.addToIssuesList('Возможен перехват админки, смотри PAGE_URL', '0');
 
-					} else if(ct.details[i].value == '' ||
-						ct.details[i].value === null
+					} else if(detail.value == '' ||
+						detail.value === null
 					){
 
-						ct.details[i].css_id= 'BAD';
+						detail.css_id= 'BAD';
 						helper.addToIssuesList('Пустой PAGE_URL. Это странно.', '0');
 
 					}
-					else ct.details[i].css_id= 'GOOD';
+					else detail.css_id= 'GOOD';
 
 				}break;
 			}
