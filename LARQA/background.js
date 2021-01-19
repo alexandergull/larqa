@@ -1,8 +1,9 @@
+//todo Продолжить рефакторинг
 //todo Выводить изменения в опциях и параметрах красиво
 //todo Допилить проверку параметров
 //todo Допилить статус, отображать одобрен\нет, менять цвет в зависимости от этого, отражать allowed by PL
 
-class Helper{
+class Helper { //Helper class, called to keep misc functionality. Canonized
 
 	constructor(
 		debug_list,
@@ -14,19 +15,19 @@ class Helper{
 		this.changed_options_list = changed_options_list;
 	}
 
-	initHelperData(){
+	initHelperData() {	//Initialize Helper necessary data.
 		this.debug_list = '';
 		this.issues_list = new Map();
 		this.changed_options_list = '';
 	}
 
-	callWindow() { //вызов окна запроса
+	callWindow() {	//Main window call based on "prefilled.html"
 
-		window.layout_window = window.open( // собственно основное окно
+		window.layout_window = window.open(
 			'prefilled.html',
 			'_blank');
-
-		layout_window.onload = function () { // действия после загрузки окна
+		layout_window.onload = function () { // Processes starts there
+			window.pub_strcnt = 0;
 
 			ct.analysis.initOptionsDefaults();
 			ct.initDetailsArray();
@@ -35,152 +36,158 @@ class Helper{
 			ct.status.initStatus();
 			ct.analysis.initOptionsDefaults();
 
-			window.pub_strcnt = 0; //счётчик строк в таблице
-
 			ct.analysis.checkDetails();
 
 			ct.drawDetailsBlock();
 			ct.drawOptionsBlock();
 			ct.drawStatusBlock();
 
-
 			ct.analysis.checkOptions();
 
 			helper.showIssuesList();
 			helper.showDebugMsgList();
 			helper.showChangedOptionsList();
-
-
 			layout_window.focus();
+		}
 
-		}//вызов окна запроса
+	}
 
-	} //вызов рабочего окна
+	findBetween(string, left, right) {	//Return result(str) within string(str) between left(str) and right(str).
 
-	findBetween(string, left, right){
-		let startfrom;
-		let endwith;
-		for (let i=0; i<string.length; i++){
+		let start_from;
+		let end_with;
+
+		for (let i=0; i<string.length; i++) {
+
 			if (string.slice(i,i+left.length) === left) {
-				startfrom = i+left.length;
-			}
-			if (string.slice(i,i+right.length) === right) {
-				endwith = i;
-			}
-		}
-		return (string.slice(startfrom,endwith))
-	}
 
-	getHtmlSection(section_name) { //извлекает html секции по Details.section_id
-
-		const signature = `<div class="section_block" data-section="` + section_name + `">`; // подпись берём из параметра функции
-		const start_section_position = EXTRACTED_HTML.indexOf(signature);// начальная позиция определена
-		let end_section_position = null;
-		for (let i = start_section_position + 1; i <= EXTRACTED_HTML.length; i++) {
-			if ((EXTRACTED_HTML.slice(i, i + 40)) === '<div class="section_block" data-section=') {
-				end_section_position = i; // конечная позиция определена
+				start_from = i+left.length+1;
+				for (let j=start_from; j<string.length; j++) {
+					if (string.slice(j,j+right.length) === right) {
+						end_with = j;
+						break;
+					}
+				}
 				break;
 			}
 		}
-		return EXTRACTED_HTML.slice(start_section_position, end_section_position);
+		return string.slice(start_from,end_with);
+	}
+
+	getHtmlSectionFromEHTML(section_id) { //Returns a HTML section(str) of EXTRACTED_HTML(const:str) by section_name(str), the list of available section_name is in initDetailsSignatureData.Выкл
+
+		let left = '<div class="section_block" data-section="' + section_id + '">';
+		let right = '<div class="section_block" data-section=';
+
+		return this.findBetween(EXTRACTED_HTML,left,right);
 
 	}
 
-	getDetailSignatureForSection(section_id, signature) { //ищет Detail.value по Detail.signature внутри секции Details.section_id
+	getDetailBySignatureInSection(section_id, signature) { //Returns value(str) of Detail by its signature(str) within HTML section of section_id(str)
 
-		const html_section = this.getHtmlSection(section_id); // секция определена
-		let start_value_position;
-		let end_value_position;
-
-		if (html_section.includes(signature)) { // 11- это символы <td>:&nbsp;
-			start_value_position = (html_section.indexOf(signature) + signature.length + 11); //стартовая позиция для искомого значения
-		} else {
-			//helper.debugMessage('Signature not found :<a href="'+ signature +'">SIGNATURE</a>');
-			return 'INVISIBLE';
-		}
-
-		for (let i = start_value_position; i <= html_section.length; i++) {
-			if ((html_section.slice(i, i + 5)) === '</td>') {
-				end_value_position = i; //конечная позиция определена
-				break;
-			}
-		}
-		return html_section.slice(start_value_position, end_value_position);
+		const html_section = this.getHtmlSectionFromEHTML(section_id);
+		if (!html_section.includes(signature)) return 'INVISIBLE';
+		let left = signature + '<td>:&nbsp';
+		let right = '</td>';
+		return this.findBetween(html_section,left,right)
 
 	}
 
-	addTag(position_tag_id, align, html) { // добавляет тег на страницу
+	addTag(position_tag_id, align, html) { // Adds HTML tag [html:str] to target tag [position_tag_id:str] with alignment [align:str]
 
 		layout_window.document.getElementById(position_tag_id).insertAdjacentHTML(align, html);
 
 	}
 
-	getOptionsFromJSON(json) { //возвращает массив объектов OPTION из JSON настроек
+	getOptionsFromJSON(json) { //Return array of Option class [array] from JSON string [json:str]
 
-		const jsonobj = JSON.parse(json);
+		const json_obj = JSON.parse(json);
 		let temp = [];
-		$.each(jsonobj, function (name, value) {
+
+		$.each(json_obj, function (name, value) {
 			temp.push(new Option(name, value, 0))
 		})
+
 		return temp;
-	}
-
-	trimAndLow (option_value) {
-
-		let resstring = option_value;
-		resstring = resstring.toString().trim();
-		resstring = resstring.toLowerCase();
-		return (resstring);
 
 	}
 
-	addToIssuesList(issue,weight){
+	trimAndLow (option_value) { //Returns trimmed string [return_string:str] in lowercase. Miscellaneous.
+
+		let return_string = option_value;
+		return_string = return_string.toString().trim();
+		return_string = return_string.toLowerCase();
+
+		return (return_string);
+
+	}
+
+	addToIssuesList(issue,weight) { //Collect new issue [issue:str] and its weight[weight:str] to helper.issues_list
+
 		this.issues_list.set(issue,weight);
+
 	}
 
-	showIssuesList(){
+	showIssuesList() { //Adds a new tag of found issues from [helper.issues_list:map] to Details table
 
-		let list_of_issues ='';
-		let amount_of_issues = 0;
-		let issues_number = 0;
-		for (let entry of this.issues_list.keys()) {
-			list_of_issues += ' - '+entry +'<br>';
-		}
-		for (let entry of this.issues_list.values()) {
-			amount_of_issues += Number(entry);
-			issues_number++;
+		if(helper.issues_list !=='') {
+
+			let list = '';
+			let weight = 0;
+			let issues_number = 0;
+
+			for (let entry of this.issues_list.keys()) {
+				list += ' - ' + entry + '<br>';
+			}
+
+			for (let entry of this.issues_list.values()) {
+				weight += Number(entry);
+				issues_number++;
+			}
+
+			if (list !== '') {
+				helper.addTag('details_table-tbody', 'afterbegin', (
+					' <tr class="status_table_inner">Обратить внимание!(' + issues_number + '): <br><b>' + list +
+					' </b></tr>' +
+					' <tr class="status_table_inner">Итоговый вес: <b>' + weight + '</b></tr>'
+				));
+			}
 		}
 
-		if (list_of_issues !==''){
-			helper.addTag('details_table-tbody', 'afterbegin', (
-				' <tr class="status_table_inner">Обратить внимание!('+issues_number+'): <br><b>' + list_of_issues +
-				' </b></tr>' +
-				' <tr class="status_table_inner">Итоговый вес: <b>' + amount_of_issues + '</b></tr>'
-			));
-			list_of_issues = '';
-		}
 	}
 
-	debugMessage(msg){
-		this.debug_list += ('<p id="debug">Debug message: ' + msg + '</p>');
+	debugMessage(msg,comment) { //Collects new message [msg:str] to [helper.debug_list:str]
+
+		if (comment) {
+			this.debug_list += ('[' + comment + ' ]<p id="debug">Debug message: ' + msg + '</p>');
+		} else {
+			this.debug_list += ('<p id="debug">Debug message: ' + msg + '</p>');
+		}
+
 	}
 
-	showDebugMsgList(){
-		if (this.debug_list !==''){
+	showDebugMsgList() { //Adds a new tag of found issues from helper.debug_list to Status table
+
+		if (this.debug_list !=='') {
 			helper.addTag('status_table-tbody', 'beforeend', ('<tr id="debug"><td>'+this.debug_list+'</td></tr>'));
 			this.debug_list = '';
 		}
+
 	}
 
-	addToChangedOptionsList(msg){
-		this.changed_options_list += ('<p id="debug">' + msg + '</p>');
+	addToChangedOptionsList(opt) { //Collects changed options [opt:str] to [helper.changed_options_list:str].
+
+		this.changed_options_list += ('<p id="debug">' + opt + '</p>');
+
 	}
 
-	showChangedOptionsList(){
+	showChangedOptionsList() { //Adds a new tag of changed options from helper.changed_options to Options table
+
 		if (this.changed_options_list !==''){
 			helper.addTag('options_table-tbody', 'afterbegin', ('<div>Изменены опции:'+this.changed_options_list+'</div>'));
 			this.changed_options_list = '';
 		}
+
 	}
 }
 
@@ -203,7 +210,39 @@ class Status {
 		this.link_noc = link_noc;
 		this.link_user = link_user;
 	}
-
+	setFiltersColored (){ // Подсветка фильтров с правками если фильтры вообще есть
+		let filters = ct.status.filters;
+		if (filters != null) {
+			let service_or_user_id = '';
+			if (filters.includes('service_') || filters.includes('user_')) {
+				let start = null;
+				let id_regexp;
+				for (let i = 0; i < filters.length; i++) {
+					if (
+						filters.slice(i, i + 8) === 'service_'
+						||
+						filters.slice(i, i + 5) === 'user_'
+					) {
+						start = i;
+					}
+					if (start != null) {
+						if (filters[i] === ':') {
+							let end = i;
+							if (end != null) {
+								service_or_user_id = filters.slice(start, end)
+								id_regexp = new RegExp(service_or_user_id, 'gi');
+								end = 0;
+							}
+							start = end = null;
+							filters = filters.replace(id_regexp, `<a style="color:#990000">` + service_or_user_id + `</a>`);
+						}
+					}
+				}
+				helper.addToIssuesList('Для пользователя правились фильтры.', '0');
+			}
+		}
+		ct.status.filters = filters;
+	}
 	initStatus() {
 
 		if (ct.details) {
@@ -245,7 +284,7 @@ class Status {
 		// поиск значения фильтров - тот ещё геморрой
 
 		const signature = `"Добавить в произвольный блок"></span>&nbsp;</td>`;
-		const filters_section = helper.getHtmlSection('filters');
+		const filters_section = helper.getHtmlSectionFromEHTML('filters');
 		const start_fs = filters_section.indexOf(signature) + 49;
 
 		let end_fs = null;
@@ -289,28 +328,19 @@ class Status {
 			}
 
 		}
-
-		//экстракция IP адреса по регулярке
-/*		if (ct.getDetailValueByName('sender_ip',) !== '') {
-			IP_TRIMMED = ct.getDetailValueByName('sender_ip',);
-			IP_TRIMMED = IP_TRIMMED.match(/(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/);
-			IP_TRIMMED = IP_TRIMMED[0];
-		}*/
-
 	}
-
 	initId() { // берёт request ID из массива HTML и делает ссылки на него
 
 		const signature = `<div class="panel-heading">Запрос `;
 
 		if (EXTRACTED_HTML.includes(signature)) {
 			let start_position = ( (EXTRACTED_HTML.indexOf(signature) + (signature.length) ) )
-			this.id_value = (EXTRACTED_HTML.slice (start_position, (parseInt(start_position) + 32) ) );
+			this.id_value = (EXTRACTED_HTML.slice (start_position, start_position + 32 ) );
 		} else
 
-		if (this.value) { //формирует ссылки на ПУ и на НОК
-			this.link_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.value;
-			this.link_user = 'https://cleantalk.org/my/show_requests?request_id=' + this.value;
+		if (this.id_value) { //формирует ссылки на ПУ и на НОК
+			this.link_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.id_value;
+			this.link_user = 'https://cleantalk.org/my/show_requests?request_id=' + this.id_value;
 		}
 	} // берёт request ID из массива HTML и делает ссылки на него
 
@@ -349,7 +379,8 @@ class CT {
 		status,
 		details,
 		options,
-		analysis
+		analysis,
+		details_length
 
 	) {
 		this.id = id; // class Id
@@ -357,9 +388,10 @@ class CT {
 		this.details = details; // array of class Detail
 		this.options = options; //array of class Option
 		this.analysis = analysis;
+		this.details_length = details_length;
 	}
 
-	initDetailsSignatureData() { // ДАННЫЕ!! Установка данных для поиска в HTML лапше, возвращает массив и длину массива
+	initDetailsSignatureData(){	// ДАННЫЕ!! Установка данных для поиска в HTML лапше, возвращает массив и длину массива
 
 		const values = [
 			// имя параметра, номер блока, сигнатура, РЕЗЕРВ, стиль, где искать
@@ -371,7 +403,6 @@ class CT {
 			['sender_ip_is_bl', '1', '<td>ip_in_list&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['sender_ip_is_sc', '1', '<td>short_cache_ip&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['username', '1', '<td>username&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['message', '1', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params'],
 			['ct_options', '2', '<td>ct_options&nbsp;</td>', '', 'DEFAULT', 'sender'],
 			['ct_agent', '3', '<td>agent&nbsp;</td>', '', 'DEFAULT', 'params'],
 			['js_status', '4', '<td>js_passed&nbsp;</td>', '', 'DEFAULT', 'details'],
@@ -390,23 +421,23 @@ class CT {
 			['denied_by_pl', '4', '<td>private_list_deny&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['pl_has_records', '4', '<td>private_list_detected&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['is_allowed', '4', '<td>allow&nbsp;</td>', '', 'DEFAULT', 'response'],
-			['method_name', '4', '<td>method_name&nbsp;</td>', '', 'DEFAULT', 'details']
+			['method_name', '4', '<td>method_name&nbsp;</td>', '', 'DEFAULT', 'details'],
+			['message', '4', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params']
 		];
 
-//длина массива данных для поиска определена
-		DETAILS_LENGTH = values.length;
+		this.details_length = values.length;
 
 		return values;
 
 
-	}// ДАННЫЕ!! Установка данных для поиска в HTML лапше, возвращает массив и длину массива
+	}
 
-	initDetailsArray() { //создаёт объекты Details в массиве (без values) на основе set_details_signature_data
+	initDetailsArray(){	//создаёт объекты Details в массиве (без values) на основе set_details_signature_data
 
 		this.details = [];
 		let details_draft = this.initDetailsSignatureData();
 
-		for (let i = 0; i < DETAILS_LENGTH; i++) {
+		for (let i = 0; i < this.details_length; i++) {
 			this.details.push (
 				new Detail(
 					(details_draft[i][0]),
@@ -418,7 +449,7 @@ class CT {
 				)
 			);
 			//Внесение результатов поиcка values в массив объектов Details
-			this.details[i].value = helper.getDetailSignatureForSection(this.details[i].section_id, this.details[i].signature);
+			this.details[i].value = helper.getDetailBySignatureInSection(this.details[i].section_id, this.details[i].signature);
 
 			//helper.debugMessage(this.details[i].name +' *** '+ this.details[i].value +' '+this.details[i].css_id);
 			if (
@@ -430,19 +461,17 @@ class CT {
 			}
 		}
 
-	}	//создаёт объекты Detail в массиве (без values) на основе set_details_signature_data
+	}
 
-	initOptionsArray () { 				//создаёт объекты Option в массиве ct.options
-
+	initOptionsArray (){	//создаёт объекты Option в массиве ct.options TODO Добавить сортировку, сначала выводить изменённые
 		this.options = helper.getOptionsFromJSON(this.getDetailValueByName("ct_options"));
+	}
 
-	}	//создаёт объекты Option в массиве ct.options TODO Добавить сортировку, сначала выводить изменённые
-
-	drawDetailsBlock() { //рисует блоки основываясь на Section ID
+	drawDetailsBlock(){		//рисует блоки основываясь на Section ID
 
 		let ar = [];
 
-		for (let j = 0; j < DETAILS_LENGTH; j++) {
+		for (let j = 0; j < this.details_length; j++) {
 			ar.push(parseInt(this.details[j].block_id));
 		}
 
@@ -452,7 +481,7 @@ class CT {
 
 			//helper.addTag('details_table-tbody', 'beforeend', ('<tr id="details_tier_block_' + block_id + '">SECTION ' + block_id + '</tr>')); todo Деление на секции, тут разобратсья нужно оно или нет
 
-			for (let i = 0; i < DETAILS_LENGTH; i++) { 						//добавление строк
+			for (let i = 0; i < this.details_length; i++) { 						//добавление строк
 
 				if (pub_strcnt <= i) { 														//хуй знает как это работает и почему без этого не работает
 
@@ -581,11 +610,11 @@ class CT {
 			}
 		}
 
-	}// рисует блоки Details основываясь на Section ID из set_details_signature_data
+	}
 
-	drawOptionsBlock() { // рисует блок опций
+	drawOptionsBlock(){
 
-		pub_strcnt = 0;
+		window.pub_strcnt = 0;
 
 		helper.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
 
@@ -602,9 +631,11 @@ class CT {
 			}
 		}
 
-	} // рисует блок опций
+	}
 
-	drawStatusBlock(){ //todo всё переделать под рисование как в showDebugMessage
+	drawStatusBlock(){	//todo всё переделать под рисование как в showDebugMessage
+
+		ct.status.setFiltersColored();
 
 		layout_window.document.getElementById('status_table_status-class-column').innerHTML += (
 			' <p class="status_table_inner">Ссылки на запрос: <a href="' + ct.status.link_noc +'">[НОК] </a>'+
@@ -612,58 +643,30 @@ class CT {
 			' </p>'
 		);
 
-		if (ct.status.filters != null) { // Подсветка фильтров с правками если фильтры вообще есть
-			let service_or_user_id = '';
-			if (ct.status.filters.includes('service_') || ct.status.filters.includes('user_')) {
-				let start = '-';
-				let id_regexp;
-				for (let i = 0; i < ct.status.filters.length; i++) {
-					if (((ct.status.filters.slice(i, i + 8)) === 'service_') || ((ct.status.filters.slice(i, i + 5)) === 'user_')) {
-						start = i;
-					}
-					if (start !== '-') {
-						if (ct.status.filters[i] === ':') {
-							let end = i;
-							if (start != '-' && end != '-') {
-								service_or_user_id = ct.status.filters.slice(start, end)
-								id_regexp = new RegExp(service_or_user_id, 'gi');
-								end = 0;
-							}
-							start = '-';
-						}
-					}
-				}
+		layout_window.document.getElementById('status_table-filter-raw').innerHTML += (
+			'Агент: [' + ct.status.agent + '] Фильтры: [' + ct.status.filters + ']'
+		);
+		layout_window.document.getElementById('layout_window_title').innerHTML = (
+			' ID=..' +
+			ct.status.id_value.slice(ct.status.id_value.length-5,ct.status.id_value.length) +
+			' [' + ct.status.isAllowed +
+			']');
+		//todo менять цвет в зависимости от состояния
 
-				ct.status.filters = ct.status.filters.replace(id_regexp, `<a style="color:#990000">` + service_or_user_id + `</a>`);
-				helper.addToIssuesList('Для пользователя правились фильтры.','0');
-
-			}
-
-			layout_window.document.getElementById('status_table-filter-raw').innerHTML += (
-				'Агент: [' + ct.status.agent + '] Фильтры: [' + ct.status.filters + ']'
-			);
-			layout_window.document.getElementById('layout_window_title').innerHTML = (
-				' ID=..' +
-				ct.status.id_value.slice(ct.status.id_value.length-5,ct.status.id_value.length) +
-				' [' + ct.status.isAllowed +
-				']');
-			//todo менять цвет в зависимости от состояния
-		}
-	} // рисует блок статуса
+	}
 
 	getDetailValueByName(name) { 	//вызывает значения value объекта Detail по имени
 
-		for (let i = 0; i < DETAILS_LENGTH; i++) {
-
+		for (let i = 0; i < this.details_length; i++) {
 			if (this.details[i].name === name) {
 				return this.details[i].value
 			}
 		}
-	} //вызывает значения value объекта Detail по имени
+	}
 
 	setDetailPropertyByName(detail_name, property, new_value) { 	//вызывает значения value объекта Detail по имени
 
-		for (let i = 0; i < DETAILS_LENGTH; i++) {
+		for (let i = 0; i < this.details_length; i++) {
 
 			if (this.details[i].name === detail_name) {
 
@@ -679,9 +682,7 @@ class CT {
 				}
 			}
 		}
-	} //вызывает значения value объекта Detail по имени
-
-
+	}
 
 }
 
@@ -689,14 +690,11 @@ class Option {
 
 	constructor(
 		name,
-		value,
-		priority,
+		value
 	) {
 
 		this.name = name;
 		this.value = value;
-		this.priority = priority;
-
 	}
 
 }
@@ -713,9 +711,6 @@ class Analysis {
 
 	}
 
-
-
-
 	//todo не отрабатывает post_info для comment type
 
 	initOptionsDefaults() { 			//устанавлвает опции по умолчанию
@@ -727,7 +722,6 @@ class Analysis {
 		}
 		//берёт массив опций из JSON
 		this.options_default.wordpress = helper.getOptionsFromJSON('{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"20","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
-
 	}
 
 	compareCtOptionsWithDefaults(def_options_agent) { //сравнение опций из запроса с опциями по умолчанию
@@ -737,8 +731,6 @@ class Analysis {
 
 		} else {
 		}
-
-
 
 		for (let i = 0; i <= def_options_agent.length - 1; i++) {
 
@@ -756,10 +748,10 @@ class Analysis {
 			}
 		}
 
-
 		changes_array.forEach(function (value) { // подсветка изменённых опций
 			let tr_name = ('options_tier_' + value);
 			layout_window.document.getElementById(tr_name).style.color = '#FF0000';
+
 		})
 		layout_window.document.getElementById('options_header').innerHTML += ('<a style = "color: red"> (' + changes_array.length + ')</a>');
 
@@ -1025,8 +1017,7 @@ const CURRENT_VERSIONS = new Map(
 	]
 )
 let EXTRACTED_HTML;
-let IP_TRIMMED;
-let DETAILS_LENGTH;
+let DEBUG = '';
 
 let ct = new CT();
 ct.analysis = new Analysis();
