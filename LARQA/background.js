@@ -31,7 +31,7 @@ class Helper{
 			ct.analysis.initOptionsDefaults();
 			ct.initDetailsArray();
 			ct.initOptionsArray();
-			ct.status.initId();
+			ct.id.initId();
 			ct.status.initStatus();
 			ct.analysis.initOptionsDefaults();
 
