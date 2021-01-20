@@ -1,5 +1,3 @@
-//todo Продолжить рефакторинг
-//todo Выводить изменения в опциях и параметрах красиво
 //todo Допилить проверку параметров
 //todo Допилить статус, отображать одобрен\нет, менять цвет в зависимости от этого, отражать allowed by PL
 
@@ -133,7 +131,7 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	addToIssuesList(issue,weight) { //Collect new issue [issue:str] and its weight[weight:str] to helper.issues_list
 
-		this.issues_list.set(issue,weight);
+		this.issues_list.set('<p id="debug">- ' + issue + '</p>',weight);
 
 	}
 
@@ -146,7 +144,7 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 			let issues_number = 0;
 
 			for (let entry of this.issues_list.keys()) {
-				list += ' - ' + entry + '<br>';
+				list += entry;
 			}
 
 			for (let entry of this.issues_list.values()) {
@@ -155,10 +153,10 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 			}
 
 			if (list !== '') {
-				helper.addTag('details_table-tbody', 'afterbegin', (
-					' <tr class="status_table_inner">Обратить внимание!(' + issues_number + '): <br><b>' + list +
-					' </b></tr>' +
-					' <tr class="status_table_inner">Итоговый вес: <b>' + weight + '</b></tr>'
+				helper.addTag('details_table', 'beforebegin', (
+					' <div class="report_block">Обратить внимание!(' + issues_number + '):' + list +
+					' <p><b>Итоговый вес: [' + weight + ']</p></b>' +
+					' </div>'
 				));
 			}
 		}
@@ -186,14 +184,14 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	addToChangedOptionsList(opt) { //Collects changed options [opt:str] to [helper.changed_options_list:str].
 
-		this.changed_options_list += ('<p id="debug">' + opt + '</p>');
+		this.changed_options_list += ('<p id="debug">- ' + opt + '</p>');
 
 	}
 
 	showChangedOptionsList() { //Adds a new tag of changed options from helper.changed_options to Options table
 
 		if (this.changed_options_list !==''){
-			helper.addTag('options_table-tbody', 'afterbegin', ('<div>Изменены опции:'+this.changed_options_list+'</div>'));
+			helper.addTag('options_table', 'beforebegin', ('<div class="report_block" style align="left">Изменены опции:'+this.changed_options_list+'</div>'));
 			this.changed_options_list = '';
 		}
 
@@ -808,7 +806,8 @@ class Analysis {	// Analysis class
 			layout_window.document.getElementById(tr_name).style.color = '#FF0000';
 
 		})
-		layout_window.document.getElementById('options_header').innerHTML += ('<a style = "color: red"> (' + changes_array.length + ')</a>');
+
+		helper.addToChangedOptionsList('<p><b>Опций изменено:'+changes_array.length+'</b></p>');
 
 	}
 
@@ -1044,7 +1043,8 @@ class Analysis {	// Analysis class
 
 				}break;
 
-				//PAGE_URL
+				//PAGE_URL and SENDER_URL
+				case 'sender_url':
 				case 'page_url': {
 
 					if (detail.value.includes('members') ||
@@ -1053,12 +1053,12 @@ class Analysis {	// Analysis class
 					) {
 
 						detail.css_id= 'BAD';
-						helper.addToIssuesList('Возможен перехват админки, смотри PAGE_URL', '0');
+						helper.addToIssuesList('Возможен перехват админки, смотри PAGE_URL и SENDER_URL', '0');
 
 					} else if(detail.value === '' || detail.value === null) {
 
 						detail.css_id= 'BAD';
-						helper.addToIssuesList('Пустой PAGE_URL. Это странно.', '0');
+						helper.addToIssuesList('Пустой PAGE_URL или SENDER_URL. Это странно, но не более.', '0');
 
 					}
 
