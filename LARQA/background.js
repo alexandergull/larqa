@@ -1078,7 +1078,6 @@ const CURRENT_VERSIONS = new Map(
 	]
 )
 let EXTRACTED_HTML;
-let DEBUG = '';
 
 let ct = new CT();
 ct.analysis = new Analysis();

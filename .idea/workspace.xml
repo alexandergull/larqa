@@ -20,7 +20,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -334,7 +333,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611128345072</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="- alexthegull  20.01.2021 -&#10;Правки:&#10;- канонизировал все классы">
+      <created>1611140195485</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1611140195485</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -356,7 +362,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="removed OLD folder" />
     <MESSAGE value="- перенёс конструктор блоков HTML в класс Ct_request&#10;- рефакторинг некоторых названий и переменных" />
     <MESSAGE value="- перенёс конструктор блоков HTML в класс Ct_request&#10;- рефакторинг некоторых названий и переменных&#10;- избавился от setdata.js и layout .js" />
     <MESSAGE value="-мигрировал всё на модальное окно из расширения&#10;- убрал мусор" />
@@ -381,7 +386,8 @@
     <MESSAGE value="Новое:&#10;- вывожу изменения опций и параметров в соответствующих блоках" />
     <MESSAGE value="Новое:&#10;- причесал код&#10;- избавился от класса ID&#10;- вывел конец requaest id в имя окна larqa" />
     <MESSAGE value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- унёс разбор фильтров в отдельный метод clearFiltersString();&#10;Правки:&#10;- канонизировал class Status" />
-    <option name="LAST_COMMIT_MESSAGE" value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- унёс разбор фильтров в отдельный метод clearFiltersString();&#10;Правки:&#10;- канонизировал class Status" />
+    <MESSAGE value="- alexthegull  20.01.2021 -&#10;Правки:&#10;- канонизировал все классы" />
+    <option name="LAST_COMMIT_MESSAGE" value="- alexthegull  20.01.2021 -&#10;Правки:&#10;- канонизировал все классы" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">
