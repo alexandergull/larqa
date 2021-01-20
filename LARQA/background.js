@@ -3,9 +3,10 @@
 //todo Допилить проверку параметров
 //todo Допилить статус, отображать одобрен\нет, менять цвет в зависимости от этого, отражать allowed by PL
 
-class Helper { //Helper class, called to keep misc functionality. Canonized
+class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	constructor(
+
 		debug_list,
 		issues_list,
 		changed_options_list,
@@ -16,9 +17,17 @@ class Helper { //Helper class, called to keep misc functionality. Canonized
 	}
 
 	initHelperData() {	//Initialize Helper necessary data.
+
 		this.debug_list = '';
 		this.issues_list = new Map();
 		this.changed_options_list = '';
+
+	}
+
+	hardDebug(msg) {	//Message to layout_window, erases all other window data
+
+		layout_window.document.writeln('<xmp>'+msg+'</xmp>');
+
 	}
 
 	callWindow() {	//Main window call based on "prefilled.html"
@@ -26,7 +35,7 @@ class Helper { //Helper class, called to keep misc functionality. Canonized
 		window.layout_window = window.open(
 			'prefilled.html',
 			'_blank');
-		layout_window.onload = function () { // Processes starts there
+		layout_window.onload = function() {	// Processes starts here.
 			window.pub_strcnt = 0;
 
 			ct.analysis.initOptionsDefaults();
@@ -52,7 +61,7 @@ class Helper { //Helper class, called to keep misc functionality. Canonized
 
 	}
 
-	findBetween(string, left, right) {	//Return result(str) within string(str) between left(str) and right(str).
+	findBetween(string, left, right) { //Return result(str) within string(str) between left(str) and right(str).
 
 		let start_from;
 		let end_with;
@@ -210,14 +219,56 @@ class Status {
 		this.link_noc = link_noc;
 		this.link_user = link_user;
 	}
-	setFiltersColored (){ // Подсветка фильтров с правками если фильтры вообще есть
+
+	clearFiltersString() {	//Clear [ct.status.filters:str] from tags
+
+		let fstr = ct.status.filters
+
+		for (let i = 0; i <= fstr.length; i++) {
+
+			if (fstr.slice(i, i + 4) === '<td>') {
+				fstr = fstr.slice(0, i) + fstr.slice(i + 4, fstr.length)
+				i--;
+			}
+
+			if (fstr.slice(i, i + 6) === '&nbsp;') {
+				fstr = fstr.slice(0, i) + fstr.slice(i + 6, fstr.length)
+				i--;
+			}
+
+			if (fstr.slice(i, i + 5) === '</td>') {
+				fstr = fstr.slice(0, i) + fstr.slice(i + 5, fstr.length)
+				i--;
+			}
+
+			if (fstr.slice(i, i + 32) === '<a href="#" class="edit_filter">') {
+				fstr = fstr.slice(0, i) + fstr.slice(i + 32, fstr.length);
+				i--;
+			}
+
+			if (fstr.slice(i, i + 4) === '</a>') {
+				fstr = fstr.slice(0, i) + fstr.slice(i + 4, fstr.length);
+				i--;
+			}
+		}
+		ct.status.filters = fstr;
+	}
+
+	setFiltersColored() {	// Filters highlighting in [ct.status.filter:str]
+
 		let filters = ct.status.filters;
+
 		if (filters != null) {
+
 			let service_or_user_id = '';
+
 			if (filters.includes('service_') || filters.includes('user_')) {
+
 				let start = null;
 				let id_regexp;
+
 				for (let i = 0; i < filters.length; i++) {
+
 					if (
 						filters.slice(i, i + 8) === 'service_'
 						||
@@ -225,44 +276,62 @@ class Status {
 					) {
 						start = i;
 					}
+
 					if (start != null) {
+
 						if (filters[i] === ':') {
+
 							let end = i;
+
 							if (end != null) {
 								service_or_user_id = filters.slice(start, end)
 								id_regexp = new RegExp(service_or_user_id, 'gi');
 								end = 0;
 							}
+
 							start = end = null;
 							filters = filters.replace(id_regexp, `<a style="color:#990000">` + service_or_user_id + `</a>`);
 						}
 					}
 				}
+
 				helper.addToIssuesList('Для пользователя правились фильтры.', '0');
+
 			}
 		}
+
 		ct.status.filters = filters;
 	}
-	initStatus() {
+
+	initStatus() { //Init ct.status parameters
 
 		if (ct.details) {
 
-			//поиск агента
+			// Names the agent
+
 			this.agent = ct.getDetailValueByName('ct_agent');
 
+			//Checks if the plugin is up-to-date
+
 			if (this.agent !== CURRENT_VERSIONS.get('wordpress'))  {
+
 				this.agent = '<a title="Плагин устарел" style  = "color: red">'+this.agent+'</a>';
 				helper.addToIssuesList('Версия плагина устарела','3');
 				ct.setDetailPropertyByName('ct_agent','css_id','BAD');
 
 			} else {
+
 				this.agent = '<a title="Версия в порядке" style = "color: green">'+this.agent+'</a>';
+
 			}
 
-			//поиск одобрен/нет
-			this.isAllowed = ct.getDetailValueByName('is_allowed');
+			//Checks if is allowed
 
-			//поиск типа запроса
+			this.isAllowed = ct.getDetailValueByName('is_allowed');
+			if (this.isAllowed) {this.isAllowed = 'ALLOWED'} else this.isAllowed = 'DENIED';
+
+			//Checks request type
+
 			switch (ct.getDetailValueByName('method_name')) {
 				case 'check_newuser':
 					this.type = "registration";
@@ -279,70 +348,33 @@ class Status {
 
 		} else alert('ct.details - details block not found');
 
-		if (this.isAllowed) {this.isAllowed = 'ALLOWED'} else this.isAllowed = 'DENIED';
+		// Extract filters string from HTML
 
-		// поиск значения фильтров - тот ещё геморрой
-
-		const signature = `"Добавить в произвольный блок"></span>&nbsp;</td>`;
+		const left = `"Добавить в произвольный блок"></span>&nbsp;</td><td`;
 		const filters_section = helper.getHtmlSectionFromEHTML('filters');
-		const start_fs = filters_section.indexOf(signature) + 49;
+		const right = 'R:';
+		this.filters = helper.findBetween(filters_section,left,right);
 
-		let end_fs = null;
+		//Clear this.filters from tags
 
-		for (let i = start_fs + 1; i <= filters_section.length; i++) {
+		this.clearFiltersString();
 
-			if ((filters_section.slice(i, i + 2)) === 'R:') {
-				end_fs = i;
-				break;
-
-			}
-		}
-		// отрезает строку филтьтров, удаляет форматирование, оставляет только ффильтр и значение
-		this.filters = (filters_section.slice(start_fs, end_fs));
-
-		for (let i = 0; i <= this.filters.length; i++) { //удаляет форматирование, оставляет только ффильтр и значение
-
-			if (this.filters.slice(i, i + 4) === '<td>') {
-				this.filters = this.filters.slice(0, i) + this.filters.slice(i + 4, this.filters.length)
-				i--;
-			}
-
-			if (this.filters.slice(i, i + 6) === '&nbsp;') {
-				this.filters = this.filters.slice(0, i) + this.filters.slice(i + 6, this.filters.length)
-				i--;
-			}
-
-			if (this.filters.slice(i, i + 5) === '</td>') {
-				this.filters = this.filters.slice(0, i) + this.filters.slice(i + 5, this.filters.length)
-				i--;
-			}
-
-			if (this.filters.slice(i, i + 32) === '<a href="#" class="edit_filter">') {
-				this.filters = this.filters.slice(0, i) + this.filters.slice(i + 32, this.filters.length);
-				i--;
-			}
-
-			if (this.filters.slice(i, i + 4) === '</a>') {
-				this.filters = this.filters.slice(0, i) + this.filters.slice(i + 4, this.filters.length);
-				i--;
-			}
-
-		}
 	}
-	initId() { // берёт request ID из массива HTML и делает ссылки на него
+
+	initId() {	// Finds request ID to this.id_value, set this.link_noc and this.link_user
 
 		const signature = `<div class="panel-heading">Запрос `;
 
 		if (EXTRACTED_HTML.includes(signature)) {
-			let start_position = ( (EXTRACTED_HTML.indexOf(signature) + (signature.length) ) )
-			this.id_value = (EXTRACTED_HTML.slice (start_position, start_position + 32 ) );
-		} else
 
-		if (this.id_value) { //формирует ссылки на ПУ и на НОК
+			const start_position = ( (EXTRACTED_HTML.indexOf(signature) + (signature.length) ) )
+			this.id_value = (EXTRACTED_HTML.slice (start_position, start_position + 32 ) );
+
 			this.link_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.id_value;
 			this.link_user = 'https://cleantalk.org/my/show_requests?request_id=' + this.id_value;
-		}
-	} // берёт request ID из массива HTML и делает ссылки на него
+
+		} else helper.debugMessage('ID запроса не найден.');
+	}
 
 }
 
