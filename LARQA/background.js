@@ -1,6 +1,6 @@
 //todo Допилить проверку параметров
 //todo Допилить статус, отображать одобрен\нет, менять цвет в зависимости от этого, отражать allowed by PL
-
+const HARD_DEBUG = false;
 class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	constructor(
@@ -24,7 +24,7 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	hardDebug(msg) {	//Message to layout_window, erases all other window data
 
-		layout_window.document.writeln('<xmp>'+msg+'</xmp>');
+		if (HARD_DEBUG) layout_window.document.writeln('<xmp>'+msg+'</xmp>');
 
 	}
 
@@ -68,7 +68,7 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 			if (string.slice(i,i+left.length) === left) {
 
-				start_from = i+left.length+1;
+				start_from = i+left.length;
 				for (let j=start_from; j<string.length; j++) {
 					if (string.slice(j,j+right.length) === right) {
 						end_with = j;
@@ -94,7 +94,7 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 		const html_section = this.getHtmlSectionFromEHTML(section_id);
 		if (!html_section.includes(signature)) return 'INVISIBLE';
-		let left = signature + '<td>:&nbsp';
+		let left = signature + `<td>:&nbsp;`;
 		let right = '</td>';
 		return this.findBetween(html_section,left,right)
 
@@ -163,10 +163,10 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	}
 
-	debugMessage(msg,comment) { //Collects new message [msg:str] to [helper.debug_list:str]
+	debugMessage(msg,comment) { //Collects new message [msg:str] to [helper.debug_list:str]. If comment, shows the comment first.
 
 		this.debug_list += (comment) ?
-			('[' + comment + ' ]<p id="debug">Debug message: ' + msg + '</p>')
+			('<p id="debug"> [' + comment + '] [' + msg + ']</p>')
 			: ('<p id="debug">Debug message: ' + msg + '</p>');
 
 	}
@@ -205,7 +205,8 @@ class Status {
 		type,
 		value,
 		link_noc,
-		link_user
+		link_user,
+		feedback
 	) {
 		this.agent = agent;
 		this.isAllowed = isAllowed;
@@ -214,6 +215,8 @@ class Status {
 		this.id_value = value;
 		this.link_noc = link_noc;
 		this.link_user = link_user;
+		this.feedback = feedback;
+
 	}
 
 	clearFiltersString() {	//Clear [ct.status.filters:str] from tags
@@ -304,11 +307,9 @@ class Status {
 		if (ct.details) {
 
 			// Names the agent
-
 			this.agent = ct.getDetailValueByName('ct_agent');
 
 			//Checks if the plugin is up-to-date
-
 			if (this.agent !== CURRENT_VERSIONS.get('wordpress'))  {
 
 				this.agent = '<a title="Плагин устарел" style  = "color: red">'+this.agent+'</a>';
@@ -341,15 +342,20 @@ class Status {
 
 		} else alert('ct.details - details block not found');
 
-		// Extract filters string from HTML
+		//Extract feedback
+		this.feedback = EXTRACTED_HTML.includes('<span class="text-danger');
+		if (this.feedback) {
+			const user_dec = helper.findBetween(EXTRACTED_HTML,'<span class="text-danger">','</span>');
+			this.feedback = user_dec ==='NO' ? '0':'1';
+		} else this.feedback = '-1';
 
-		const left = `"Добавить в произвольный блок"></span>&nbsp;</td><td`;
+		// Extract filters string from HTML
+		const left = `"Добавить в произвольный блок"></span>&nbsp;</td><td>`;
 		const filters_section = helper.getHtmlSectionFromEHTML('filters');
 		const right = 'R:';
 		this.filters = helper.findBetween(filters_section,left,right);
 
 		//Clear this.filters from tags
-
 		this.clearFiltersString();
 
 	}
@@ -696,9 +702,6 @@ class CT {	// Main class CT
 		header_text += (this.status.isAllowed) ? 'ALLOWED':'DENIED';
 		header_text += (+(this.getDetailValueByName('allowed_by_pl')) === 1) ? ' BY PRIVATE LIST':'';
 		header_text += (+(this.getDetailValueByName('denied_by_pl')) === 1) ? ' BY PRIVATE LIST':'';
-
-		//let has_feedback = Boolean(helper.findBetween(EXTRACTED_HTML,'<span class="text-danger"','</span>'))
-		//header_text += has_feedback ? ' (FEEDBACK=DENIED)':'(FEEDBACK=ALLOWED)'
 
 		layout_window.document.getElementById('status_block-header').innerHTML += '<b class="status_header">'+header_text+'</b>'
 
