@@ -349,7 +349,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611140351379</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="- alexthegull  20.01.2021 -&#10;Новое:&#10;- вывожу красиво измения в опциях и параметрах, добавил класс  .report_block, чуть поправил вёрстку">
+      <created>1611143536476</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1611143536476</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -371,7 +378,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- перенёс конструктор блоков HTML в класс Ct_request&#10;- рефакторинг некоторых названий и переменных&#10;- избавился от setdata.js и layout .js" />
     <MESSAGE value="-мигрировал всё на модальное окно из расширения&#10;- убрал мусор" />
     <MESSAGE value="- версировал файлы" />
     <MESSAGE value="- передалал туду листы" />
@@ -396,7 +402,8 @@
     <MESSAGE value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- унёс разбор фильтров в отдельный метод clearFiltersString();&#10;Правки:&#10;- канонизировал class Status" />
     <MESSAGE value="- alexthegull  20.01.2021 -&#10;Правки:&#10;- канонизировал все классы" />
     <MESSAGE value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- добавил метод helper.hardDebug для жёсткого дебага HTML кода" />
-    <option name="LAST_COMMIT_MESSAGE" value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- добавил метод helper.hardDebug для жёсткого дебага HTML кода" />
+    <MESSAGE value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- вывожу красиво измения в опциях и параметрах, добавил класс  .report_block, чуть поправил вёрстку" />
+    <option name="LAST_COMMIT_MESSAGE" value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- вывожу красиво измения в опциях и параметрах, добавил класс  .report_block, чуть поправил вёрстку" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">
@@ -425,15 +432,15 @@
     </state>
     <state x="400" y="115" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1611037578379" />
     <state x="533" y="201" key="SettingsEditor/0.0.2048.1112@0.0.2048.1112" timestamp="1610983626278" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1611140357288">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1611143542024">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1611140357288" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1611143542024" />
     <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1611050927054" />
-    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611035676501">
+    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611144210928">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1611035676501" />
+    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1611144210928" />
     <state x="497" y="201" key="git4idea.merge.GitPullDialog" timestamp="1611140438068">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -446,5 +453,23 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="681" y="259" key="run.anything.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1611073659766" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/LARQA/background.js</url>
+          <line>420</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/LARQA/background.js</url>
+          <line>696</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

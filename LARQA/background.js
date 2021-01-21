@@ -165,11 +165,9 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	debugMessage(msg,comment) { //Collects new message [msg:str] to [helper.debug_list:str]
 
-		if (comment) {
-			this.debug_list += ('[' + comment + ' ]<p id="debug">Debug message: ' + msg + '</p>');
-		} else {
-			this.debug_list += ('<p id="debug">Debug message: ' + msg + '</p>');
-		}
+		this.debug_list += (comment) ?
+			('[' + comment + ' ]<p id="debug">Debug message: ' + msg + '</p>')
+			: ('<p id="debug">Debug message: ' + msg + '</p>');
 
 	}
 
@@ -324,12 +322,9 @@ class Status {
 			}
 
 			//Checks if is allowed
-
-			this.isAllowed = ct.getDetailValueByName('is_allowed');
-			if (this.isAllowed) {this.isAllowed = 'ALLOWED'} else this.isAllowed = 'DENIED';
+			this.isAllowed = (ct.getDetailValueByName('is_allowed')) ? 'ALLOWED' : 'DENIED';
 
 			//Checks request type
-
 			switch (ct.getDetailValueByName('method_name')) {
 				case 'check_newuser':
 					this.type = "registration";
@@ -696,6 +691,16 @@ class CT {	// Main class CT
 			ct.status.id_value.slice(ct.status.id_value.length-5,ct.status.id_value.length) +
 			' [' + ct.status.isAllowed +
 			']');
+
+		let header_text ='';
+		header_text += (this.status.isAllowed) ? 'ALLOWED':'DENIED';
+		header_text += (+(this.getDetailValueByName('allowed_by_pl')) === 1) ? ' BY PRIVATE LIST':'';
+		header_text += (+(this.getDetailValueByName('denied_by_pl')) === 1) ? ' BY PRIVATE LIST':'';
+
+		//let has_feedback = Boolean(helper.findBetween(EXTRACTED_HTML,'<span class="text-danger"','</span>'))
+		//header_text += has_feedback ? ' (FEEDBACK=DENIED)':'(FEEDBACK=ALLOWED)'
+
+		layout_window.document.getElementById('status_block-header').innerHTML += '<b class="status_header">'+header_text+'</b>'
 
 		//todo менять цвет блока в зависимости от состояния is_allowed
 		//todo добавить отображение наличия и качества обратной связи

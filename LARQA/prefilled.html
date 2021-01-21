@@ -11,6 +11,7 @@
 
         font-family: Verdana;
         background-color: #3090c7;
+
     }
 
     h1{
@@ -37,7 +38,7 @@
         font-size: 10px;
     }
 
-    #line_block {
+    .line_block {
         width:47%;
         height:auto;
         background:#f1f1f1;
@@ -134,7 +135,7 @@
 </style>
 <div style="width:100%; height:1px; clear:both;"></div>
 <div style=" display: block;">
-    <div id="status_block"><h1>STATUS</h1>
+    <div id="status_block"><h1 id="status_block-header">STATUS:</h1>
         <table id='status_table'>
             <tbody id="status_table-tbody">
                 <tr id="status_table-filter-raw" class="status_table_inner"></tr>
@@ -154,7 +155,7 @@
         </table>
     </div>
 </div>
-<div id="line_block">
+<div class="line_block">
     <div id="details_block"><h1>Параметры запроса</h1>
         <table id='details_table'>
             <tbody id="details_table-tbody">
@@ -162,7 +163,7 @@
         </table>
     </div>
 </div>
-<div id="line_block">
+<div class="line_block">
     <div>
         <h1 id="options_header">Опций плагина в запросе</h1>
         <div id="options_block">
