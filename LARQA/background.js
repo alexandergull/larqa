@@ -31,6 +31,8 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	callWindow() {	//Main window call based on "prefilled.html"
 
+		helper.initHelperData();
+
 		window.layout_window = window.open(
 			'prefilled.html',
 			'_blank');
@@ -160,6 +162,7 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 					' </div>'
 				));
 			}
+			helper.issues_list = '';
 		}
 
 	}
@@ -985,7 +988,7 @@ class Analysis {	// Analysis class
 
 					//SUBMIT_TIME
 					case 'submit_time': {
-
+						helper.debugMessage(`${detail.name} ${detail.value}`);
 						if (detail.value === undefined || detail.value === '') {
 							detail.css_id = 'INCORRECT';
 							helper.addToIssuesList('Не смогли определить SUBMIT_TIME.', '10');
@@ -1097,7 +1100,7 @@ ct.analysis = new Analysis();
 ct.status = new Status();
 
 helper = new Helper();
-helper.initHelperData();
+
 
 //==== DECLARE BLOCK END
 
