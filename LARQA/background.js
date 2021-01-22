@@ -1,6 +1,7 @@
 //todo Допилить проверку параметров
 //todo Допилить статус, отображать одобрен\нет, менять цвет в зависимости от этого, отражать allowed by PL
-const HARD_DEBUG = false;
+const HARD_DEBUG = true;
+
 class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	constructor(
@@ -108,14 +109,14 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	getOptionsFromJSON(json) { //Return array of Option class [array] from JSON string [json:str]
 
-		const json_obj = JSON.parse(json);
-		let temp = [];
+			const json_obj = JSON.parse(json);
+			let parsed_options =[];
 
-		$.each(json_obj, function (name, value) {
-			temp.push(new Option(name, value, 0))
-		})
+			$.each(json_obj, function (name, value) {
+				parsed_options.push(new Option(name, value, 0))
+			})
 
-		return temp;
+			return parsed_options
 
 	}
 
@@ -447,7 +448,7 @@ class CT {	// Main class CT
 			['hook_type', '4', '<td>hook&nbsp;</td>', '', 'DEFAULT', 'sender'],
 			['is_greylisted', '4', '<td>grey_list_stop&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['is_mobile_ua', '4', '<td>is_mobile_UA&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['links_detected', '4', '<td>links&nbsp;</td>', '', 'DEFAULT', 'details'],
+			//['links_detected', '4', '<td>links&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['allowed_by_pl', '4', '<td>private_list_allow&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['denied_by_pl', '4', '<td>private_list_deny&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['pl_has_records', '4', '<td>private_list_detected&nbsp;</td>', '', 'DEFAULT', 'details'],
@@ -498,7 +499,15 @@ class CT {	// Main class CT
 
 	initOptionsArray () {	// Init JSON of request options using helper.getOptionsFromJSON and this.getDetailValueByName
 
-		this.options = helper.getOptionsFromJSON(this.getDetailValueByName("ct_options"));
+		if (this.getDetailValueByName('ct_options') === 'INVISIBLE') {
+
+			this.options = 'INVISIBLE';
+
+		} else {
+
+			this.options = helper.getOptionsFromJSON(this.getDetailValueByName("ct_options"));
+
+		}
 
 	}
 
@@ -651,28 +660,36 @@ class CT {	// Main class CT
 				}
 			}
 		}
-
 	}
 
 	drawOptionsBlock() {	//Draws details block in layout_window
 
-		//Nulls string counter
-		window.pub_strcnt = 0;
+		if (this.options !== 'INVISIBLE') {
 
-		helper.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
+			//Nulls string counter
+			window.pub_strcnt = 0;
 
-		for (let i = 0; i < this.options.length; i++) {
+			helper.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
 
-			if (pub_strcnt <= i) {
+			for (let i = 0; i < this.options.length; i++) {
 
-				helper.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_' + pub_strcnt + '"></tr>'));
-				helper.addTag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-name">' + this.options[pub_strcnt].name + ':</td>'));
-				helper.addTag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-value">' + this.options[pub_strcnt].value + '</td>'));
+				if (pub_strcnt <= i) {
 
-				//Finishes a detail tag
-				pub_strcnt++;
+					helper.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_' + pub_strcnt + '"></tr>'));
+					helper.addTag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-name">' + this.options[pub_strcnt].name + ':</td>'));
+					helper.addTag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-value">' + this.options[pub_strcnt].value + '</td>'));
 
+					//Finishes a detail tag
+					pub_strcnt++;
+
+				}
 			}
+		} else {
+
+			helper.addTag('options_table', 'beforebegin', (
+				' <div class="report_block">Вывод опций не поддерживается в этом плагине</div>'
+			));
+
 		}
 
 	}
@@ -720,7 +737,8 @@ class CT {	// Main class CT
 
 			}
 		}
-
+		helper.hardDebug(`No detail ${name} found in getDetailValueByName`);
+		return '';
 	}
 
 	setDetailPropertyByName(detail_name, property, new_value) {	// Set a new property [property:str] value[value:str] in this.details by detail name[detail_name:str]
@@ -827,254 +845,241 @@ class Analysis {	// Analysis class
 
 			this.compareCtOptionsWithDefaults(this.options_default.wordpress);
 
-		} else {
-
-			layout_window.document.getElementById('options_header').innerHTML += ' Options checking is not supported for this plugin yet';
-
 		}
 		// The place for other agents if released
 	}
 
 	checkDetails() {	//Checks details, main analysis logic implementation
 
-		for (let i=0; i<=ct.details.length-1; i++){
+		if (ct.details) {
 
-			let detail = ct.details[i];
+			for (let i = 0; i <= ct.details.length - 1; i++) {
 
-			switch (detail.name) {
+				let detail = ct.details[i];
 
-				//SHORTCACHES
-				case 'sender_email_is_sc': {
+				switch (detail.name) {
 
-					if (Number(detail.value) >= 30) {
+					//SHORTCACHES
+					case 'sender_email_is_sc': {
 
-						detail.css_id = 'BAD';
-						helper.addToIssuesList('EMAIL в шорткэше', '0');
+						if (Number(detail.value) >= 30) {
 
-					} else detail.value = 'INVISIBLE';
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('EMAIL в шорткэше', '0');
 
-				} break;
-
-				case 'sender_ip_is_sc': {
-
-					if (Number(detail.value) >= 30) {
-
-						detail.css_id = 'BAD';
-						helper.addToIssuesList('IP в шорткэше', '0');
-
-					} else detail.value = 'INVISIBLE';
-
-				} break;
-
-				//EMAIL
-				case 'sender_email': {
-
-					if (detail.value === '') {
-
-						detail.css_id = 'BAD';
-						helper.addToIssuesList('EMAIL передан, но пустой', '3');
-
-					} else if (detail.value === null) {
-
-						detail.css_id = 'INCORRECT';
-						helper.addToIssuesList('Не смогли определить EMAIL', '10');
-
-					} else if (ct.getDetailValueByName('sender_email_is_bl')==2){
-
-						detail.css_id = 'BAD';
-
-					} else detail.css_id = 'GOOD';
-
-
-				} break;
-
-				//JS
-				case 'js_status': {
-
-					if (Number(detail.value) === -1){
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('JS отключен в браузере', '3');
-					}
-
-					else if (Number(detail.value) === 1){
-						detail.css_id= 'GOOD';
-					}
-
-					else if(Number(detail.value) === 0){
-						detail.css_id= 'BAD'
-						helper.addToIssuesList('Тест JS провален', '3');
-					}
-
-					else {
-						detail.css_id= 'INCORRECT';
-						helper.addToIssuesList('Не смогли определить JS', '10');
-					}
-				} break;
-
-				//IP
-				case 'sender_ip': {
-
-					if (detail.value === '') {
-
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('IP адрес пустой', '3');
-
-					} else if (detail.value === null) {
-
-						detail.css_id= 'INCORRECT';
-						helper.addToIssuesList('Не смогли определить IP адрес', '10');
-
-					} else if (ct.getDetailValueByName('sender_ip_is_bl')==2){
-
-						detail.css_id = 'BAD';
+						} else detail.value = 'INVISIBLE';
 
 					}
-					else detail.css_id= 'GOOD';
+						break;
 
-				}break;
+					case 'sender_ip_is_sc': {
 
-				//REFERRER
-				case 'page_referrer': {
+						if (Number(detail.value) >= 30) {
 
-					if (detail.value === '') {
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('IP в шорткэше', '0');
 
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('REFERRER  пустой', '3');
-
-					} else if (detail.value.includes('google')) {
-
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('Поисковик в REFERRER', '10');
-
-					}  else detail.css_id= 'GOOD';
-
-				}break;
-
-				//PRE-REFERRER
-				case 'page_pre_referrer': {
-
-					if (detail.value === '') {
-
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('PRE-REFERRER  пустой', '3');
-
-					} else if (detail.value.includes('google')) {
-
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('Поисковик в PRE-REFERRER', '10');
-
-					}  else detail.css_id= 'GOOD';
-
-				}break;
-
-				//SUBMIT_TIME
-				case 'submit_time': {
-
-					if ( detail.value === undefined || detail.value === '' ){
-						detail.css_id= 'INCORRECT';
-						helper.addToIssuesList('Не смогли определить SUBMIT_TIME.', '10');
-					}
-
-					else if (Number(detail.value) === 0){
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
-					}
-
-					else if(Number(detail.value) === 1){
-						detail.css_id= 'INCORRECT'
-						helper.addToIssuesList('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
-					}
-
-					else if(1 <= Number(detail.value) && Number(detail.value <= 5) ){
-						detail.css_id= 'BAD'
-						helper.addToIssuesList('1 <= SUBMIT_TIME < 5, слишком низкий.', '3');
-					}
-
-					else if(500 <= Number(detail.value) && Number(detail.value) <= 3000){
-						detail.css_id= 'BAD'
-						helper.addToIssuesList('3000 > SUBMIT_TIME > 500, многовато.', '3');
-					}
-
-					else if(Number(detail.value) > 3000){
-						detail.css_id= 'BAD'
-						helper.addToIssuesList('SUBMIT_TIME > 3000, есть проблемы.', '3');
-					}
-
-					else {
-						detail.css_id= 'GOOD';
-					}
-
-				} break;
-
-				//COOKIES
-				case 'cookies_enabled': {
-
-					if (detail.value === '' ||
-						detail.value === null) {
-
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('Не смогли определить наличие COOKIES', '3');
-
-					} else if (detail.value == 0){
-
-						detail.css_id = 'BAD';
-						helper.addToIssuesList('COOKIES отключены', '10');
+						} else detail.value = 'INVISIBLE';
 
 					}
-					else detail.css_id= 'GOOD';
+						break;
 
-				}break;
+					//EMAIL
+					case 'sender_email': {
 
-				//GREYLIST
-				case 'is_greylisted': {
+						if (detail.value === '') {
 
-					if (detail.value == 1) {
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('EMAIL передан, но пустой', '3');
 
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('Сработал GREYLIST. Смотри SUBMIT_TIME.', '3');
+						} else if (detail.value === null) {
 
-					}
-					else detail.value= 'INVISIBLE';
+							detail.css_id = 'INCORRECT';
+							helper.addToIssuesList('Не смогли определить EMAIL', '10');
 
-				}break;
+						} else if (ct.getDetailValueByName('sender_email_is_bl') == 2) {
 
-				//MOBILE_UA
-				case 'is_mobile_ua': {
+							detail.css_id = 'BAD';
 
-					if (detail.value == 1) {
+						} else detail.css_id = 'GOOD';
 
-						detail.css_id= 'GOOD';
-						helper.addToIssuesList('USERAGENT - мобильное устройство', '0');
 
 					}
-					else detail.value= 'INVISIBLE';
+						break;
 
-				}break;
+					//JS
+					case 'js_status': {
 
-				//PAGE_URL and SENDER_URL
-				case 'sender_url':
-				case 'page_url': {
+						if (Number(detail.value) === -1) {
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('JS отключен в браузере', '3');
+						} else if (Number(detail.value) === 1) {
+							detail.css_id = 'GOOD';
+						} else if (Number(detail.value) === 0) {
+							detail.css_id = 'BAD'
+							helper.addToIssuesList('Тест JS провален', '3');
+						} else {
+							detail.css_id = 'INCORRECT';
+							helper.addToIssuesList('Не смогли определить JS', '10');
+						}
+					}
+						break;
 
-					if (detail.value.includes('members') ||
-						detail.value.includes('admin') ||
-						detail.value.includes('login')
-					) {
+					//IP
+					case 'sender_ip': {
 
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('Возможен перехват админки, смотри PAGE_URL и SENDER_URL', '0');
+						if (detail.value === '') {
 
-					} else if(detail.value === '' || detail.value === null) {
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('IP адрес пустой', '3');
 
-						detail.css_id= 'BAD';
-						helper.addToIssuesList('Пустой PAGE_URL или SENDER_URL. Это странно, но не более.', '0');
+						} else if (detail.value === null) {
+
+							detail.css_id = 'INCORRECT';
+							helper.addToIssuesList('Не смогли определить IP адрес', '10');
+
+						} else if (ct.getDetailValueByName('sender_ip_is_bl') == 2) {
+
+							detail.css_id = 'BAD';
+
+						} else detail.css_id = 'GOOD';
 
 					}
+						break;
 
-					else detail.css_id= 'GOOD';
+					//REFERRER
+					case 'page_referrer': {
 
-				}break;
+						if (detail.value === '') {
+
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('REFERRER  пустой', '3');
+
+						} else if (detail.value.includes('google')) {
+
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('Поисковик в REFERRER', '10');
+
+						} else detail.css_id = 'GOOD';
+
+					}
+						break;
+
+					//PRE-REFERRER
+					case 'page_pre_referrer': {
+
+						if (detail.value === '') {
+
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('PRE-REFERRER  пустой', '3');
+
+						} else if (detail.value.includes('google')) {
+
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('Поисковик в PRE-REFERRER', '10');
+
+						} else detail.css_id = 'GOOD';
+
+					}
+						break;
+
+					//SUBMIT_TIME
+					case 'submit_time': {
+
+						if (detail.value === undefined || detail.value === '') {
+							detail.css_id = 'INCORRECT';
+							helper.addToIssuesList('Не смогли определить SUBMIT_TIME.', '10');
+						} else if (Number(detail.value) === 0) {
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
+						} else if (Number(detail.value) === 1) {
+							detail.css_id = 'INCORRECT'
+							helper.addToIssuesList('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
+						} else if (1 <= Number(detail.value) && Number(detail.value <= 5)) {
+							detail.css_id = 'BAD'
+							helper.addToIssuesList('1 <= SUBMIT_TIME < 5, слишком низкий.', '3');
+						} else if (500 <= Number(detail.value) && Number(detail.value) <= 3000) {
+							detail.css_id = 'BAD'
+							helper.addToIssuesList('3000 > SUBMIT_TIME > 500, многовато.', '3');
+						} else if (Number(detail.value) > 3000) {
+							detail.css_id = 'BAD'
+							helper.addToIssuesList('SUBMIT_TIME > 3000, есть проблемы.', '3');
+						} else {
+							detail.css_id = 'GOOD';
+						}
+
+					}
+						break;
+
+					//COOKIES
+					case 'cookies_enabled': {
+
+						if (detail.value === '' ||
+							detail.value === null) {
+
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('Не смогли определить наличие COOKIES', '3');
+
+						} else if (detail.value == 0) {
+
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('COOKIES отключены', '10');
+
+						} else detail.css_id = 'GOOD';
+
+					}
+						break;
+
+					//GREYLIST
+					case 'is_greylisted': {
+
+						if (detail.value == 1) {
+
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('Сработал GREYLIST. Смотри SUBMIT_TIME.', '3');
+
+						} else detail.value = 'INVISIBLE';
+
+					}
+						break;
+
+					//MOBILE_UA
+					case 'is_mobile_ua': {
+
+						if (detail.value == 1) {
+
+							detail.css_id = 'GOOD';
+							helper.addToIssuesList('USERAGENT - мобильное устройство', '0');
+
+						} else detail.value = 'INVISIBLE';
+
+					}
+						break;
+
+					//PAGE_URL and SENDER_URL
+					case 'sender_url':
+					case 'page_url': {
+
+						if (detail.value.includes('members') ||
+							detail.value.includes('admin') ||
+							detail.value.includes('login')
+						) {
+
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('Возможен перехват админки, смотри PAGE_URL и SENDER_URL', '0');
+
+						} else if (detail.value === '' || detail.value === null) {
+
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('Пустой PAGE_URL или SENDER_URL. Это странно, но не более.', '0');
+
+						} else detail.css_id = 'GOOD';
+
+					}
+						break;
+				}
 			}
-		}
+		} else helper.hardDebug('ct.checkdetails failed');
 	}
 
 }
@@ -1097,23 +1102,26 @@ helper.initHelperData();
 //==== DECLARE BLOCK END
 
 //==== LISTENERS
-chrome.runtime.onMessage.addListener(function (message) {
-	switch (message.command) {
+	chrome.runtime.onMessage.addListener(function (message) {
+		switch (message.command) {
 
-		case "pageHtml":
-			EXTRACTED_HTML = message.html;
-			helper.callWindow();
-			break;
+			case "pageHtml":
+				EXTRACTED_HTML = message.html;
+				helper.callWindow();
+				break;
 
-		default:
-			break;
+			default:
+				break;
+		}
+	})
+
+	function logHtmlCode(tab) {
+		chrome.tabs.executeScript(tab.id, {file: "send-page-code.js"});
 	}
-})
 
-function logHtmlCode(tab) {
-	chrome.tabs.executeScript(tab.id, {file: "send-page-code.js"});
-}
-
-chrome.browserAction.onClicked.addListener(logHtmlCode);
+	chrome.browserAction.onClicked.addListener(logHtmlCode);
 //==== LISTENERS END
 //CODE END
+
+// ==== DEBUG
+
