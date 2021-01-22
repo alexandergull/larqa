@@ -31,14 +31,13 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	callWindow() {	//Main window call based on "prefilled.html"
 
-		helper.initHelperData();
-
 		window.layout_window = window.open(
 			'prefilled.html',
 			'_blank');
 		layout_window.onload = function() {	// Processes starts here.
 			window.pub_strcnt = 0;
 
+			helper.initHelperData();
 			ct.analysis.initOptionsDefaults();
 			ct.initDetailsArray();
 			ct.initOptionsArray();
