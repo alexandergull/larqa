@@ -115,9 +115,10 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 			const json_obj = JSON.parse(json);
 			let parsed_options =[];
 
-			$.each(json_obj, function (name, value) {
-				parsed_options.push(new Option(name, value, 0))
-			})
+			for (let key in json_obj) {
+				let value = json_obj[key];
+				parsed_options.push(new Option(key, value, 0))
+			}
 
 			return parsed_options
 
