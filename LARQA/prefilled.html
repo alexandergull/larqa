@@ -115,29 +115,34 @@
 
     th,tr {width:50%}
 
-    .details-value {
-        width:20px;
+
+
+    #details_block{
+        width:57%;
+        height:auto;
+        background:#f1f1f1;
+        float:left;
+        margin: 0 1% 1% 0;
+        text-align:center;
+        padding: 1%;
+        background-color: #ECE9E0;
+        border-radius: 15px;
     }
 
-    .details-name{
-
-        width: 30px;
-
-    }
-
-    #details_table-header{
-
+    #options_block{
+        width:37%;
+        height:auto;
+        background:#f1f1f1;
+        float:left;
+        margin: 0 1% 1% 0;
+        text-align:center;
+        padding: 1%;
+        background-color: #ECE9E0;
+        border-radius: 15px;
     }
 
     #options_table{
-
-        width: 100%;
-
-    }
-
-
-    #options_table-header{
-
+        width:37%;
     }
 
     #status_table{
@@ -159,6 +164,15 @@
         padding: 1px;
         margin: 1px;
         font-size: 10px;
+
+    }
+    .details-value {
+        width:20px;
+    }
+
+    .details-name{
+
+        width: 30px;
 
     }
 
@@ -185,18 +199,18 @@
         </table>
     </div>
 </div>
-<div class="line_block">
-    <div id="details_block"><h1>Параметры запроса</h1>
+<div id="details_block">
+    <div id="details_block-inner"><h1>Параметры запроса</h1>
         <table id='details_table'>
             <tbody id="details_table-tbody">
             </tbody>
         </table>
     </div>
 </div>
-<div class="line_block">
+<div id="options_block">
     <div>
         <h1 id="options_header">Опций плагина в запросе</h1>
-        <div id="options_block">
+        <div id="options_block-inner">
             <table id="options_table">
                 <tbody id="options_table-tbody">
                 </tbody>

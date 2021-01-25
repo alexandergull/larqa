@@ -1,4 +1,3 @@
-//todo Разнести drawStatusBlock на функции
 //todo добавить проверку критических опций в issuesList
 //todo проверять опции перед выводом, как в details
 
@@ -200,6 +199,18 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 		}
 
 	}
+
+	setInnerHtmlOfTag(tag_id,html_code){ //Shortens code for tag set
+
+		return layout_window.document.getElementById(tag_id).innerHTML=html_code;
+
+	}
+
+	addInnerHtmlToTag(tag_id,html_code){ //Shortens code for tag insert
+
+		return layout_window.document.getElementById(tag_id).innerHTML+=html_code;
+
+	}
 }
 
 class Status {
@@ -225,7 +236,7 @@ class Status {
 
 	}
 
-	clearFiltersString() {	//Clear [ct.status.filters:str] from tags
+	cleanFiltersStringFromTags() {	//Clear [ct.status.filters:str] from tags
 
 		let fstr = ct.status.filters
 
@@ -259,7 +270,7 @@ class Status {
 		ct.status.filters = fstr;
 	}
 
-	setFiltersColored() {	// Filters highlighting in [ct.status.filter:str]
+	colorFiltersNamesIfInSet() {	// Filters highlighting in [ct.status.filter:str]
 
 		let filters = ct.status.filters;
 
@@ -308,6 +319,54 @@ class Status {
 		ct.status.filters = filters;
 	}
 
+	initFeedback() { //Extracts feedback from EXTRACTED_HTML.
+
+		if (EXTRACTED_HTML.includes('<span class="text-danger')) {
+
+			this.feedback = EXTRACTED_HTML.includes('<span class="text-danger');
+
+			const user_dec = helper.findBetween(EXTRACTED_HTML,'<span class="text-danger">','</span>');
+			this.feedback = user_dec ==='NO' ? 0:1;
+
+			if (ct.status.feedback === 1) {
+
+				ct.status.feedback = '<a style="color: #009900" >[ ОС: одобрено пользователем ]<a>';
+
+				if (+ct.status.getDetailValueByName('denied_by_pl')) {
+
+					helper.addToIssuesList('Запрос одобрен пользователем, при этом запись запрещена ЧС. Нужно письмо.','10')
+
+				}
+
+			} else if (this.feedback === 0) {
+
+				ct.status.feedback = '<a style="color: #990000">[ ОС: запрещено пользователем ]<a>';
+
+				if (+ct.getDetailValueByName('allowed_by_pl')) {
+
+					helper.addToIssuesList('Запрос запрещён пользователем, при этом запись одобрена ЧС. Нужно письмо.','10');
+
+				}
+			}
+		} else ct.status.feedback = 'Обратной связи нет.';
+
+	}
+
+	initFilters() {
+
+		// Extract filters string from HTML
+		const left = `"Добавить в произвольный блок"></span>&nbsp;</td><td>`;
+		const filters_section = helper.getHtmlSectionFromEHTML('filters');
+		const right = 'R:';
+
+		this.filters = helper.findBetween(filters_section,left,right);
+
+		this.cleanFiltersStringFromTags();
+
+		this.colorFiltersNamesIfInSet();
+
+	}
+
 	initStatus() { //Init ct.status parameters
 
 		if (ct.details) {
@@ -346,24 +405,12 @@ class Status {
 
 			}
 
-		} else alert('ct.details - details block not found');
-
-		//Extract feedback
-		this.feedback = EXTRACTED_HTML.includes('<span class="text-danger');
-		if (this.feedback) {
-			const user_dec = helper.findBetween(EXTRACTED_HTML,'<span class="text-danger">','</span>');
-			this.feedback = user_dec ==='NO' ? 0:1;
-		} else this.feedback = -1;
+		} else alert('initStatus fail: ct.details is undefinied');
 
 
-		// Extract filters string from HTML
-		const left = `"Добавить в произвольный блок"></span>&nbsp;</td><td>`;
-		const filters_section = helper.getHtmlSectionFromEHTML('filters');
-		const right = 'R:';
-		this.filters = helper.findBetween(filters_section,left,right);
+		this.initFeedback();
 
-		//Clear this.filters from tags
-		this.clearFiltersString();
+		this.initFilters()
 
 	}
 
@@ -373,11 +420,13 @@ class Status {
 
 		if (EXTRACTED_HTML.includes(signature)) {
 
-			const start_position = ( (EXTRACTED_HTML.indexOf(signature) + (signature.length) ) )
-			this.id_value = (EXTRACTED_HTML.slice (start_position, start_position + 32 ) );
+			this.id_value = {full:'',short:''};
 
-			this.link_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.id_value;
-			this.link_user = 'https://cleantalk.org/my/show_requests?request_id=' + this.id_value;
+			const start_position = ( (EXTRACTED_HTML.indexOf(signature) + (signature.length) ) )
+			this.id_value.full = (EXTRACTED_HTML.slice (start_position, start_position + 32 ) );
+
+			this.link_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.id_value.full;
+			this.link_user = 'https://cleantalk.org/my/show_requests?request_id=' + this.id_value.full;
 
 		} else helper.debugMessage('ID запроса не найден.');
 	}
@@ -702,27 +751,25 @@ class CT {	// Main class CT
 
 	drawStatusBlock() {	//Draws details block in layout_window
 
-		//Calls filters coloring
-		ct.status.setFiltersColored();
-
-		layout_window.document.getElementById('status_table_status-class-column').innerHTML += (
+		helper.addInnerHtmlToTag('status_table_status-class-column',(
 			' <p class="status_table_inner">Ссылки на запрос: <a href="' + ct.status.link_noc +'">[НОК] </a>'+
 			' <a href="' + ct.status.link_user +'">[ПУ] </a>' +
 			' </p>'
-		);
+		));
 
-		layout_window.document.getElementById('status_table-filter-raw').innerHTML += (
+		helper.addInnerHtmlToTag('status_table-filter-raw',(
 			'Агент: [' + ct.status.agent + '] Фильтры: [' + ct.status.filters + ']'
-		);
+		));
 
-		let short_request_id = (
+		ct.status.id_value.short = (
 			' ID=..' +
-			ct.status.id_value.slice( ct.status.id_value.length-5,ct.status.id_value.length ) );
+			ct.status.id_value.full.slice( ct.status.id_value.full.length-5,ct.status.id_value.full.length ) );
 
-		layout_window.document.getElementById('layout_window_title').innerHTML = (
-			short_request_id +
+		helper.setInnerHtmlOfTag('layout_window_title',(
+			ct.status.id_value.short +
 			' [' + ct.status.isAllowed +
-			']');
+			']'
+		));
 
 		let header_text;
 
@@ -738,42 +785,23 @@ class CT {	// Main class CT
 
 		}
 
-		if (ct.status.feedback === 1) {
+		//Draws if Private lists found and triggered
+		if (this.status.isAllowed) {
+			header_text += (this.status.isAllowed === 'ALLOWED') ? 'ALLOWED' : 'DENIED';
+			header_text += (+(this.getDetailValueByName('allowed_by_pl')) === 1) ? ' BY PRIVATE LIST' : '';
+			header_text += (+(this.getDetailValueByName('denied_by_pl')) === 1) ? ' BY PRIVATE LIST' : '';
 
-			ct.status.feedback = '<a style="color: #009900" >[ ОС: одобрено пользователем ]<a>';
+			helper.addInnerHtmlToTag('status_block-header', (
+				'Статус запроса ' +
+				'<a href="' + this.status.link_noc + '">' +
+				ct.status.id_value.short + '</a>' +
+				' ' +
+				'<a class="status_header">: ' + header_text + '</a>' +
 
-			if (+this.getDetailValueByName('denied_by_pl')) {
-
-				helper.addToIssuesList('Запрос одобрен пользователем, при этом запись запрещена ЧС. Нужно письмо.','10')
-
-			}
-
-		} else if (ct.status.feedback === 0) {
-
-				ct.status.feedback = '<a style="color: #990000">[ ОС: запрещено пользователем ]<a>';
-
-				if (+this.getDetailValueByName('allowed_by_pl')) {
-
-					helper.addToIssuesList('Запрос запрещён пользователем, при этом запись одобрена ЧС. Нужно письмо.','10');
-
-				}
-
-			} else ct.status.feedback = 'Обратной связи нет.';
-
-
-
-		header_text += (this.status.isAllowed === 'ALLOWED') ? 'ALLOWED':'DENIED';
-		header_text += (+(this.getDetailValueByName('allowed_by_pl')) === 1) ? ' BY PRIVATE LIST':'';
-		header_text += (+(this.getDetailValueByName('denied_by_pl')) === 1) ? ' BY PRIVATE LIST':'';
-
-		layout_window.document.getElementById('status_block-header').innerHTML += (
-			'Статус запроса ' +
-			'<a href="' + this.status.link_noc + '">' +
-			short_request_id + '</a>' +
-			' ' +
-			'<a class="status_header">: '+header_text+'</a>' +
-			'<p style = "text-align: right"> '+ ct.status.feedback+'</p>'
-		)
+				//Draws feedback if so.
+				'<p style = "text-align: right"> ' + ct.status.feedback + '</p>'
+			))
+		} else helper.hardDebug('drawStatus failed: no isAllowed found')
 
 	}
 
