@@ -1,5 +1,8 @@
-//todo Допилить проверку параметров
-//todo Допилить статус, отображать одобрен\нет, менять цвет в зависимости от этого, отражать allowed by PL
+//todo Разнести drawStatusBlock на функции
+//todo добавить проверку критических опций в issuesList
+//todo проверять опции перед выводом, как в details
+
+
 const HARD_DEBUG = true;
 
 class Helper {	//Helper class, called to keep misc functionality. Canonized
@@ -326,7 +329,7 @@ class Status {
 			}
 
 			//Checks if is allowed
-			this.isAllowed = (ct.getDetailValueByName('is_allowed')) ? 'ALLOWED' : 'DENIED';
+			this.isAllowed = (ct.getDetailValueByName('is_allowed') === '1') ? 'ALLOWED' : 'DENIED';
 
 			//Checks request type
 			switch (ct.getDetailValueByName('method_name')) {
@@ -349,8 +352,9 @@ class Status {
 		this.feedback = EXTRACTED_HTML.includes('<span class="text-danger');
 		if (this.feedback) {
 			const user_dec = helper.findBetween(EXTRACTED_HTML,'<span class="text-danger">','</span>');
-			this.feedback = user_dec ==='NO' ? '0':'1';
-		} else this.feedback = '-1';
+			this.feedback = user_dec ==='NO' ? 0:1;
+		} else this.feedback = -1;
+
 
 		// Extract filters string from HTML
 		const left = `"Добавить в произвольный блок"></span>&nbsp;</td><td>`;
@@ -696,7 +700,7 @@ class CT {	// Main class CT
 
 	}
 
-	drawStatusBlock() {	//Draws details block in layout_window todo всё переделать под рисование как в showDebugMessage
+	drawStatusBlock() {	//Draws details block in layout_window
 
 		//Calls filters coloring
 		ct.status.setFiltersColored();
@@ -711,21 +715,65 @@ class CT {	// Main class CT
 			'Агент: [' + ct.status.agent + '] Фильтры: [' + ct.status.filters + ']'
 		);
 
-		layout_window.document.getElementById('layout_window_title').innerHTML = (
+		let short_request_id = (
 			' ID=..' +
-			ct.status.id_value.slice(ct.status.id_value.length-5,ct.status.id_value.length) +
+			ct.status.id_value.slice( ct.status.id_value.length-5,ct.status.id_value.length ) );
+
+		layout_window.document.getElementById('layout_window_title').innerHTML = (
+			short_request_id +
 			' [' + ct.status.isAllowed +
 			']');
 
-		let header_text ='';
-		header_text += (this.status.isAllowed) ? 'ALLOWED':'DENIED';
+		let header_text;
+
+		if (this.status.isAllowed === 'ALLOWED') {
+
+			header_text ='<a style="color: #009900">';
+			layout_window.document.getElementById('status_block').className = 'is_allowed';
+
+		} else {
+
+			header_text ='<a style="color: #990000">';
+			layout_window.document.getElementById('status_block').className = 'is_denied';
+
+		}
+
+		if (ct.status.feedback === 1) {
+
+			ct.status.feedback = '<a style="color: #009900" >[ ОС: одобрено пользователем ]<a>';
+
+			if (+this.getDetailValueByName('denied_by_pl')) {
+
+				helper.addToIssuesList('Запрос одобрен пользователем, при этом запись запрещена ЧС. Нужно письмо.','10')
+
+			}
+
+		} else if (ct.status.feedback === 0) {
+
+				ct.status.feedback = '<a style="color: #990000">[ ОС: запрещено пользователем ]<a>';
+
+				if (+this.getDetailValueByName('allowed_by_pl')) {
+
+					helper.addToIssuesList('Запрос запрещён пользователем, при этом запись одобрена ЧС. Нужно письмо.','10');
+
+				}
+
+			} else ct.status.feedback = 'Обратной связи нет.';
+
+
+
+		header_text += (this.status.isAllowed === 'ALLOWED') ? 'ALLOWED':'DENIED';
 		header_text += (+(this.getDetailValueByName('allowed_by_pl')) === 1) ? ' BY PRIVATE LIST':'';
 		header_text += (+(this.getDetailValueByName('denied_by_pl')) === 1) ? ' BY PRIVATE LIST':'';
 
-		layout_window.document.getElementById('status_block-header').innerHTML += '<b class="status_header">'+header_text+'</b>'
-
-		//todo менять цвет блока в зависимости от состояния is_allowed
-		//todo добавить отображение наличия и качества обратной связи
+		layout_window.document.getElementById('status_block-header').innerHTML += (
+			'Статус запроса ' +
+			'<a href="' + this.status.link_noc + '">' +
+			short_request_id + '</a>' +
+			' ' +
+			'<a class="status_header">: '+header_text+'</a>' +
+			'<p style = "text-align: right"> '+ ct.status.feedback+'</p>'
+		)
 
 	}
 
@@ -872,7 +920,7 @@ class Analysis {	// Analysis class
 						} else detail.value = 'INVISIBLE';
 
 					}
-						break;
+					break;
 
 					case 'sender_ip_is_sc': {
 
@@ -884,7 +932,7 @@ class Analysis {	// Analysis class
 						} else detail.value = 'INVISIBLE';
 
 					}
-						break;
+					break;
 
 					//EMAIL
 					case 'sender_email': {
@@ -907,7 +955,7 @@ class Analysis {	// Analysis class
 
 
 					}
-						break;
+					break;
 
 					//JS
 					case 'js_status': {
@@ -925,7 +973,7 @@ class Analysis {	// Analysis class
 							helper.addToIssuesList('Не смогли определить JS', '10');
 						}
 					}
-						break;
+					break;
 
 					//IP
 					case 'sender_ip': {
@@ -947,7 +995,7 @@ class Analysis {	// Analysis class
 						} else detail.css_id = 'GOOD';
 
 					}
-						break;
+					break;
 
 					//REFERRER
 					case 'page_referrer': {
@@ -965,7 +1013,7 @@ class Analysis {	// Analysis class
 						} else detail.css_id = 'GOOD';
 
 					}
-						break;
+					break;
 
 					//PRE-REFERRER
 					case 'page_pre_referrer': {
@@ -983,11 +1031,11 @@ class Analysis {	// Analysis class
 						} else detail.css_id = 'GOOD';
 
 					}
-						break;
+					break;
 
 					//SUBMIT_TIME
 					case 'submit_time': {
-						helper.debugMessage(`${detail.name} ${detail.value}`);
+
 						if (detail.value === undefined || detail.value === '') {
 							detail.css_id = 'INCORRECT';
 							helper.addToIssuesList('Не смогли определить SUBMIT_TIME.', '10');
@@ -1011,7 +1059,7 @@ class Analysis {	// Analysis class
 						}
 
 					}
-						break;
+					break;
 
 					//COOKIES
 					case 'cookies_enabled': {
@@ -1030,7 +1078,7 @@ class Analysis {	// Analysis class
 						} else detail.css_id = 'GOOD';
 
 					}
-						break;
+					break;
 
 					//GREYLIST
 					case 'is_greylisted': {
@@ -1043,7 +1091,7 @@ class Analysis {	// Analysis class
 						} else detail.value = 'INVISIBLE';
 
 					}
-						break;
+					break;
 
 					//MOBILE_UA
 					case 'is_mobile_ua': {
@@ -1056,10 +1104,25 @@ class Analysis {	// Analysis class
 						} else detail.value = 'INVISIBLE';
 
 					}
-						break;
+					break;
 
-					//PAGE_URL and SENDER_URL
-					case 'sender_url':
+					//SENDER_URL
+					case 'sender_url': {
+
+						if (detail.value !== '') {
+
+							detail.css_id = 'BAD';
+							helper.addToIssuesList('SENDER_URL не пустой. Возможно спам.', '0');
+
+						} else {
+
+							detail.value = 'INVISIBLE';
+
+						}
+					}
+					break;
+
+					//PAGE_URL and
 					case 'page_url': {
 
 						if (detail.value.includes('members') ||
@@ -1075,11 +1138,63 @@ class Analysis {	// Analysis class
 							detail.css_id = 'BAD';
 							helper.addToIssuesList('Пустой PAGE_URL или SENDER_URL. Это странно, но не более.', '0');
 
-						} else detail.css_id = 'GOOD';
+						} else {
+							detail.css_id = 'GOOD';
+
+						}
+					}
+					break;
+
+
+					//ALLOWED BY PL
+					case 'denied_by_pl':
+					case 'allowed_by_pl':{
+
+						if (+(detail.value)===1 ){
+
+							if (+(ct.getDetailValueByName('pl_has_records')) === 0){
+
+								detail.css_id = 'INCORRECT';
+								helper.addToIssuesList('Сработали записи в персональных списках, но в списках нет записей.', '0');
+
+							} else {
+
+								detail.css_id = 'GOOD';
+								helper.addToIssuesList('Сработали записи в персональных списках.', '0');
+
+							}
+
+						} else {
+
+							detail.value = 'INVISIBLE';
+
+						}
+
+					}
+					break;
+
+					//MOBILE_UA
+					case 'is_allowed': {
+
+						detail.value = 'INVISIBLE';
+
+					}
+					break;
+
+					//MOBILE_UA
+					case 'pl_has_records': {
+						if (+detail.value!==0) {
+							detail.css_id = 'GOOD';
+							helper.addToIssuesList('Есть записи в ПС Анти-Спам', '0');
+						}
+						else
+
+							detail.value = 'INVISIBLE';
 
 					}
 						break;
 				}
+
 			}
 		} else helper.hardDebug('ct.checkdetails failed');
 	}
@@ -1097,7 +1212,6 @@ let EXTRACTED_HTML;
 let ct = new CT();
 ct.analysis = new Analysis();
 ct.status = new Status();
-
 helper = new Helper();
 
 
