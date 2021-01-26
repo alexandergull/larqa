@@ -1,8 +1,9 @@
 //todo добавить проверку критических опций в issuesList
 //todo проверять опции перед выводом, как в details
+//todo ссылка на фильтры пользователя если были правки по фильтрам
 
 
-const HARD_DEBUG = true;
+const HARD_DEBUG = false;
 
 class Helper {	//Helper class, called to keep misc functionality. Canonized
 
@@ -25,12 +26,6 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	}
 
-	hardDebug(msg) {	//Message to layout_window, erases all other window data
-
-		if (HARD_DEBUG) layout_window.document.writeln('<xmp>'+msg+'</xmp>');
-
-	}
-
 	callWindow() {	//Main window call based on "prefilled.html"
 
 		window.layout_window = window.open(
@@ -43,7 +38,6 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 			ct.analysis.initOptionsDefaults();
 			ct.initDetailsArray();
 			ct.initOptionsArray();
-			ct.status.initId();
 			ct.status.initStatus();
 			ct.analysis.initOptionsDefaults();
 
@@ -136,7 +130,7 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	addToIssuesList(issue,weight) { //Collect new issue [issue:str] and its weight[weight:str] to helper.issues_list
 
-		this.issues_list.set('<p id="debug">- ' + issue + '</p>',weight);
+		this.issues_list.set('<p id="report_block-issues">- ' + issue + '</p>',weight);
 
 	}
 
@@ -159,9 +153,11 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 			if (list !== '') {
 				helper.addTag('details_table', 'beforebegin', (
-					' <div class="report_block">Обратить внимание!(' + issues_number + '):' + list +
-					' <p><b>Итоговый вес: [' + weight + ']</p></b>' +
-					' </div>'
+					' <div class="report_block"><b>Отчёт аналитики. Найдено проблем: (' + issues_number + ')</b>' + list + '</div>'
+				));
+			} else {
+				helper.addTag('details_table', 'beforebegin', (
+					'<div class="report_block"><b>Отчёт аналитики. Проблемы не обнаружены.</b></div>'
 				));
 			}
 			helper.issues_list = '';
@@ -171,10 +167,17 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	debugMessage(msg,comment) { //Collects new message [msg:str] to [helper.debug_list:str]. If comment, shows the comment first.
 
-		this.debug_list += (comment) ?
-			('<p id="debug"> [' + comment + '] [' + msg + ']</p>')
-			: ('<p id="debug">Debug message: ' + msg + '</p>');
+		if (HARD_DEBUG) {
 
+			layout_window.document.writeln('['+comment+']<xmp> ['+msg+'] </xmp>');
+
+		} else {
+
+			this.debug_list += (comment) ?
+				('<p id="debug"> [' + comment + '] [' + msg + ']</p>')
+				: ('<p id="debug">Debug message: ' + msg + '</p>');
+
+		}
 	}
 
 	showDebugMsgList() { //Adds a new tag of found issues from helper.debug_list to Status table
@@ -188,15 +191,30 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	addToChangedOptionsList(opt) { //Collects changed options [opt:str] to [helper.changed_options_list:str].
 
-		this.changed_options_list += ('<p id="debug">- ' + opt + '</p>');
+		this.changed_options_list += ('<p id="report_block-issues">- ' + opt + '</p>');
 
 	}
 
 	showChangedOptionsList() { //Adds a new tag of changed options from helper.changed_options to Options table
 
 		if (this.changed_options_list !==''){
-			helper.addTag('options_table', 'beforebegin', ('<div class="report_block" style align="left">Изменены опции:'+this.changed_options_list+'</div>'));
+
+			helper.addTag('options_table',
+				'beforebegin',
+				('<div class="report_block" style align="left"><b>Изменено опций: (' +
+					ct.analysis.options_changed_indexes.length +
+					')</b>' +
+					this.changed_options_list +
+					'</div>'
+				)
+			);
+
 			this.changed_options_list = '';
+
+		} else {
+
+			helper.addTag('options_table', 'beforebegin', '<div class="report_block" style align="left"><b>Изменений в опциях не обнаружено.</b>');
+
 		}
 
 	}
@@ -222,19 +240,74 @@ class Status {
 		filters,
 		type,
 		value,
-		link_noc,
-		link_user,
-		feedback
+		feedback,
+		links,
+		api_calls,
+	    user_card
 	) {
 		this.agent = agent;
 		this.isAllowed = isAllowed;
 		this.filters = filters;
 		this.type = type; //todo допилить status.type
 		this.id_value = value;
-		this.link_noc = link_noc;
-		this.link_user = link_user;
 		this.feedback = feedback;
+		this.links = links;
+		this.user_card = user_card;
+		this.api_calls = api_calls;
 
+	}
+
+	sortFiltersByBalls() {	//Sorts filters by dec
+
+		let start,end;
+		let count = 0;
+		let extracted_values_array = [];
+		let fstr = ct.status.filters;
+
+		for (let i=fstr.length;i>=0;i--) {
+
+			if (fstr[i] === ' '){
+
+				if (count === 0) {
+
+					end = i;
+					count = 1;
+
+				} else {
+
+					if (end !== fstr.length) {
+						start = i + 1;
+						extracted_values_array.push (fstr.slice(start, end));
+						end = i;
+					}
+				}
+			}
+		}
+
+		let dots_symbol_index,balls_value;
+		let balls_to_sort_array = [];
+		let result_string ='';
+		for (let i=0;i < extracted_values_array.length;i++) {
+
+			dots_symbol_index = extracted_values_array[i].indexOf(':',extracted_values_array[i].length-4);
+			balls_value = extracted_values_array[i].slice(dots_symbol_index+1,extracted_values_array[i].length)
+			if (!balls_to_sort_array.includes(balls_value)) {
+				balls_to_sort_array.push(balls_value);
+			}
+
+		}
+
+		balls_to_sort_array.sort( (a, b) => b - a );
+
+		for (let i=0;i < balls_to_sort_array.length;i++) {
+			for (let j=0;j < extracted_values_array.length;j++){
+				if (extracted_values_array[j].includes(balls_to_sort_array[i])){
+					result_string += extracted_values_array[j] + ' ';
+				}
+			}
+		}
+
+		ct.status.filters = result_string;
 	}
 
 	cleanFiltersStringFromTags() {	//Clear [ct.status.filters:str] from tags
@@ -268,7 +341,9 @@ class Status {
 				i--;
 			}
 		}
+
 		ct.status.filters = fstr;
+
 	}
 
 	colorFiltersNamesIfInSet() {	// Filters highlighting in [ct.status.filter:str]
@@ -320,39 +395,6 @@ class Status {
 		ct.status.filters = filters;
 	}
 
-	initFeedback() { //Extracts feedback from EXTRACTED_HTML.
-
-		if (EXTRACTED_HTML.includes('<span class="text-danger')) {
-
-			this.feedback = EXTRACTED_HTML.includes('<span class="text-danger');
-
-			const user_dec = helper.findBetween(EXTRACTED_HTML,'<span class="text-danger">','</span>');
-			this.feedback = user_dec ==='NO' ? 0:1;
-
-			if (ct.status.feedback === 1) {
-
-				ct.status.feedback = '<a style="color: #009900" >[ ОС: одобрено пользователем ]<a>';
-
-				if (+ct.status.getDetailValueByName('denied_by_pl')) {
-
-					helper.addToIssuesList('Запрос одобрен пользователем, при этом запись запрещена ЧС. Нужно письмо.','10')
-
-				}
-
-			} else if (this.feedback === 0) {
-
-				ct.status.feedback = '<a style="color: #990000">[ ОС: запрещено пользователем ]<a>';
-
-				if (+ct.getDetailValueByName('allowed_by_pl')) {
-
-					helper.addToIssuesList('Запрос запрещён пользователем, при этом запись одобрена ЧС. Нужно письмо.','10');
-
-				}
-			}
-		} else ct.status.feedback = 'Обратной связи нет.';
-
-	}
-
 	initFilters() {
 
 		// Extract filters string from HTML
@@ -364,7 +406,88 @@ class Status {
 
 		this.cleanFiltersStringFromTags();
 
+		this.sortFiltersByBalls();
+
 		this.colorFiltersNamesIfInSet();
+
+	}
+
+	initLinks() {
+
+		this.links = {
+
+			to_noc:'',
+			to_dashboard:'',
+			to_user_card: '',
+			to_user_requests:'',
+			to_service_requests:'',
+			to_feedback:''
+
+		};
+
+		this.user_card = {
+
+			email:'',
+			user_id:''
+
+		};
+
+		this.user_card.user_id = helper.findBetween(EXTRACTED_HTML,'href="profile?user_id=','">');
+		this.user_card.email = helper.findBetween(EXTRACTED_HTML,this.user_card.user_id+'">',' (');
+		this.links.to_user_card = 'https://cleantalk.org/profile?user_id=' + this.user_card.user_id;
+		this.links.to_user_requests = 'https://cleantalk.org/noc/requests?user_id=' + this.user_card.user_id;
+		this.links.to_service_requests = 'https://cleantalk.org/noc/requests?service_id=' + helper.findBetween(EXTRACTED_HTML,'requests?service_id=','" style=');
+		this.links.to_feedback = this.links.to_user_requests + '&feedback=on';
+
+	}
+
+	initId() {	// Finds request ID to this.id_value, set this.link_noc and this.link_user
+
+		const signature = `<div class="panel-heading">Запрос `;
+
+		if (EXTRACTED_HTML.includes(signature)) {
+
+			this.id_value = {full:'',short:''};
+
+			const start_position = ( (EXTRACTED_HTML.indexOf(signature) + (signature.length) ) )
+			this.id_value.full = (EXTRACTED_HTML.slice (start_position, start_position + 32 ) );
+
+			this.links.to_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.id_value.full;
+			this.links.to_dashboard = 'https://cleantalk.org/my/show_requests?request_id=' + this.id_value.full;
+
+		} else helper.debugMessage('ID запроса не найден.');
+	}
+
+	initFeedback() { //Extracts feedback from EXTRACTED_HTML.
+
+		if (EXTRACTED_HTML.includes('<span class="text-danger')) {
+
+			this.feedback = EXTRACTED_HTML.includes('<span class="text-danger');
+
+			const user_dec = helper.findBetween(EXTRACTED_HTML,'<span class="text-danger">','</span>');
+			this.feedback = user_dec ==='NO' ? 0:1;
+
+			if (ct.status.feedback === 1) {
+
+				ct.status.feedback = '<a style="color: #009900" >[ Внимание, ОС! -> Одобрено пользователем. ]<a>';
+
+				if (+ct.status.getDetailValueByName('denied_by_pl')) {
+
+					helper.addToIssuesList('Запрос одобрен пользователем, при этом запись запрещена ЧС. Нужно письмо.','10')
+
+				}
+
+			} else if (this.feedback === 0) {
+
+				ct.status.feedback = '<a style="color: #990000">[ Внимание, ОС! -> запрещено пользователем! ]<a>';
+
+				if (+ct.getDetailValueByName('allowed_by_pl')) {
+
+					helper.addToIssuesList('Запрос запрещён пользователем, при этом запись одобрена ЧС. Нужно письмо.','10');
+
+				}
+			}
+		} else ct.status.feedback = 'Обратной связи нет.';
 
 	}
 
@@ -408,29 +531,19 @@ class Status {
 
 		} else alert('initStatus fail: ct.details is undefinied');
 
+//links.user_card.email
+
+		this.initLinks();
 
 		this.initFeedback();
 
-		this.initFilters()
+		this.initFilters();
+
+		this.initId();
 
 	}
 
-	initId() {	// Finds request ID to this.id_value, set this.link_noc and this.link_user
 
-		const signature = `<div class="panel-heading">Запрос `;
-
-		if (EXTRACTED_HTML.includes(signature)) {
-
-			this.id_value = {full:'',short:''};
-
-			const start_position = ( (EXTRACTED_HTML.indexOf(signature) + (signature.length) ) )
-			this.id_value.full = (EXTRACTED_HTML.slice (start_position, start_position + 32 ) );
-
-			this.link_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.id_value.full;
-			this.link_user = 'https://cleantalk.org/my/show_requests?request_id=' + this.id_value.full;
-
-		} else helper.debugMessage('ID запроса не найден.');
-	}
 
 }
 
@@ -595,9 +708,9 @@ class CT {	// Main class CT
 						// Skip ct_options, this detail is used in options block and should not be shown in details tab.
 						if (detail.name !== 'ct_options') {
 
-							helper.addTag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
-
 							if (detail.value !== 'INVISIBLE') {
+
+							helper.addTag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
 
 								// Special templates for sender IP and sender email to show tools links
 								let href = '';
@@ -753,13 +866,18 @@ class CT {	// Main class CT
 	drawStatusBlock() {	//Draws details block in layout_window
 
 		helper.addInnerHtmlToTag('status_table_status-class-column',(
-			' <p class="status_table_inner">Ссылки на запрос: <a href="' + ct.status.link_noc +'">[НОК] </a>'+
-			' <a href="' + ct.status.link_user +'">[ПУ] </a>' +
-			' </p>'
+			'<p class="status_table_inner">Полезные ссылки: ' +
+			'<a href="' + ct.status.links.to_noc +'">[Запрос в НОК] </a>'+
+			'<a href="' + ct.status.links.to_dashboard +'">[Запрос в ПУ] </a>' +
+			'<a href="' + ct.status.links.to_user_card +'">[Карта пользователя] </a>' +
+			'<a href="' + ct.status.links.to_service_requests +'">[Все запросы сервиса] </a>' +
+			'<a href="' + ct.status.links.to_user_requests +'">[Все запросы пользователя] </a>' +
+			'<a href="' + ct.status.links.to_feedback +'">[Все запросы пользователя c обратной связью] </a>' +
+			'</p>'
 		));
 
 		helper.addInnerHtmlToTag('status_table-filter-raw',(
-			'Агент: [' + ct.status.agent + '] Фильтры: [' + ct.status.filters + ']'
+			'<p class="status_table_inner">Агент: [' + ct.status.agent + '] Фильтры: [' + ct.status.filters + ']</p>'
 		));
 
 		ct.status.id_value.short = (
@@ -794,7 +912,7 @@ class CT {	// Main class CT
 
 			helper.addInnerHtmlToTag('status_block-header', (
 				'Статус запроса ' +
-				'<a href="' + this.status.link_noc + '">' +
+				'<a href="' + this.status.links.to_noc + '">' +
 				ct.status.id_value.short + '</a>' +
 				' ' +
 				'<a class="status_header">: ' + header_text + '</a>' +
@@ -864,8 +982,10 @@ class Analysis {	// Analysis class
 
 	constructor(
 		options_default,
+		options_changed_count
 	) {
 		this.options_default = options_default;
+		this.options_changed_indexes = options_changed_count;
 	}
 
 	//todo не отрабатывает post_info для comment type
@@ -885,7 +1005,7 @@ class Analysis {	// Analysis class
 
 	compareCtOptionsWithDefaults(def_options_agent) {	//Compares request options with defaults by agent [def_options_agent:str]
 
-		let changes_array = [];
+		this.options_changed_indexes = [];
 
 		// Collects options changed
 		for (let i = 0; i <= def_options_agent.length - 1; i++) {
@@ -898,7 +1018,7 @@ class Analysis {	// Analysis class
 
 				if ( (def_options_agent[i].name === ct.options[j].name) && ( def_value !== req_value )) {
 
-					changes_array.push(j);
+					this.options_changed_indexes.push(j);
 					helper.addToChangedOptionsList(ct.options[j].name);
 
 				}
@@ -906,13 +1026,11 @@ class Analysis {	// Analysis class
 		}
 
 		// Colors changed options
-		changes_array.forEach(function (value) {
+		this.options_changed_indexes.forEach(function (value) {
 			let tr_name = ('options_tier_' + value);
 			layout_window.document.getElementById(tr_name).style.color = '#FF0000';
 
 		})
-
-		helper.addToChangedOptionsList('<p><b>Опций изменено:'+changes_array.length+'</b></p>');
 
 	}
 

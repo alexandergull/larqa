@@ -20,10 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_01_2021_10_54_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_01_2021_10_54__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/icons/off.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/icons/on.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LARQA/prefilled.html" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/prefilled.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +82,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/prefilled.html" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -392,7 +393,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611591631170</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="- Cadence 25/01&#10;Новое:&#10;- иконку запилил">
+      <created>1611593550198</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1611593550198</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -414,7 +422,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна" />
     <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию" />
     <MESSAGE value="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций" />
     <MESSAGE value="- добавил подсветку кастомных множеств" />
@@ -439,7 +446,8 @@
     <MESSAGE value="- alexthegull  22.01.2021 -&#10;Правки:&#10;- поправил ещё helper.initHelperData();" />
     <MESSAGE value="- alexthegull  25.01.2021 -&#10;Новое:&#10;- запилил проверку ОС&#10;- запили проверку private_list&#10;Правки:&#10;- блок статуса" />
     <MESSAGE value="- Cadence 25/01&#10;Правки:&#10;- отключил jQuery, парсинг JSON теперь через нативные средства" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 25/01&#10;Правки:&#10;- отключил jQuery, парсинг JSON теперь через нативные средства" />
+    <MESSAGE value="- Cadence 25/01&#10;Новое:&#10;- иконку запилил" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 25/01&#10;Новое:&#10;- иконку запилил" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">
@@ -459,20 +467,21 @@
     </state>
     <state x="93" y="93" width="1350" height="638" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1611038145093" />
     <state x="124" y="126" width="1800" height="861" key="DiffContextDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1611075030554" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1610947540679">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="732" y="225" key="FileChooserDialogImpl" timestamp="1611655085093">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1610947540679" />
+    <state x="732" y="225" key="FileChooserDialogImpl/0.0.2048.1112@0.0.2048.1112" timestamp="1611655085093" />
     <state x="400" y="115" key="SettingsEditor" timestamp="1611037578379">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="400" y="115" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1611037578379" />
     <state x="533" y="201" key="SettingsEditor/0.0.2048.1112@0.0.2048.1112" timestamp="1610983626278" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1611563141977">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="481" y="196" key="Vcs.Push.Dialog.v2" timestamp="1611647110006">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1611563141977" />
-    <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1611050927054" />
+    <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1611647110006" />
     <state x="771" y="440" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611578907136">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
@@ -490,17 +499,18 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="681" y="259" key="run.anything.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1611073659766" />
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1611563013366">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="575" y="196" width="896" height="915" key="search.everywhere.popup" timestamp="1611688883745">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1611563013366" />
+    <state x="575" y="196" width="896" height="915" key="search.everywhere.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1611688883745" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/LARQA/background.js</url>
-          <line>484</line>
+          <line>597</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>

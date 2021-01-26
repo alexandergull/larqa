@@ -6,75 +6,53 @@
 </head>
 <body>
 <style>
-    body{
+    /*COMMON*/
 
+    body{
         font-family: Verdana;
         background-color: #3090c7;
-
     }
 
     h1{
         margin: 2px;
         padding: 3px;
         text-align: center;
-
         font-size: 95%;
     }
 
-    #options_block{
-        overflow: auto;
-        height: 700px;
-        max-height: 700px;
-    }
-
-    table, th, td{
+    table, td, th {
         border: 1px solid black;
-        border-radius: 7px;
-        background:#E9e9e1;
-        text-align:left;
-        padding: 1px;
-        margin: 1px;
+        text-align: left;
         font-size: 10px;
+        padding-block: 0.2%;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 
     .line_block {
         width:47%;
         height:auto;
-        background:#f1f1f1;
         float:left;
         margin: 0 1% 1% 0;
         text-align:center;
         padding: 1%;
         background-color: #ECE9E0;
-        border-radius: 15px;
-    }
-    #options_unsupported{
-        text-align: center;
-        font-style: italic;
-        width: 100%;
-        display: block;
-    }
-    .report_block{
-        text-align:left;
-        border-radius: 2px;
-        border-style: dotted;
-        border-color: #000000;
-        border-width: 2px;
-        margin-bottom: 15px;
-        padding: 5px;
+        border-radius: 7px;
     }
 
-    .is_allowed{
+
+
+
+    /*********************STATUS BLOCK*********************/
+
+    .status_block {
         display: block;
         height:auto;
         margin: 0 1% 1% 0;
         text-align:center;
         padding: 1%;
         background-color: #ECE9E0;
-        border-radius: 15px;
-        border-color: #009900;
-        border-style: dashed;
-        border-width: 3px;
+        border-radius: 7px;
     }
 
     .is_denied{
@@ -84,64 +62,28 @@
         text-align:center;
         padding: 1%;
         background-color: #ece9e0;
-        border-radius: 15px;
+        border-radius: 7px;
         border-color: #990000;
         border-style: dashed;
         border-width: 3px;
     }
 
-    #debug{
-        font-size: 10px;
-        margin: 1px;
-    }
-
-    .status_block {
+    .is_allowed{
         display: block;
         height:auto;
         margin: 0 1% 1% 0;
         text-align:center;
         padding: 1%;
         background-color: #ECE9E0;
-        border-radius: 15px;
+        border-radius: 7px;
+        border-color: #009900;
+        border-style: dashed;
+        border-width: 3px;
     }
 
-    #details_table {
-        word-wrap: break-word;
-        table-layout: fixed;
-        width: 100%;
-
-    }
-
-    th,tr {width:50%}
-
-
-
-    #details_block{
-        width:57%;
-        height:auto;
-        background:#f1f1f1;
-        float:left;
-        margin: 0 1% 1% 0;
-        text-align:center;
-        padding: 1%;
-        background-color: #ECE9E0;
-        border-radius: 15px;
-    }
-
-    #options_block{
-        width:37%;
-        height:auto;
-        background:#f1f1f1;
-        float:left;
-        margin: 0 1% 1% 0;
-        text-align:center;
-        padding: 1%;
-        background-color: #ECE9E0;
-        border-radius: 15px;
-    }
-
-    #options_table{
-        width:37%;
+    #debug{
+        font-size: 10px;
+        margin: 4px;
     }
 
     #status_table{
@@ -153,6 +95,7 @@
         padding: 1px;
         margin: 1px;
         font-size: 10px;
+
     }
 
     .status_table_inner{
@@ -165,16 +108,78 @@
         font-size: 10px;
 
     }
-    .details-value {
-        width:20px;
+
+    /*********************DETAILS BLOCK*********************/
+
+    #details_block{
+        width:57%;
+        float:left;
+        margin: 0 1% 1% 0;
+        text-align:center;
+        padding: 1%;
+        background-color: #ECE9E0;
+        border-radius: 7px;
     }
 
-    .details-name{
+    #details_table{
+        word-break: break-word;
+    }
 
-        width: 30px;
+    .details-name
+    {
+        width: max-content;
+        white-space: nowrap;
+        display: table-cell;
+    }
+
+    .details-value
+    {
 
     }
 
+    .report_block{
+        text-align:left;
+        border-radius: 2px;
+        border-style: dotted;
+        border-color: #000000;
+        border-width: 2px;
+        margin-bottom: 15px;
+        padding: 5px;
+    }
+
+    #report_block-issues
+    {
+        font-size: 10px;
+    }
+
+
+    /*********************OPTIONS BLOCK*********************/
+
+    #options_block{
+        overflow: auto;
+        height: 700px;
+        max-height: 700px;
+        width:37%;
+        height:auto;
+        background:#f1f1f1;
+        float:left;
+        margin: 0 1% 1% 0;
+        text-align:center;
+        padding: 1%;
+        background-color: #ECE9E0;
+        border-radius: 7px;
+    }
+
+    #options_unsupported{
+        text-align: center;
+        font-style: italic;
+        width: 100%;
+        display: block;
+    }
+
+    #options_table{
+        width:100%;
+    }
 </style>
 <div style="width:100%; height:1px; clear:both;"></div>
 <div style=" display: block;">
