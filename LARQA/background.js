@@ -1,21 +1,28 @@
 //todo добавить проверку критических опций в issuesList
 //todo проверять опции перед выводом, как в details
 //todo ссылка на фильтры пользователя если были правки по фильтрам
+//todo есть проблема с сортировкой https://cleantalk.org/noc/requests?request_id=60dbc4ea6fad9547f06a6e214721e002
 
+//*** OPTIONS ***
+const HARD_DEBUG = false;
+const FILTERS_SORT_DESC = true;
+//*** OPTIONS END ***
 
-const HARD_DEBUG = true;
-
-class Helper {	//Helper class, called to keep misc functionality. Canonized
+class Helper {	//Helper class, called to keep misc functionality.
 
 	constructor(
 
 		debug_list,
 		issues_list,
 		changed_options_list,
+		timers,
+		exectime,
 	) {
 		this.debug_list = debug_list;
 		this.issues_list = issues_list;
 		this.changed_options_list = changed_options_list;
+		this.timers = timers;
+		this.exectime = exectime;
 	}
 
 	initHelperData() {	//Initialize Helper necessary data.
@@ -23,36 +30,72 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 		this.debug_list = '';
 		this.issues_list = new Map();
 		this.changed_options_list = '';
+		this.timers = [];
+		this.exectime = 0;
+
 
 	}
 
+	recordNewTimer(name){
+		hl.timers.push(`${name}: ${(performance.now() - this.exectime).toFixed(1)}`);
+	}
+
+	startTimer(){
+		this.exectime = performance.now();
+	}
+
 	callWindow() {	//Main window call based on "prefilled.html"
+
+		hl.initHelperData();
+		hl.startTimer();
 
 		window.layout_window = window.open(
 			'prefilled.html',
 			'_blank');
 		layout_window.onload = function() {	// Processes starts here.
-			window.pub_strcnt = 0;
 
-			helper.initHelperData();
-			ct.analysis.initOptionsDefaults();
-			ct.initDetailsArray();
-			ct.initOptionsArray();
-			ct.status.initStatus();
-			ct.analysis.initOptionsDefaults();
+		window.pub_strcnt = 0;
 
-			ct.analysis.checkDetails();
+		ct.analysis.initOptionsDefaults();
+		ct.initDetailsArray();
+		ct.initOptionsArray();
+		ct.status.initStatus();
+		ct.analysis.initOptionsDefaults();
 
-			ct.drawDetailsBlock();
-			ct.drawOptionsBlock();
-			ct.drawStatusBlock();
+			hl.recordNewTimer('Init total')
+			hl.startTimer();
 
-			ct.analysis.checkOptions();
+		ct.analysis.checkDetails();
 
-			helper.showIssuesList();
-			helper.showDebugMsgList();
-			helper.showChangedOptionsList();
-			layout_window.focus();
+			hl.recordNewTimer('CheckDetails')
+			hl.startTimer();
+
+		ct.drawDetailsBlock();
+		ct.drawOptionsBlock();
+		ct.drawStatusBlock();
+
+			hl.recordNewTimer('Drawing')
+			hl.startTimer();
+
+		ct.analysis.checkOptions();
+
+			hl.recordNewTimer('CheckOptions')
+			hl.startTimer();
+
+		hl.showIssuesList();
+		hl.showDebugMsgList();
+		hl.showChangedOptionsList();
+
+			hl.recordNewTimer('Reports')
+
+		for (let key in hl.timers){
+			hl.addTag('body','afterbegin',`<p style="font-size: 8px">exec time [${hl.timers[key]} ms]</p>`);
+		}
+
+
+		layout_window.focus();
+
+
 		}
 
 	}
@@ -77,6 +120,7 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 			}
 		}
 		return string.slice(start_from,end_with);
+
 	}
 
 	getHtmlSectionFromEHTML(section_id) { //Returns a HTML section(str) of EXTRACTED_HTML(const:str) by section_name(str), the list of available section_name is in initDetailsSignatureData.Выкл
@@ -151,15 +195,15 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 	}
 
-	addToIssuesList(issue,weight) { //Collect new issue [issue:str] and its weight[weight:str] to helper.issues_list
+	addToIssuesList(issue,weight) { //Collect new issue [issue:str] and its weight[weight:str] to hl.issues_list
 
 		this.issues_list.set('<p id="report_block-issues">- ' + issue + '</p>',weight);
 
 	}
 
-	showIssuesList() { //Adds a new tag of found issues from [helper.issues_list:map] to Details table
+	showIssuesList() { //Adds a new tag of found issues from [hl.issues_list:map] to Details table
 
-		if(helper.issues_list !=='') {
+		if(hl.issues_list !=='') {
 
 			let list = '';
 			let weight = 0;
@@ -175,20 +219,20 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 			}
 
 			if (list !== '') {
-				helper.addTag('details_table', 'beforebegin', (
-					' <div class="report_block"><b>Отчёт аналитики. Найдено проблем: (' + issues_number + ')</b>' + list + '</div>'
+				hl.addTag('details_table', 'beforebegin', (
+					' <div class="report_block"><b>Отчёт аналитики. Обратить внимание: (' + issues_number + ')</b>' + list + '</div>'
 				));
 			} else {
-				helper.addTag('details_table', 'beforebegin', (
+				hl.addTag('details_table', 'beforebegin', (
 					'<div class="report_block"><b>Отчёт аналитики. Проблемы не обнаружены.</b></div>'
 				));
 			}
-			helper.issues_list = '';
+			hl.issues_list = '';
 		}
 
 	}
 
-	debugMessage(msg,comment) { //Collects new message [msg:str] to [helper.debug_list:str]. If comment, shows the comment first.
+	debugMessage(msg,comment) { //Collects new message [msg:str] to [hl.debug_list:str]. If comment, shows the comment first.
 
 		if (HARD_DEBUG) {
 
@@ -203,26 +247,26 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 		}
 	}
 
-	showDebugMsgList() { //Adds a new tag of found issues from helper.debug_list to Status table
+	showDebugMsgList() { //Adds a new tag of found issues from hl.debug_list to Status table
 
 		if (this.debug_list !=='') {
-			helper.addTag('status_table-tbody', 'beforeend', ('<tr id="debug"><td>'+this.debug_list+'</td></tr>'));
+			hl.addTag('status_table-tbody', 'beforeend', ('<tr id="debug"><td>'+this.debug_list+'</td></tr>'));
 			this.debug_list = '';
 		}
 
 	}
 
-	addToChangedOptionsList(opt) { //Collects changed options [opt:str] to [helper.changed_options_list:str].
+	addToChangedOptionsList(opt) { //Collects changed options [opt:str] to [hl.changed_options_list:str].
 
 		this.changed_options_list += ('<p id="report_block-issues">- ' + opt + '</p>');
 
 	}
 
-	showChangedOptionsList() { //Adds a new tag of changed options from helper.changed_options to Options table
+	showChangedOptionsList() { //Adds a new tag of changed options from hl.changed_options to Options table
 
 		if (this.changed_options_list !==''){
 
-			helper.addTag('options_table',
+			hl.addTag('options_table',
 				'beforebegin',
 				('<div class="report_block" style align="left"><b>Изменено опций: (' +
 					ct.analysis.options_changed_indexes.length +
@@ -236,7 +280,7 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 		} else {
 
-			helper.addTag('options_table',
+			hl.addTag('options_table',
 				'beforebegin',
 				'<div class="report_block" style align="left"><b>Изменений в опциях не обнаружено ' +
 				'или отслеживание опций пока не поддерживается для агента ' + ct.status.agent + '.</b>'
@@ -284,34 +328,24 @@ class Status {
 
 	}
 
-	sortFiltersByBalls() {	//Sorts filters by dec
+	sortFiltersByBalls(order) {	//Sorts filters by dec, expect FILTERS_SORT_DESC
+		let filters = ct.status.filters;
 
-		let start,end;
-		let endoflineflag = 1;
+		//Slices "service:filter:value,"
 		let extracted_values_array = [];
-		let fstr = ct.status.filters;
+		let f_start = 0;
 
-		for (let i=fstr.length;i>-1;i--) {
+		for (let i=0;i < filters.length;i++){
 
-			if (fstr[i] === ' ' || i === 0){
+			if (filters[i]==' '){
 
-				if (endoflineflag === 1) {
+				extracted_values_array.push(filters.slice(f_start,i))
+				f_start = i +1;
 
-					end = i;
-					endoflineflag = 0;
-
-				} else {
-
-					if (end !== fstr.length) {
-						start = (i===0) ? i: i+1;
-						extracted_values_array.push (fstr.slice(start, end));
-						end = i;
-					}
-
-				}
 			}
 		}
 
+		//Extracts balls values
 		let dots_symbol_index,balls_value;
 		let balls_to_sort_array = [];
 		let result_string ='';
@@ -320,24 +354,36 @@ class Status {
 
 			dots_symbol_index = extracted_values_array[i].indexOf(':',extracted_values_array[i].length-6);
 			balls_value = extracted_values_array[i].slice(dots_symbol_index+1,extracted_values_array[i].length)
+
 			if (!balls_to_sort_array.includes(balls_value)) {
+
 				balls_to_sort_array.push(balls_value);
+
 			}
-
 		}
+		//Sorts balls values
+		if (order) {balls_to_sort_array.sort( (a, b) => b - a )} else {balls_to_sort_array.sort( (a, b) => a - b )};
 
-		balls_to_sort_array.sort( (a, b) => b - a );
-
+		//Bolds balls values
+		let reg_exp;
+		let new_eva;
 		for (let i=0;i < balls_to_sort_array.length;i++) {
+
 			for (let j=0;j < extracted_values_array.length;j++){
-				if (extracted_values_array[j].includes(balls_to_sort_array[i])){
-					let eva = extracted_values_array[j].replace(balls_to_sort_array[i],'<b>'+balls_to_sort_array[i]+'</b>')
-					result_string += eva + ' ';
+
+				reg_exp = ':'+balls_to_sort_array[i];
+
+				if (extracted_values_array[j].includes(reg_exp)){
+
+					new_eva = extracted_values_array[j].replace(reg_exp,':<b>'+balls_to_sort_array[i]+'</b>');
+					result_string += new_eva + ' ';
+
 				}
 			}
 		}
 
 		ct.status.filters = result_string;
+
 	}
 
 	cleanFiltersStringFromTags() {	//Clear [ct.status.filters:str] from tags
@@ -418,7 +464,7 @@ class Status {
 					}
 				}
 
-				helper.addToIssuesList('Для пользователя правились фильтры.', '0');
+				hl.addToIssuesList('Для пользователя правились фильтры.', '0');
 
 			}
 		}
@@ -430,16 +476,24 @@ class Status {
 
 		// Extract filters string from HTML
 		const left = `"Добавить в произвольный блок"></span>&nbsp;</td><td>`;
-		const filters_section = helper.getHtmlSectionFromEHTML('filters');
+		const filters_section = hl.getHtmlSectionFromEHTML('filters');
 		const right = 'R:';
+		const balls_summary = hl.findBetween(hl.getHtmlSectionFromEHTML('filters'),' R:','</td>')
 
-		this.filters = helper.findBetween(filters_section,left,right);
+		this.filters = hl.findBetween(filters_section,left,right);
 
 		this.cleanFiltersStringFromTags();
 
-		this.sortFiltersByBalls();
+		this.sortFiltersByBalls(FILTERS_SORT_DESC);
 
 		this.colorFiltersNamesIfInSet();
+
+
+		if ( +balls_summary < 80 ) {
+			ct.status.filters = '<b style="color: green">R:' + balls_summary + ' </b>' + ct.status.filters;
+		} else {
+			ct.status.filters = '<b style="color: #990000">R:' + balls_summary + ' </b>' + ct.status.filters;
+		}
 
 	}
 
@@ -463,11 +517,11 @@ class Status {
 
 		};
 
-		this.user_card.user_id = helper.findBetween(EXTRACTED_HTML,'href="profile?user_id=','">');
-		this.user_card.email = helper.findBetween(EXTRACTED_HTML,this.user_card.user_id+'">',' (');
+		this.user_card.user_id = hl.findBetween(EXTRACTED_HTML,'href="profile?user_id=','">');
+		this.user_card.email = hl.findBetween(EXTRACTED_HTML,this.user_card.user_id+'">',' (');
 		this.links.to_user_card = 'https://cleantalk.org/profile?user_id=' + this.user_card.user_id;
 		this.links.to_user_requests = 'https://cleantalk.org/noc/requests?user_id=' + this.user_card.user_id;
-		this.links.to_service_requests = 'https://cleantalk.org/noc/requests?service_id=' + helper.findBetween(EXTRACTED_HTML,'requests?service_id=','" style=');
+		this.links.to_service_requests = 'https://cleantalk.org/noc/requests?service_id=' + hl.findBetween(EXTRACTED_HTML,'requests?service_id=','" style=');
 		this.links.to_feedback = this.links.to_user_requests + '&feedback=on';
 
 	}
@@ -486,7 +540,7 @@ class Status {
 			this.links.to_noc = 'https://cleantalk.org/noc/requests?request_id=' + this.id_value.full;
 			this.links.to_dashboard = 'https://cleantalk.org/my/show_requests?request_id=' + this.id_value.full;
 
-		} else helper.debugMessage('ID запроса не найден.');
+		} else hl.debugMessage('ID запроса не найден.');
 	}
 
 	initFeedback() { //Extracts feedback from EXTRACTED_HTML.
@@ -495,7 +549,7 @@ class Status {
 
 			this.feedback = EXTRACTED_HTML.includes('<span class="text-danger');
 
-			const user_dec = helper.findBetween(EXTRACTED_HTML,'<span class="text-danger">','</span>');
+			const user_dec = hl.findBetween(EXTRACTED_HTML,'<span class="text-danger">','</span>');
 			this.feedback = user_dec ==='NO' ? 0:1;
 
 			if (ct.status.feedback === 1) {
@@ -504,7 +558,7 @@ class Status {
 
 				if (+ct.status.getDetailValueByName('denied_by_pl')) {
 
-					helper.addToIssuesList('Запрос одобрен пользователем, при этом запись запрещена ЧС. Нужно письмо.','10')
+					hl.addToIssuesList('Запрос одобрен пользователем, при этом запись запрещена ЧС. Нужно письмо.','10')
 
 				}
 
@@ -514,7 +568,7 @@ class Status {
 
 				if (+ct.getDetailValueByName('allowed_by_pl')) {
 
-					helper.addToIssuesList('Запрос запрещён пользователем, при этом запись одобрена ЧС. Нужно письмо.','10');
+					hl.addToIssuesList('Запрос запрещён пользователем, при этом запись одобрена ЧС. Нужно письмо.','10');
 
 				}
 			}
@@ -523,6 +577,7 @@ class Status {
 	}
 
 	initStatus() { //Init ct.status parameters
+
 
 		if (ct.details) {
 
@@ -533,7 +588,7 @@ class Status {
 			if (this.agent !== CURRENT_VERSIONS.get('wordpress'))  {
 
 				this.agent = '<a title="Плагин устарел" style  = "color: red">'+this.agent+'</a>';
-				helper.addToIssuesList('Версия плагина устарела','3');
+				hl.addToIssuesList('Версия плагина устарела','3');
 				ct.setDetailPropertyByName('ct_agent','css_id','BAD');
 
 			} else {
@@ -670,7 +725,8 @@ class CT {	// Main class CT
 		this.details = [];
 		let details_draft = this.initDetailsSearchData();
 
-		for (let i = 0; i < this.details_length; i++) {
+
+		for (let i =0 ; i < this.details_length ; i++){
 
 			this.details.push (
 				new Detail(
@@ -684,7 +740,7 @@ class CT {	// Main class CT
 			);
 
 			// Set details.values in accordance with initDetailsSearchData result
-			this.details[i].value = helper.getDetailBySignatureInSection(this.details[i].section_id, this.details[i].signature);
+			this.details[i].value = hl.getDetailBySignatureInSection(this.details[i].section_id, this.details[i].signature);
 
 			// Keep the links from source HTML of sender_email and sender_ip
 			if (
@@ -692,13 +748,13 @@ class CT {	// Main class CT
 				||
 				this.details[i].name === 'sender_ip'
 			){
-				this.details[i].value =  helper.findBetween(this.details[i].value,'"_blank">','</a>');
+				this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
 			}
 		}
 
 	}
 
-	initOptionsArray () {	// Init JSON of request options using helper.getOptionsFromJSON and this.getDetailValueByName
+	initOptionsArray () {	// Init JSON of request options using hl.getOptionsFromJSON and this.getDetailValueByName
 
 		if (this.getDetailValueByName('ct_options') === 'INVISIBLE') {
 
@@ -706,7 +762,7 @@ class CT {	// Main class CT
 
 		} else {
 
-			this.options = helper.getOptionsFromJSON(this.getDetailValueByName("ct_options"));
+			this.options = hl.getOptionsFromJSON(this.getDetailValueByName("ct_options"));
 
 		}
 
@@ -742,7 +798,7 @@ class CT {	// Main class CT
 
 							if (detail.value !== 'INVISIBLE') {
 
-							helper.addTag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
+							hl.addTag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
 
 								// Special templates for sender IP and sender email to show tools links
 								let href = '';
@@ -777,12 +833,12 @@ class CT {	// Main class CT
 
 									//BLACK for defaults
 									case 'DEFAULT':{
-										helper.addTag(('details_tier_' + pub_strcnt),
+										hl.addTag(('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-name">'
 												+ detail.name
 												+ ':</td>'));
-										helper.addTag(
+										hl.addTag(
 											('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-value">'
@@ -794,12 +850,12 @@ class CT {	// Main class CT
 									//CRIMSON for bad values, bad values needs to inspect
 									case 'BAD':{
 
-										helper.addTag(('details_tier_' + pub_strcnt),
+										hl.addTag(('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-name"><a style="color:#C02000">'
 												+ detail.name + ':</td>'));
 
-										helper.addTag(
+										hl.addTag(
 											('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-value"><a '+href+'style="color:#C02000">' +
@@ -813,13 +869,13 @@ class CT {	// Main class CT
 									//GREEN for good values
 									case 'GOOD':{
 
-										helper.addTag(('details_tier_' + pub_strcnt),
+										hl.addTag(('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-name"><a style="color:#009000">'
 												+ detail.name
 												+ ':</a></td>'));
 
-										helper.addTag(
+										hl.addTag(
 											('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-value"><a '
@@ -835,13 +891,13 @@ class CT {	// Main class CT
 									//RED for incorrect values, this should be inspected at CleanTalk side
 									case 'INCORRECT':{
 
-										helper.addTag(('details_tier_' + pub_strcnt),
+										hl.addTag(('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-name"><a style="color:#CC0000">'
 												+ detail.name
 												+ ':</a></td>'));
 
-										helper.addTag(
+										hl.addTag(
 											('details_tier_' + pub_strcnt),
 											'beforeend',
 											('<td class="details-value"><a style="color:#CC0000">'
@@ -870,15 +926,15 @@ class CT {	// Main class CT
 			//Nulls string counter
 			window.pub_strcnt = 0;
 
-			helper.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
+			hl.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
 
 			for (let i = 0; i < this.options.length; i++) {
 
 				if (pub_strcnt <= i) {
 
-					helper.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_' + pub_strcnt + '"></tr>'));
-					helper.addTag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-name">' + this.options[pub_strcnt].name + ':</td>'));
-					helper.addTag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-value">' + this.options[pub_strcnt].value + '</td>'));
+					hl.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_' + pub_strcnt + '"></tr>'));
+					hl.addTag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-name">' + this.options[pub_strcnt].name + ':</td>'));
+					hl.addTag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-value">' + this.options[pub_strcnt].value + '</td>'));
 
 					//Finishes a detail tag
 					pub_strcnt++;
@@ -887,7 +943,7 @@ class CT {	// Main class CT
 			}
 		} else {
 
-			helper.addTag('options_table', 'beforebegin', (
+			hl.addTag('options_table', 'beforebegin', (
 				' <div class="report_block">Вывод опций не поддерживается в этом плагине</div>'
 			));
 
@@ -897,15 +953,15 @@ class CT {	// Main class CT
 
 	drawStatusBlock() {	//Draws details block in layout_window
 
-		helper.addInnerHtmlToTag('status_table-filter-raw',(
+		hl.addInnerHtmlToTag('status_table-filter-raw',(
 			'<p class="status_table_inner">Агент: [' + ct.status.agent + ']</p>'
 		));
 
-		helper.addInnerHtmlToTag('status_table-filter-raw',(
+		hl.addInnerHtmlToTag('status_table-filter-raw',(
 			'<p class="status_table_inner">Фильтры (отсортированы по убыванию): [' + ct.status.filters + ']</p>'
 		));
 
-		helper.addInnerHtmlToTag('status_table-filter-raw',(
+		hl.addInnerHtmlToTag('status_table-filter-raw',(
 			'<p class="status_table_inner">Полезные ссылки: ' +
 			'<a href="' + ct.status.links.to_noc +'">[Запрос в НОК] </a>'+
 			'<a href="' + ct.status.links.to_dashboard +'">[Запрос в ПУ] </a>' +
@@ -922,7 +978,7 @@ class CT {	// Main class CT
 			' ID=..' +
 			ct.status.id_value.full.slice( ct.status.id_value.full.length-5,ct.status.id_value.full.length ) );
 
-		helper.setInnerHtmlOfTag('layout_window_title',(
+		hl.setInnerHtmlOfTag('layout_window_title',(
 			ct.status.id_value.short +
 			' [' + ct.status.isAllowed +
 			']'
@@ -948,7 +1004,7 @@ class CT {	// Main class CT
 			header_text += (+(this.getDetailValueByName('allowed_by_pl')) === 1) ? ' BY PRIVATE LIST' : '';
 			header_text += (+(this.getDetailValueByName('denied_by_pl')) === 1) ? ' BY PRIVATE LIST' : '';
 
-			helper.addInnerHtmlToTag('status_block-header', (
+			hl.addInnerHtmlToTag('status_block-header', (
 				'Статус запроса ' +
 				'<a href="' + this.status.links.to_noc + '">' +
 				ct.status.id_value.short + '</a>' +
@@ -958,7 +1014,7 @@ class CT {	// Main class CT
 				//Draws feedback if so.
 				'<p style = "text-align: right"> ' + ct.status.feedback + '</p>'
 			))
-		} else helper.hardDebug('drawStatus failed: no isAllowed found')
+		} else hl.hardDebug('drawStatus failed: no isAllowed found')
 
 	}
 
@@ -972,7 +1028,7 @@ class CT {	// Main class CT
 
 			}
 		}
-		helper.hardDebug(`No detail ${name} found in getDetailValueByName`);
+		hl.hardDebug(`No detail ${name} found in getDetailValueByName`);
 		return '';
 	}
 
@@ -1037,7 +1093,7 @@ class Analysis {	// Analysis class
 		}
 
 		//JSON handling
-		this.options_default.wordpress = helper.getOptionsFromJSON('{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"20","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
+		this.options_default.wordpress = hl.getOptionsFromJSON('{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"20","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
 
 	}
 
@@ -1048,16 +1104,16 @@ class Analysis {	// Analysis class
 		// Collects options changed
 		for (let i = 0; i <= def_options_agent.length - 1; i++) {
 
-			const def_value = helper.trimAndLow(def_options_agent[i].value);
+			const def_value = hl.trimAndLow(def_options_agent[i].value);
 
 			for (let j = 0; j<= ct.options.length -1; j++) {
 
-				const req_value = helper.trimAndLow(ct.options[j].value);
+				const req_value = hl.trimAndLow(ct.options[j].value);
 
 				if ( (def_options_agent[i].name === ct.options[j].name) && ( def_value !== req_value )) {
 
 					this.options_changed_indexes.push(j);
-					helper.addToChangedOptionsList(ct.options[j].name);
+					hl.addToChangedOptionsList(ct.options[j].name);
 
 				}
 			}
@@ -1100,7 +1156,7 @@ class Analysis {	// Analysis class
 						if (Number(detail.value) >= 30) {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('EMAIL в шорткэше', '0');
+							hl.addToIssuesList('EMAIL в шорткэше', '0');
 
 						} else detail.value = 'INVISIBLE';
 
@@ -1112,7 +1168,7 @@ class Analysis {	// Analysis class
 						if (Number(detail.value) >= 30) {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('IP в шорткэше', '0');
+							hl.addToIssuesList('IP в шорткэше', '0');
 
 						} else detail.value = 'INVISIBLE';
 
@@ -1125,12 +1181,12 @@ class Analysis {	// Analysis class
 						if (detail.value === '') {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('EMAIL передан, но пустой', '3');
+							hl.addToIssuesList('EMAIL передан, но пустой', '3');
 
 						} else if (detail.value === null) {
 
 							detail.css_id = 'INCORRECT';
-							helper.addToIssuesList('Не смогли определить EMAIL', '10');
+							hl.addToIssuesList('Не смогли определить EMAIL', '10');
 
 						} else if (ct.getDetailValueByName('sender_email_is_bl') == 2) {
 
@@ -1147,15 +1203,15 @@ class Analysis {	// Analysis class
 
 						if (Number(detail.value) === -1) {
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('JS отключен в браузере', '3');
+							hl.addToIssuesList('JS отключен в браузере', '3');
 						} else if (Number(detail.value) === 1) {
 							detail.css_id = 'GOOD';
 						} else if (Number(detail.value) === 0) {
 							detail.css_id = 'BAD'
-							helper.addToIssuesList('Тест JS провален', '3');
+							hl.addToIssuesList('Тест JS провален', '3');
 						} else {
 							detail.css_id = 'INCORRECT';
-							helper.addToIssuesList('Не смогли определить JS', '10');
+							hl.addToIssuesList('Не смогли определить JS', '10');
 						}
 					}
 					break;
@@ -1166,12 +1222,12 @@ class Analysis {	// Analysis class
 						if (detail.value === '') {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('IP адрес пустой', '3');
+							hl.addToIssuesList('IP адрес пустой', '3');
 
 						} else if (detail.value === null) {
 
 							detail.css_id = 'INCORRECT';
-							helper.addToIssuesList('Не смогли определить IP адрес', '10');
+							hl.addToIssuesList('Не смогли определить IP адрес', '10');
 
 						} else if (ct.getDetailValueByName('sender_ip_is_bl') == 2) {
 
@@ -1188,12 +1244,12 @@ class Analysis {	// Analysis class
 						if (detail.value === '') {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('REFERRER  пустой', '3');
+							hl.addToIssuesList('REFERRER  пустой', '3');
 
 						} else if (detail.value.includes('google')) {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('Поисковик в REFERRER', '10');
+							hl.addToIssuesList('Поисковик в REFERRER', '10');
 
 						} else detail.css_id = 'GOOD';
 
@@ -1206,12 +1262,12 @@ class Analysis {	// Analysis class
 						if (detail.value === '') {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('PRE-REFERRER  пустой', '3');
+							hl.addToIssuesList('PRE-REFERRER  пустой', '3');
 
 						} else if (detail.value.includes('google')) {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('Поисковик в PRE-REFERRER', '10');
+							hl.addToIssuesList('Поисковик в PRE-REFERRER', '10');
 
 						} else detail.css_id = 'GOOD';
 
@@ -1223,22 +1279,22 @@ class Analysis {	// Analysis class
 
 						if (detail.value === undefined || detail.value === '') {
 							detail.css_id = 'INCORRECT';
-							helper.addToIssuesList('Не смогли определить SUBMIT_TIME.', '10');
+							hl.addToIssuesList('Не смогли определить SUBMIT_TIME.', '10');
 						} else if (Number(detail.value) === 0) {
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
+							hl.addToIssuesList('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
 						} else if (Number(detail.value) === 1) {
 							detail.css_id = 'INCORRECT'
-							helper.addToIssuesList('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
+							hl.addToIssuesList('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
 						} else if (1 <= Number(detail.value) && Number(detail.value <= 5)) {
 							detail.css_id = 'BAD'
-							helper.addToIssuesList('1 <= SUBMIT_TIME < 5, слишком низкий.', '3');
+							hl.addToIssuesList('1 <= SUBMIT_TIME < 5, слишком низкий.', '3');
 						} else if (500 <= Number(detail.value) && Number(detail.value) <= 3000) {
 							detail.css_id = 'BAD'
-							helper.addToIssuesList('3000 > SUBMIT_TIME > 500, многовато.', '3');
+							hl.addToIssuesList('3000 > SUBMIT_TIME > 500, многовато.', '3');
 						} else if (Number(detail.value) > 3000) {
 							detail.css_id = 'BAD'
-							helper.addToIssuesList('SUBMIT_TIME > 3000, есть проблемы.', '3');
+							hl.addToIssuesList('SUBMIT_TIME > 3000, есть проблемы.', '3');
 						} else {
 							detail.css_id = 'GOOD';
 						}
@@ -1253,12 +1309,12 @@ class Analysis {	// Analysis class
 							detail.value === null) {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('Не смогли определить наличие COOKIES', '3');
+							hl.addToIssuesList('Не смогли определить наличие COOKIES', '3');
 
 						} else if (detail.value == 0) {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('COOKIES отключены', '10');
+							hl.addToIssuesList('COOKIES отключены', '10');
 
 						} else detail.css_id = 'GOOD';
 
@@ -1271,7 +1327,7 @@ class Analysis {	// Analysis class
 						if (detail.value == 1) {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('Сработал GREYLIST. Смотри SUBMIT_TIME.', '3');
+							hl.addToIssuesList('Сработал GREYLIST. Смотри SUBMIT_TIME.', '3');
 
 						} else detail.value = 'INVISIBLE';
 
@@ -1284,7 +1340,7 @@ class Analysis {	// Analysis class
 						if (detail.value == 1) {
 
 							detail.css_id = 'GOOD';
-							helper.addToIssuesList('USERAGENT - мобильное устройство', '0');
+							hl.addToIssuesList('USERAGENT - мобильное устройство', '0');
 
 						} else detail.value = 'INVISIBLE';
 
@@ -1297,7 +1353,7 @@ class Analysis {	// Analysis class
 						if (detail.value !== '') {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('SENDER_URL не пустой. Возможно спам.', '0');
+							hl.addToIssuesList('SENDER_URL не пустой. Возможно спам.', '0');
 
 						} else {
 
@@ -1316,12 +1372,12 @@ class Analysis {	// Analysis class
 						) {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('Возможен перехват админки, смотри PAGE_URL и SENDER_URL', '0');
+							hl.addToIssuesList('Возможен перехват админки, смотри PAGE_URL и SENDER_URL', '0');
 
 						} else if (detail.value === '' || detail.value === null) {
 
 							detail.css_id = 'BAD';
-							helper.addToIssuesList('Пустой PAGE_URL или SENDER_URL. Это странно, но не более.', '0');
+							hl.addToIssuesList('Пустой PAGE_URL или SENDER_URL. Это странно, но не более.', '0');
 
 						} else {
 							detail.css_id = 'GOOD';
@@ -1340,12 +1396,12 @@ class Analysis {	// Analysis class
 							if (+(ct.getDetailValueByName('pl_has_records')) === 0){
 
 								detail.css_id = 'INCORRECT';
-								helper.addToIssuesList('Сработали записи в персональных списках, но в списках нет записей.', '0');
+								hl.addToIssuesList('Сработали записи в персональных списках, но в списках нет записей.', '0');
 
 							} else {
 
 								detail.css_id = 'GOOD';
-								helper.addToIssuesList('Сработали записи в персональных списках.', '0');
+								hl.addToIssuesList('Сработали записи в персональных списках.', '0');
 
 							}
 
@@ -1370,7 +1426,7 @@ class Analysis {	// Analysis class
 					case 'pl_has_records': {
 						if (+detail.value!==0) {
 							detail.css_id = 'GOOD';
-							helper.addToIssuesList('Есть записи в ПС Анти-Спам', '0');
+							hl.addToIssuesList('Есть записи в ПС Анти-Спам', '0');
 						}
 						else
 
@@ -1381,34 +1437,35 @@ class Analysis {	// Analysis class
 				}
 
 			}
-		} else helper.hardDebug('ct.checkdetails failed');
+		} else hl.hardDebug('ct.checkdetails failed');
 	}
 
 }
 
-//==== DECLARE BLOCK
+//*** DECLARE BLOCK ***
 const CURRENT_VERSIONS = new Map(
 	[
 		['wordpress','wordpress-51514']
 	]
 )
+
 let EXTRACTED_HTML;
 
 let ct = new CT();
 ct.analysis = new Analysis();
 ct.status = new Status();
-helper = new Helper();
+hl = new Helper();
 
 
-//==== DECLARE BLOCK END
+//*** DECLARE BLOCK END ***
 
-//==== LISTENERS
+//*** LISTENERS ***
 	chrome.runtime.onMessage.addListener(function (message) {
 		switch (message.command) {
 
 			case "pageHtml":
 				EXTRACTED_HTML = message.html;
-				helper.callWindow();
+				hl.callWindow();
 				break;
 
 			default:
