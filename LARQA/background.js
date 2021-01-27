@@ -3,7 +3,7 @@
 //todo ссылка на фильтры пользователя если были правки по фильтрам
 
 
-const HARD_DEBUG = false;
+const HARD_DEBUG = true;
 
 class Helper {	//Helper class, called to keep misc functionality. Canonized
 
@@ -82,7 +82,18 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 	getHtmlSectionFromEHTML(section_id) { //Returns a HTML section(str) of EXTRACTED_HTML(const:str) by section_name(str), the list of available section_name is in initDetailsSignatureData.Выкл
 
 		let left = '<div class="section_block" data-section="' + section_id + '">';
-		let right = '<div class="section_block" data-section=';
+		let right;
+
+		if (section_id!=='message_decoded') {
+
+			right = '<div class="section_block" data-section=';
+
+
+		} else {
+
+			right = '</td></tr></tbody>';
+
+		}
 
 		return this.findBetween(EXTRACTED_HTML,left,right);
 
@@ -92,8 +103,20 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 		const html_section = this.getHtmlSectionFromEHTML(section_id);
 		if (!html_section.includes(signature)) return 'INVISIBLE';
-		let left = signature + `<td>:&nbsp;`;
+		let left;
+
+		if (section_id!=='message_decoded') {
+
+			left = signature + `<td>:&nbsp;`;
+
+		} else {
+
+			left = signature;
+
+		}
+
 		let right = '</td>';
+
 		return this.findBetween(html_section,left,right)
 
 	}
@@ -630,7 +653,8 @@ class CT {	// Main class CT
 			['pl_has_records', '4', '<td>private_list_detected&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['is_allowed', '4', '<td>allow&nbsp;</td>', '', 'DEFAULT', 'response'],
 			['method_name', '4', '<td>method_name&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['message', '4', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params']
+			['message', '4', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params'],
+			['message_decoded', '4', 'title="Добавить в произвольный блок"></span>&nbsp;</td><td></td><td>', '', 'DEFAULT', 'message_decoded']
 		];
 
 		this.details_length = values.length;

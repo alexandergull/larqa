@@ -20,13 +20,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_20_01_2021_17_51__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_20_01_2021_17_51__Default_Changelist_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_20_01_2021_8_57_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_20_01_2021_8_57__Default_Changelist_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_21_01_2021_12_02__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_21_01_2021_12_02__Default_Changelist_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_22_01_2021_8_46__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_22_01_2021_8_46__Default_Changelist_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_01_2021_23_24__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_01_2021_23_24__Default_Changelist_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_25_01_2021_17_48__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_25_01_2021_17_48__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
     </list>
@@ -193,7 +186,7 @@
       <workItem from="1610943539998" duration="16283000" />
       <workItem from="1610963158787" duration="10903000" />
       <workItem from="1611049671519" duration="24121000" />
-      <workItem from="1611742160402" duration="923000" />
+      <workItem from="1611742160402" duration="3524000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -405,7 +398,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611593550198</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="- alexthegull  27.01.2021 -&#10;Правки:&#10;- сортировка фильтров работала неправильно&#10;- мелкие правки в HTML">
+      <created>1611743387851</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1611743387851</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -427,7 +427,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию" />
     <MESSAGE value="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций" />
     <MESSAGE value="- добавил подсветку кастомных множеств" />
     <MESSAGE value="- добавил подсветку кастомных множеств (правки)" />
@@ -452,7 +451,8 @@
     <MESSAGE value="- alexthegull  25.01.2021 -&#10;Новое:&#10;- запилил проверку ОС&#10;- запили проверку private_list&#10;Правки:&#10;- блок статуса" />
     <MESSAGE value="- Cadence 25/01&#10;Правки:&#10;- отключил jQuery, парсинг JSON теперь через нативные средства" />
     <MESSAGE value="- Cadence 25/01&#10;Новое:&#10;- иконку запилил" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 25/01&#10;Новое:&#10;- иконку запилил" />
+    <MESSAGE value="- alexthegull  27.01.2021 -&#10;Правки:&#10;- сортировка фильтров работала неправильно&#10;- мелкие правки в HTML" />
+    <option name="LAST_COMMIT_MESSAGE" value="- alexthegull  27.01.2021 -&#10;Правки:&#10;- сортировка фильтров работала неправильно&#10;- мелкие правки в HTML" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">
@@ -482,10 +482,10 @@
     </state>
     <state x="400" y="115" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1611037578379" />
     <state x="533" y="201" key="SettingsEditor/0.0.2048.1112@0.0.2048.1112" timestamp="1610983626278" />
-    <state x="481" y="196" key="Vcs.Push.Dialog.v2" timestamp="1611647110006">
-      <screen x="0" y="0" width="2048" height="1112" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1611743394169">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1611563141977" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1611743394169" />
     <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1611647110006" />
     <state x="771" y="440" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611578907136">
       <screen x="0" y="0" width="2048" height="1112" />
@@ -515,7 +515,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/LARQA/background.js</url>
-          <line>604</line>
+          <line>627</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
