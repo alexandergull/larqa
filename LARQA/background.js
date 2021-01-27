@@ -331,7 +331,8 @@ class Status {
 		for (let i=0;i < balls_to_sort_array.length;i++) {
 			for (let j=0;j < extracted_values_array.length;j++){
 				if (extracted_values_array[j].includes(balls_to_sort_array[i])){
-					result_string += extracted_values_array[j] + ' ';
+					let eva = extracted_values_array[j].replace(balls_to_sort_array[i],'<b>'+balls_to_sort_array[i]+'</b>')
+					result_string += eva + ' ';
 				}
 			}
 		}
