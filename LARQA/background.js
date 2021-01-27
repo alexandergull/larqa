@@ -213,7 +213,11 @@ class Helper {	//Helper class, called to keep misc functionality. Canonized
 
 		} else {
 
-			helper.addTag('options_table', 'beforebegin', '<div class="report_block" style align="left"><b>Изменений в опциях не обнаружено.</b>');
+			helper.addTag('options_table',
+				'beforebegin',
+				'<div class="report_block" style align="left"><b>Изменений в опциях не обнаружено ' +
+				'или отслеживание опций пока не поддерживается для агента ' + ct.status.agent + '.</b>'
+			);
 
 		}
 
@@ -260,26 +264,27 @@ class Status {
 	sortFiltersByBalls() {	//Sorts filters by dec
 
 		let start,end;
-		let count = 0;
+		let endoflineflag = 1;
 		let extracted_values_array = [];
 		let fstr = ct.status.filters;
 
-		for (let i=fstr.length;i>=0;i--) {
+		for (let i=fstr.length;i>-1;i--) {
 
-			if (fstr[i] === ' '){
+			if (fstr[i] === ' ' || i === 0){
 
-				if (count === 0) {
+				if (endoflineflag === 1) {
 
 					end = i;
-					count = 1;
+					endoflineflag = 0;
 
 				} else {
 
 					if (end !== fstr.length) {
-						start = i + 1;
+						start = (i===0) ? i: i+1;
 						extracted_values_array.push (fstr.slice(start, end));
 						end = i;
 					}
+
 				}
 			}
 		}
@@ -287,9 +292,10 @@ class Status {
 		let dots_symbol_index,balls_value;
 		let balls_to_sort_array = [];
 		let result_string ='';
+
 		for (let i=0;i < extracted_values_array.length;i++) {
 
-			dots_symbol_index = extracted_values_array[i].indexOf(':',extracted_values_array[i].length-4);
+			dots_symbol_index = extracted_values_array[i].indexOf(':',extracted_values_array[i].length-6);
 			balls_value = extracted_values_array[i].slice(dots_symbol_index+1,extracted_values_array[i].length)
 			if (!balls_to_sort_array.includes(balls_value)) {
 				balls_to_sort_array.push(balls_value);
@@ -313,6 +319,7 @@ class Status {
 	cleanFiltersStringFromTags() {	//Clear [ct.status.filters:str] from tags
 
 		let fstr = ct.status.filters
+
 
 		for (let i = 0; i <= fstr.length; i++) {
 
@@ -865,7 +872,15 @@ class CT {	// Main class CT
 
 	drawStatusBlock() {	//Draws details block in layout_window
 
-		helper.addInnerHtmlToTag('status_table_status-class-column',(
+		helper.addInnerHtmlToTag('status_table-filter-raw',(
+			'<p class="status_table_inner">Агент: [' + ct.status.agent + ']</p>'
+		));
+
+		helper.addInnerHtmlToTag('status_table-filter-raw',(
+			'<p class="status_table_inner">Фильтры (отсортированы по убыванию): [' + ct.status.filters + ']</p>'
+		));
+
+		helper.addInnerHtmlToTag('status_table-filter-raw',(
 			'<p class="status_table_inner">Полезные ссылки: ' +
 			'<a href="' + ct.status.links.to_noc +'">[Запрос в НОК] </a>'+
 			'<a href="' + ct.status.links.to_dashboard +'">[Запрос в ПУ] </a>' +
@@ -876,9 +891,7 @@ class CT {	// Main class CT
 			'</p>'
 		));
 
-		helper.addInnerHtmlToTag('status_table-filter-raw',(
-			'<p class="status_table_inner">Агент: [' + ct.status.agent + '] Фильтры: [' + ct.status.filters + ']</p>'
-		));
+		//
 
 		ct.status.id_value.short = (
 			' ID=..' +
