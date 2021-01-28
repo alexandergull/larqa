@@ -1,6 +1,7 @@
 //todo добавить проверку критических опций в issuesList
 //todo проверять опции перед выводом, как в details
 //todo выводить заголовки в отдельной таблице
+//todo отчёт в буфер обмена
 
 //*** OPTIONS ***
 const HARD_DEBUG = false;
@@ -44,11 +45,13 @@ class Helper {	//Helper class, called to keep misc functionality.
 		if (TIMERS_ENABLED) this.exectime = performance.now();
 	}
 
-	hideTag(switcher,tag_id) {
+	addTagHiddenSwitcher(target_tag_id) {
 
-		layout_window.document.getElementById(switcher).onclick = function() {
+		hl.addTag(target_tag_id,'beforebegin','<span class="hide_me" id="'+target_tag_id+'-visibility-switcher">Скрыть/показать</span>');
 
-			layout_window.document.getElementById(tag_id).hidden = !layout_window.document.getElementById('options_table').hidden;
+		layout_window.document.getElementById(target_tag_id+'-visibility-switcher').onclick = function() {
+
+			layout_window.document.getElementById(target_tag_id).hidden = !layout_window.document.getElementById(target_tag_id).hidden;
 
 		}
 
@@ -104,7 +107,8 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		layout_window.focus();
 
-			hl.hideTag('options_header','options_table');
+			hl.addTagHiddenSwitcher('options_table');
+			hl.addTagHiddenSwitcher('details_table');
 
 		}
 
@@ -207,7 +211,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	addToIssuesList(issue,weight) { //Collect new issue [issue:str] and its weight[weight:str] to hl.issues_list
 
-		this.issues_list.set('<p id="report_block-issues">- ' + issue + '</p>',weight);
+		this.issues_list.set('<p class="report_block-issues">- ' + issue + '</p>',weight);
 
 	}
 
@@ -234,7 +238,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 				));
 			} else {
 				hl.addTag('details_table', 'beforebegin', (
-					'<div class="report_block"><b>Отчёт аналитики. Проблемы не обнаружены.</b></div>'
+					'<div class="report_block" id="details_table-report-block"><b>Отчёт аналитики. Проблемы не обнаружены.</b></div>'
 				));
 			}
 			hl.issues_list = '';
@@ -268,7 +272,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	addToChangedOptionsList(opt) { //Collects changed options [opt:str] to [hl.changed_options_list:str].
 
-		this.changed_options_list += ('<p id="report_block-issues">- ' + opt + '</p>');
+		this.changed_options_list += ('<p class="report_block-issues">- ' + opt + '</p>');
 
 	}
 
@@ -278,7 +282,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 			hl.addTag('options_table',
 				'beforebegin',
-				('<div class="report_block" style align="left"><b>Изменено опций: (' +
+				('<div class="report_block" id="options_table-report-block"><b>Изменено опций: (' +
 					ct.analysis.options_changed_indexes.length +
 					')</b>' +
 					this.changed_options_list +

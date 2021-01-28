@@ -29,6 +29,10 @@
         padding-right: 5px;
     }
 
+    .hide_me{
+
+    }
+
     .line_block {
         width:47%;
         height:auto;
@@ -41,84 +45,95 @@
     }
 
 
+    .bottom_blocks{
+        overflow: auto;
+        max-height: 700px;
+        min-height: 300px;
+        float: left;
+        margin: 0 1% 1% 0;
+        text-align: center;
+        padding: 1%;
+        background-color: #ECE9E0;
+        border-radius: 7px;
+    }
+
+    .report_block{
+        text-align: left;
+        border-radius: 2px;
+        border-style: dashed;
+        border-color: #000000;
+        border-width: 1px;
+        margin-bottom: 5px;
+        padding: 5px;
+        line-height: 0.8;
+        min-height: 130px;
+        max-height: 100px;
+        overflow: auto;
+    }
+
+        .report_block-issues
+        {
+            font-size: 10px;
+        }
 
 
     /*********************STATUS BLOCK*********************/
 
-    .status_block {
-        display: block;
-        height:auto;
-        margin: 0 1% 1% 0;
-        text-align:center;
-        padding: 1%;
-        background-color: #ECE9E0;
-        border-radius: 7px;
+    #status_block {
+
     }
 
-    .is_denied{
-        display: block;
-        height:auto;
-        margin: 0 1% 1% 0;
-        text-align:center;
-        padding: 1%;
-        background-color: #ece9e0;
-        border-radius: 7px;
-        border-color: #990000;
-        border-style: dashed;
-        border-width: 3px;
-    }
+        .is_denied{
+            display: block;
+            height:auto;
+            margin: 0 1% 1% 0;
+            text-align:center;
+            padding: 1%;
+            background-color: #ece9e0;
+            border-radius: 7px;
+            border-color: #990000;
+            border-style: dashed;
+            border-width: 3px;
+        }
 
-    .is_allowed{
-        display: block;
-        height:auto;
-        margin: 0 1% 1% 0;
-        text-align:center;
-        padding: 1%;
-        background-color: #ECE9E0;
-        border-radius: 7px;
-        border-color: #009900;
-        border-style: dashed;
-        border-width: 3px;
-    }
+        .is_allowed{
+            display: block;
+            height:auto;
+            margin: 0 1% 1% 0;
+            text-align:center;
+            padding: 1%;
+            background-color: #ECE9E0;
+            border-radius: 7px;
+            border-color: #009900;
+            border-style: dashed;
+            border-width: 3px;
+        }
 
-    #debug{
+        #status_table{
+            width: 100%;
+        }
+
+            .status_table_inner{
+
+            border: hidden;
+            background:#E9e9e1;
+            text-align:left;
+            padding: 1px;
+            margin: 1px;
+            font-size: 10px;
+
+        }
+
+        #debug{
         font-size: 10px;
         margin: 4px;
     }
 
-    #status_table{
-        width: 100%;
-        border: 1px solid black;
-        border-radius: 7px;
-        background:#E9e9e1;
-        text-align:left;
-        padding: 1px;
-        margin: 1px;
-        font-size: 10px;
-
-    }
-
-    .status_table_inner{
-
-        border: hidden;
-        background:#E9e9e1;
-        text-align:left;
-        padding: 1px;
-        margin: 1px;
-        font-size: 10px;
-
-    }
 
     /*********************DETAILS BLOCK*********************/
 
     #details_block{
         width:57%;
-        float:left;
-        margin: 0 1% 1% 0;
-        text-align:center;
-        padding: 1%;
-        background-color: #ECE9E0;
-        border-radius: 7px;
     }
 
     #details_table{
@@ -126,61 +141,34 @@
         width:100%;
     }
 
-    .details-name
-    {
-        width: max-content;
-        white-space: nowrap;
-        display: table-cell;
-    }
+        .details-name {
+            width: max-content;
+            white-space: nowrap;
+            display: table-cell;
+        }
 
-    .details-value
-    {
+        .details-value {
 
-    }
-
-    .report_block{
-        text-align:left;
-        border-radius: 2px;
-        border-style: dotted;
-        border-color: #000000;
-        border-width: 2px;
-        margin-bottom: 15px;
-        padding: 5px;
-    }
-
-    #report_block-issues
-    {
-        font-size: 10px;
-    }
+        }
 
 
     /*********************OPTIONS BLOCK*********************/
 
     #options_block{
-        overflow: auto;
-        height: 700px;
-        max-height: 700px;
-        width:37%;
-        height:auto;
-        background:#f1f1f1;
-        float:left;
-        margin: 0 1% 1% 0;
-        text-align:center;
-        padding: 1%;
-        background-color: #ECE9E0;
-        border-radius: 7px;
+        width: 37%;
     }
 
-    #options_unsupported{
-        text-align: center;
-        font-style: italic;
-        width: 100%;
-        display: block;
-    }
+        #options_unsupported{
+            text-align: center;
+            font-style: italic;
+            width: 100%;
+            display: block;
+        }
 
-    #options_table{
-        width:100%;
-    }
+        #options_table{
+            width:100%;
+        }
+
 </style>
 <div style="width:100%; height:1px; clear:both;"></div>
 <div style=" display: block;">
@@ -189,22 +177,11 @@
             <tbody id="status_table-tbody">
                 <tr id="status_table-filter-raw" class="status_table_inner"></tr>
                 <tr class="status_table_inner">
-                    <td id="status_table_status-class-column" class="status_table_inner"></td>
-                </tr>
-                <tr class="status_table_inner">
-
-                </tr>
-                <tr class="status_table_inner">
-
-                </tr>
-                <tr class="status_table_inner">
-
-                </tr>
             </tbody>
         </table>
     </div>
 </div>
-<div id="details_block">
+<div class="bottom_blocks" id="details_block">
     <div id="details_block-inner"><h1>Параметры запроса</h1>
         <table id='details_table'>
             <tbody id="details_table-tbody">
@@ -212,14 +189,14 @@
         </table>
     </div>
 </div>
-<div id="options_block">
+<div class="bottom_blocks" id="options_block">
     <div>
         <h1 id="options_header">Опций плагина в запросе</h1>
         <div id="options_block-inner">
-            <table id="options_table">
-                <tbody id="options_table-tbody">
-                </tbody>
-            </table>
+                <table id="options_table">
+                    <tbody id="options_table-tbody">
+                    </tbody>
+                </table>
         </div>
     </div>
 </div>
