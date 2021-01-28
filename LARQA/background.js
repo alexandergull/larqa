@@ -1,6 +1,6 @@
 //todo добавить проверку критических опций в issuesList
 //todo проверять опции перед выводом, как в details
-//todo выводить заголовки в отдельной таблице
+//todo заголовки - показывать при нажатии на параметр
 //todo отчёт в буфер обмена
 
 //*** OPTIONS ***
@@ -74,6 +74,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		ct.initOptionsArray();
 		ct.status.initStatus();
 		ct.analysis.initOptionsDefaults();
+		ct.initHeadersArray();
 
 			hl.recordNewTimer('Init total')
 			hl.startTimer();
@@ -86,6 +87,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		ct.drawDetailsBlock();
 		ct.drawOptionsBlock();
 		ct.drawStatusBlock();
+		ct.drawHeadersTable();
 
 			hl.recordNewTimer('Drawing')
 			hl.startTimer();
@@ -712,7 +714,8 @@ class CT {	// Main class CT
 		details,
 		options,
 		analysis,
-		details_length
+		details_length,
+		headers
 
 	) {
 		this.id = id;
@@ -721,6 +724,7 @@ class CT {	// Main class CT
 		this.options = options;
 		this.analysis = analysis;
 		this.details_length = details_length;
+		this.headers = headers;
 	}
 
 	initDetailsSearchData() {	// Init start search data, returns [][]
@@ -748,14 +752,15 @@ class CT {	// Main class CT
 			['hook_type', '4', '<td>hook&nbsp;</td>', '', 'DEFAULT', 'sender'],
 			['is_greylisted', '4', '<td>grey_list_stop&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['is_mobile_ua', '4', '<td>is_mobile_UA&nbsp;</td>', '', 'DEFAULT', 'details'],
-			//['links_detected', '4', '<td>links&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['allowed_by_pl', '4', '<td>private_list_allow&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['denied_by_pl', '4', '<td>private_list_deny&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['pl_has_records', '4', '<td>private_list_detected&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['is_allowed', '4', '<td>allow&nbsp;</td>', '', 'DEFAULT', 'response'],
 			['method_name', '4', '<td>method_name&nbsp;</td>', '', 'DEFAULT', 'details'],
 			['message', '4', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params'],
-			['message_decoded', '4', 'title="Добавить в произвольный блок"></span>&nbsp;</td><td></td><td>', '', 'DEFAULT', 'message_decoded']
+			['message_decoded', '4', 'title="Добавить в произвольный блок"></span>&nbsp;</td><td></td><td>', '', 'DEFAULT', 'message_decoded'],
+			['all_headers', '4', '<td>all_headers&nbsp;</td>', '', 'DEFAULT', 'params'],
+
 		];
 
 		this.details_length = values.length;
@@ -799,7 +804,7 @@ class CT {	// Main class CT
 
 	}
 
-	initOptionsArray () {	// Init JSON of request options using hl.getOptionsFromJSON and this.getDetailValueByName
+	initOptionsArray() {	// Init JSON of request options using hl.getOptionsFromJSON and this.getDetailValueByName
 
 		if (this.getDetailValueByName('ct_options') === 'INVISIBLE') {
 
@@ -811,6 +816,55 @@ class CT {	// Main class CT
 
 		}
 
+	}
+
+	initHeadersArray() {
+
+		try {
+
+			function escapeSpecialChars(jsonString) {
+				return jsonString.replace(/\n/g, "\\n")
+					.replace(/\r/g, "\\r")
+					.replace(/\t/g, "\\t")
+					.replace(/\f/g, "\\f")
+					.replace(/<a href="\?request_id=/g, "")
+					.replace(/" target="_blank".+?,/g, "\",")
+					.replace(/<\/a>/g, "")
+					.replace(/<a href="http:\/\/cleantalk.org\/blacklists\//g, "")
+
+			}
+
+			this.headers = [];
+
+			let header = {
+				name: '',
+				value: '',
+				is_attention: ''
+			}
+
+			let json_string = this.getDetailValueByName('all_headers');
+
+				//hl.debugMessage(json_string,`json_string origin`);
+
+			json_string = escapeSpecialChars(json_string);
+
+				//hl.debugMessage(json_string,`json_string escaped`);
+
+			const json_obj = JSON.parse(json_string);
+
+			for (let key in json_obj) {
+				let value = json_obj[key];
+				this.headers.push({
+					name: key,
+					value: value,
+					is_attention: 0
+				})
+			}
+
+		} catch (e) {
+
+			hl.debugMessage('initHeadersArray() fail: '+e);
+		}
 	}
 
 	drawDetailsBlock() {	// Draws details block in layout_window
@@ -1063,6 +1117,32 @@ class CT {	// Main class CT
 			))
 		} else hl.hardDebug('drawStatus failed: no isAllowed found')
 
+	}
+
+	drawHeadersTable() {
+
+		try {
+
+			let tag_id = 'headers_table_tr-header'
+
+			for (let i = 0; i !== this.headers.length; i++) {
+
+				if (i > 0) {
+					i--;
+					tag_id = 'headers_table_tier-' + i;
+					i++;
+				}
+
+				hl.addTag(tag_id, 'afterend', '<tr id="headers_table_tier-' + i + '"></tr>')
+				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-name-' + i + '">' + this.headers[i].name + '</td>');
+				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-value-' + i + '">' + this.headers[i].value + '</td>');
+				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-attention-' + i + '">' + this.headers[i].is_attention + '</td>');
+
+			}
+
+		} catch (e) {
+			hl.debugMessage('drawHeadersTable() fail: '+e);
+		}
 	}
 
 	getDetailValueByName(name) { 	// Returns a detail value by its name[name:str]
