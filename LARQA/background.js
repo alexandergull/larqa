@@ -1,12 +1,11 @@
 //todo добавить проверку критических опций в issuesList
 //todo проверять опции перед выводом, как в details
-//todo ссылка на фильтры пользователя если были правки по фильтрам, считать сколько нужно снизить, чтоб пропускать.
 //todo выводить заголовки в отдельной таблице
-//todo исправить сортировку, появляются дубли 10 100 https://cleantalk.org/noc/requests?request_id=5e9a597a5dccd94d6b55e6e12cf840b7
 
 //*** OPTIONS ***
 const HARD_DEBUG = false;
 const FILTERS_SORT_DESC = true;
+const TIMERS_ENABLED = false;
 //*** OPTIONS END ***
 
 class Helper {	//Helper class, called to keep misc functionality.
@@ -37,12 +36,22 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	}
 
-	recordNewTimer(name){
-		hl.timers.push(`${name}: ${(performance.now() - this.exectime).toFixed(1)}`);
+	recordNewTimer(name) {
+		if (TIMERS_ENABLED) hl.timers.push(`${name}: ${(performance.now() - this.exectime).toFixed(1)}`);
 	}
 
-	startTimer(){
-		this.exectime = performance.now();
+	startTimer() {
+		if (TIMERS_ENABLED) this.exectime = performance.now();
+	}
+
+	hideTag(switcher,tag_id) {
+
+		layout_window.document.getElementById(switcher).onclick = function() {
+
+			layout_window.document.getElementById(tag_id).hidden = !layout_window.document.getElementById('options_table').hidden;
+
+		}
+
 	}
 
 	callWindow() {	//Main window call based on "prefilled.html"
@@ -88,14 +97,14 @@ class Helper {	//Helper class, called to keep misc functionality.
 		hl.showChangedOptionsList();
 
 			hl.recordNewTimer('Reports')
-
-		for (let key in hl.timers){
-			hl.addTag('body','afterbegin',`<p style="font-size: 8px">exec time [${hl.timers[key]} ms]</p>`);
-		}
-
+			if (TIMERS_ENABLED)
+				for (let key in hl.timers){
+					hl.addTag('body','afterbegin',`<p style="font-size: 8px">exec time [${hl.timers[key]} ms]</p>`);
+			}
 
 		layout_window.focus();
 
+			hl.hideTag('options_header','options_table');
 
 		}
 
@@ -368,6 +377,7 @@ class Status {
 		//Bolds balls values
 		let reg_exp;
 		let new_eva;
+		let temp = '';
 		for (let i=0;i < balls_to_sort_array.length;i++) {
 
 			for (let j=0;j < extracted_values_array.length;j++){
@@ -377,7 +387,13 @@ class Status {
 				if (extracted_values_array[j].includes(reg_exp)){
 
 					new_eva = extracted_values_array[j].replace(reg_exp,':<b>'+balls_to_sort_array[i]+'</b>');
-					result_string += new_eva + ' ';
+
+					if (!temp.includes(extracted_values_array[j])) {
+
+						result_string += new_eva + ' ';
+						temp += extracted_values_array[j];
+
+					}
 
 				}
 			}
@@ -984,8 +1000,6 @@ class CT {	// Main class CT
 			']</p>'
 		));
 
-		hl.debugMessage(ct.status.links.to_website);
-
 		hl.addInnerHtmlToTag('status_table-filter-raw',(
 			'<p class="status_table_inner">Фильтры (отсортированы по убыванию): ' + ct.status.filters + '</p>'
 		));
@@ -1489,6 +1503,7 @@ hl = new Helper();
 //*** DECLARE BLOCK END ***
 
 //*** LISTENERS ***
+
 	chrome.runtime.onMessage.addListener(function (message) {
 		switch (message.command) {
 
