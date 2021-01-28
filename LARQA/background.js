@@ -1,7 +1,8 @@
 //todo добавить проверку критических опций в issuesList
 //todo проверять опции перед выводом, как в details
-//todo ссылка на фильтры пользователя если были правки по фильтрам
-//todo есть проблема с сортировкой https://cleantalk.org/noc/requests?request_id=60dbc4ea6fad9547f06a6e214721e002
+//todo ссылка на фильтры пользователя если были правки по фильтрам, считать сколько нужно снизить, чтоб пропускать.
+//todo выводить заголовки в отдельной таблице
+//todo исправить сортировку, появляются дубли 10 100 https://cleantalk.org/noc/requests?request_id=5e9a597a5dccd94d6b55e6e12cf840b7
 
 //*** OPTIONS ***
 const HARD_DEBUG = false;
@@ -464,7 +465,7 @@ class Status {
 					}
 				}
 
-				hl.addToIssuesList('Для пользователя правились фильтры.', '0');
+				hl.addToIssuesList('Для пользователя или сервиса существуют подмножества фильтров.', '0');
 
 			}
 		}
@@ -490,10 +491,20 @@ class Status {
 
 
 		if ( +balls_summary < 80 ) {
-			ct.status.filters = '<b style="color: green">R:' + balls_summary + ' </b>' + ct.status.filters;
+
+			ct.status.filters = `<b style="color: green">R: ${balls_summary}</b> [${ct.status.filters}]`;
+			ct.status.filters += `<p>Не хватает для блокировки: <b>${80-balls_summary}</b>, `;
+
 		} else {
-			ct.status.filters = '<b style="color: #990000">R:' + balls_summary + ' </b>' + ct.status.filters;
+
+			ct.status.filters = `<b style="color: #990000">R: ${balls_summary}</b> [${ct.status.filters}]`;
+			ct.status.filters += `<p>Превышено на: <b>${balls_summary-80}</b>, `;
+
 		}
+
+		ct.status.filters += `Настроить: `;
+		ct.status.filters += `<a href="${ct.status.links.to_service_filters}">[Фильтры для service_id:${this.user_card.service_id}]</a>, `;
+		ct.status.filters += `<a href="${ct.status.links.to_service_filters}">[Фильтры для user_id:${this.user_card.user_id}]</a></p>`;
 
 	}
 
@@ -506,23 +517,33 @@ class Status {
 			to_user_card: '',
 			to_user_requests:'',
 			to_service_requests:'',
-			to_feedback:''
+			to_feedback:'',
+			to_service_filters:'',
+			to_user_filters:'',
+			to_website:'',
 
 		};
 
 		this.user_card = {
 
 			email:'',
-			user_id:''
-
+			user_id:'',
+			service_id:'',
 		};
 
 		this.user_card.user_id = hl.findBetween(EXTRACTED_HTML,'href="profile?user_id=','">');
 		this.user_card.email = hl.findBetween(EXTRACTED_HTML,this.user_card.user_id+'">',' (');
+		this.user_card.service_id = hl.findBetween(EXTRACTED_HTML,'requests?service_id=','" style=')
+		this.links.to_website = hl.findBetween(EXTRACTED_HTML,'<td><span data-href="','" onclick');
 		this.links.to_user_card = 'https://cleantalk.org/profile?user_id=' + this.user_card.user_id;
 		this.links.to_user_requests = 'https://cleantalk.org/noc/requests?user_id=' + this.user_card.user_id;
-		this.links.to_service_requests = 'https://cleantalk.org/noc/requests?service_id=' + hl.findBetween(EXTRACTED_HTML,'requests?service_id=','" style=');
+		this.links.to_service_requests = 'https://cleantalk.org/noc/requests?service_id=' + this.user_card.service_id;
 		this.links.to_feedback = this.links.to_user_requests + '&feedback=on';
+		this.links.to_service_filters = 'https://cleantalk.org/noc/filters?service%5B%5D=' + this.user_card.service_id;
+		this.links.to_user_filters = 'https://cleantalk.org/noc/filters?user%5B%5D=' + this.user_card.user_id;
+
+		//
+
 
 	}
 
@@ -545,18 +566,22 @@ class Status {
 
 	initFeedback() { //Extracts feedback from EXTRACTED_HTML.
 
-		if (EXTRACTED_HTML.includes('<span class="text-danger')) {
+		const feedback_signature = 'Решение пользователя';
+		//const feedback_signature_yes = 'Решение пользователя:</div><div class="div_feedback col-xs-1"><span class="text-success">'
+		const feedback_signature_no = 'Решение пользователя:</div><div class="div_feedback col-xs-1"><span class="text-danger">';
 
-			this.feedback = EXTRACTED_HTML.includes('<span class="text-danger');
+		if (EXTRACTED_HTML.includes(feedback_signature)) {
 
-			const user_dec = hl.findBetween(EXTRACTED_HTML,'<span class="text-danger">','</span>');
+			this.feedback = EXTRACTED_HTML.includes(feedback_signature);
+
+			const user_dec = hl.findBetween(EXTRACTED_HTML,feedback_signature_no,'</span>');
 			this.feedback = user_dec ==='NO' ? 0:1;
 
 			if (ct.status.feedback === 1) {
 
 				ct.status.feedback = '<a style="color: #009900" >[ Внимание, ОС! -> Одобрено пользователем. ]<a>';
 
-				if (+ct.status.getDetailValueByName('denied_by_pl')) {
+				if (+ct.getDetailValueByName('denied_by_pl')) {
 
 					hl.addToIssuesList('Запрос одобрен пользователем, при этом запись запрещена ЧС. Нужно письмо.','10')
 
@@ -954,11 +979,15 @@ class CT {	// Main class CT
 	drawStatusBlock() {	//Draws details block in layout_window
 
 		hl.addInnerHtmlToTag('status_table-filter-raw',(
-			'<p class="status_table_inner">Агент: [' + ct.status.agent + ']</p>'
+			'<p>Сайт: <a class="status_table_inner" href="http://' + ct.status.links.to_website + '">' + ct.status.links.to_website + '</a>'+
+			', агент: [' + ct.status.agent +
+			']</p>'
 		));
 
+		hl.debugMessage(ct.status.links.to_website);
+
 		hl.addInnerHtmlToTag('status_table-filter-raw',(
-			'<p class="status_table_inner">Фильтры (отсортированы по убыванию): [' + ct.status.filters + ']</p>'
+			'<p class="status_table_inner">Фильтры (отсортированы по убыванию): ' + ct.status.filters + '</p>'
 		));
 
 		hl.addInnerHtmlToTag('status_table-filter-raw',(
