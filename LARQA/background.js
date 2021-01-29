@@ -2,6 +2,7 @@
 //todo проверять опции перед выводом, как в details
 //todo заголовки - показывать при нажатии на параметр
 //todo отчёт в буфер обмена
+//todo проблема c empty_block
 
 //*** OPTIONS ***
 const HARD_DEBUG = false;
@@ -199,13 +200,13 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		let right = '</td>';
 
-		if (this.findBetween(html_section,left,right) === '') {
-			hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}],  value founded=[EMPTY_BLOCK] `,'DEBUG');
+		if (this.findBetween(html_section,left,right) === '' && signature.includes('network')) {
+			//hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}],  value founded=[EMPTY_BLOCK] `,'DEBUG');
 			return 'EMPTY_BLOCK'
 
 		}
 
-		hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}], value founded=[${this.findBetween(html_section,left,right)}], html_section=[${html_section}] `,'DEBUG');
+			//hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}], value founded=[${this.findBetween(html_section,left,right)}], html_section=[${html_section}] `,'DEBUG');
 		return this.findBetween(html_section,left,right)
 
 	}
@@ -347,6 +348,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		return layout_window.document.getElementById(tag_id).innerHTML+=html_code;
 
 	}
+
 }
 
 class Status {
@@ -980,8 +982,8 @@ class CT {	// Main class CT
 
 					if (parseInt(detail.block_id) === block_id) {
 
-						// Skip ct_options, this detail is used in options block and should not be shown in details tab.
-						if (detail.name !== 'ct_options') {
+						// Skip ct_options and all_headers, this detail is used in options block and should not be shown in details tab.
+						if (!['ct_options','all_headers'].includes(detail.name)) {
 
 							if (detail.value !== 'INVISIBLE') {
 
@@ -1016,6 +1018,7 @@ class CT {	// Main class CT
 										'">  [CHECKER]</a></td>'
 								}
 
+								// Link to all users requests from this IP range
 								if (detail.name.includes('network_by_')
 									&&
 									!detail.value.includes('не найден')
