@@ -4,7 +4,7 @@
 //todo отчёт в буфер обмена
 
 //*** OPTIONS ***
-const HARD_DEBUG = false;
+const HARD_DEBUG = true;
 const FILTERS_SORT_DESC = true;
 const TIMERS_ENABLED = false;
 //*** OPTIONS END ***
@@ -118,24 +118,31 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	findBetween(string, left, right) { //Return result(str) within string(str) between left(str) and right(str).
 
-		let start_from;
-		let end_with;
+		try {
 
-		for (let i=0; i<string.length; i++) {
+			let start_from;
+			let end_with;
 
-			if (string.slice(i,i+left.length) === left) {
+			for (let i = 0; i < string.length; i++) {
 
-				start_from = i+left.length;
-				for (let j=start_from; j<string.length; j++) {
-					if (string.slice(j,j+right.length) === right) {
-						end_with = j;
-						break;
+				if (string.slice(i, i + left.length) === left) {
+
+					start_from = i + left.length;
+					for (let j = start_from; j < string.length; j++) {
+						if (string.slice(j, j + right.length) === right) {
+							end_with = j;
+							break;
+						}
 					}
+					break;
 				}
-				break;
 			}
+			return string.slice(start_from, end_with);
+
+		} catch (e) {
+			this.debugMessage(string,'string');
+			this.debugMessage(e.stack);
 		}
-		return string.slice(start_from,end_with);
 
 	}
 
@@ -162,6 +169,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 	getDetailBySignatureInSection(section_id, signature) { //Returns value(str) of Detail by its signature(str) within HTML section of section_id(str)
 
 		const html_section = this.getHtmlSectionFromEHTML(section_id);
+		hl.debugMessage(`${section_id}, ${signature}, ${html_section}`);
 		if (!html_section.includes(signature)) return 'INVISIBLE';
 		let left;
 
@@ -760,6 +768,12 @@ class CT {	// Main class CT
 			['message', '4', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params'],
 			['message_decoded', '4', 'title="Добавить в произвольный блок"></span>&nbsp;</td><td></td><td>', '', 'DEFAULT', 'message_decoded'],
 			['all_headers', '4', '<td>all_headers&nbsp;</td>', '', 'DEFAULT', 'params'],
+			['type_of_network_by_type', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
+			['network_by_type', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
+			['type_of_network_by_id', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
+			['network_by_id', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
+			['type_of_network_by_mask', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
+			['network_by_mask', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
 
 		];
 
@@ -776,9 +790,9 @@ class CT {	// Main class CT
 		let details_draft = this.initDetailsSearchData();
 
 
-		for (let i =0 ; i < this.details_length ; i++){
+		for (let i =0 ; i !== this.details_length ; i++) {
 
-			this.details.push (
+			this.details.push(
 				new Detail(
 					(details_draft[i][0]),
 					(details_draft[i][1]),
@@ -792,6 +806,40 @@ class CT {	// Main class CT
 			// Set details.values in accordance with initDetailsSearchData result
 			this.details[i].value = hl.getDetailBySignatureInSection(this.details[i].section_id, this.details[i].signature);
 
+			/*this.details[i].value = function getDetailBySignatureInSection() {
+
+				try {
+
+					const section_id = this.details[i].section_id;
+					const signature = this.details[i].signature;
+					const html_section = this.getHtmlSectionFromEHTML(section_id);
+
+					hl.debugMessage(`${section_id}, ${signature}, ${html_section}`);
+					if (!html_section.includes(signature)) return 'INVISIBLE';
+					let left;
+
+					if (section_id !== 'message_decoded') {
+
+						left = signature + `<td>:&nbsp;`;
+
+					} else {
+
+						left = signature;
+
+					}
+
+					let right = '</td>';
+
+					hl.debugMessage(html_section, 'SECTION FROM getDetailBySignatureInSection');
+
+					return hl.findBetween(html_section, left, right)
+
+				} catch (e) {
+					hl.debugMessage(e.stack);
+				}
+
+			}*/
+
 			// Keep the links from source HTML of sender_email and sender_ip
 			if (
 				this.details[i].name === 'sender_email'
@@ -800,6 +848,32 @@ class CT {	// Main class CT
 			){
 				this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
 			}
+
+			// Subnet types handling
+			try {
+				if (
+					this.details[i].name === 'network_by_type'
+					||
+					this.details[i].name === 'network_by_mask'
+					||
+					this.details[i].name === 'network_by_id'
+				) {
+					if (this.details[i - 1].value !== '') {
+
+						this.details[i].value += ` Type: ${this.details[i - 1].value}`
+
+					} else {
+
+						this.details[i].value = 'Сеть не найдена в этом блоке.';
+
+						this.details[i-1].value = 'INVISIBLE';
+					}
+				}
+
+			} catch (e) {
+				hl.debugMessage('initDetailsArray:Subnet types handling failed: '+e.stack);
+			}
+
 		}
 
 	}
@@ -835,12 +909,6 @@ class CT {	// Main class CT
 			}
 
 			this.headers = [];
-
-			let header = {
-				name: '',
-				value: '',
-				is_attention: ''
-			}
 
 			let json_string = this.getDetailValueByName('all_headers');
 
