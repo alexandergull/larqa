@@ -4,7 +4,7 @@
 //todo отчёт в буфер обмена
 
 //*** OPTIONS ***
-const HARD_DEBUG = true;
+const HARD_DEBUG = false;
 const FILTERS_SORT_DESC = true;
 const TIMERS_ENABLED = false;
 //*** OPTIONS END ***
@@ -148,29 +148,42 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	getHtmlSectionFromEHTML(section_id) { //Returns a HTML section(str) of EXTRACTED_HTML(const:str) by section_name(str), the list of available section_name is in initDetailsSignatureData.Выкл
 
-		let left = '<div class="section_block" data-section="' + section_id + '">';
-		let right;
+		if (EXTRACTED_HTML.includes(section_id)) {
 
-		if (section_id!=='message_decoded') {
+			let left = '<div class="section_block" data-section="' + section_id + '">';
+			let right;
 
-			right = '<div class="section_block" data-section=';
+			if (section_id !== 'message_decoded') {
+
+				right = '<div class="section_block" data-section=';
 
 
-		} else {
+			} else {
 
-			right = '</td></tr></tbody>';
+				right = '</td></tr></tbody>';
 
-		}
+			}
 
-		return this.findBetween(EXTRACTED_HTML,left,right);
+			if (section_id === 'network_by_type') {
+				//hl.debugMessage(`LOOKING FOR ${section_id}`);
+			}
+
+			return this.findBetween(EXTRACTED_HTML, left, right);
+
+		} else return '';
 
 	}
 
 	getDetailBySignatureInSection(section_id, signature) { //Returns value(str) of Detail by its signature(str) within HTML section of section_id(str)
 
 		const html_section = this.getHtmlSectionFromEHTML(section_id);
-		hl.debugMessage(`${section_id}, ${signature}, ${html_section}`);
-		if (!html_section.includes(signature)) return 'INVISIBLE';
+
+		if (!html_section.includes(signature)) {
+			hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}],  value founded=[INVISIBLE] `,'DEBUG');
+			return 'INVISIBLE'
+
+		}
+
 		let left;
 
 		if (section_id!=='message_decoded') {
@@ -183,8 +196,16 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		}
 
+
 		let right = '</td>';
 
+		if (this.findBetween(html_section,left,right) === '') {
+			hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}],  value founded=[EMPTY_BLOCK] `,'DEBUG');
+			return 'EMPTY_BLOCK'
+
+		}
+
+		hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}], value founded=[${this.findBetween(html_section,left,right)}], html_section=[${html_section}] `,'DEBUG');
 		return this.findBetween(html_section,left,right)
 
 	}
@@ -262,13 +283,14 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 			layout_window.document.writeln('['+comment+']<xmp> ['+msg+'] </xmp>');
 
-		} else {
+		}
+/*		else {
 
 			this.debug_list += (comment) ?
 				('<p id="debug"> [' + comment + '] [' + msg + ']</p>')
 				: ('<p id="debug">Debug message: ' + msg + '</p>');
 
-		}
+		}*/
 	}
 
 	showDebugMsgList() { //Adds a new tag of found issues from hl.debug_list to Status table
@@ -768,11 +790,11 @@ class CT {	// Main class CT
 			['message', '4', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params'],
 			['message_decoded', '4', 'title="Добавить в произвольный блок"></span>&nbsp;</td><td></td><td>', '', 'DEFAULT', 'message_decoded'],
 			['all_headers', '4', '<td>all_headers&nbsp;</td>', '', 'DEFAULT', 'params'],
-			['type_of_network_by_type', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
+			['type_of_network__by_type', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
 			['network_by_type', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
-			['type_of_network_by_id', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
+			['type_of_network__by_id', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
 			['network_by_id', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
-			['type_of_network_by_mask', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
+			['type_of_network__by_mask', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
 			['network_by_mask', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
 
 		];
@@ -841,33 +863,31 @@ class CT {	// Main class CT
 			}*/
 
 			// Keep the links from source HTML of sender_email and sender_ip
-			if (
-				this.details[i].name === 'sender_email'
-				||
-				this.details[i].name === 'sender_ip'
-			){
+			if (['sender_ip','sender_email'].includes(this.details[i].name)) {
 				this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
 			}
 
 			// Subnet types handling
 			try {
-				if (
-					this.details[i].name === 'network_by_type'
-					||
-					this.details[i].name === 'network_by_mask'
-					||
-					this.details[i].name === 'network_by_id'
-				) {
-					if (this.details[i - 1].value !== '') {
 
-						this.details[i].value += ` Type: ${this.details[i - 1].value}`
+				if (['network_by_type','network_by_mask','network_by_id'].includes(this.details[i].name)) {
+
+					if (this.details[i - 1].value === 'EMPTY_BLOCK'){
+
+						this.details[i].value = 'Блок не найден в запросе.';
+						this.details[i-1].value = 'INVISIBLE';
+
+					} else if (this.details[i - 1].value === 'INVISIBLE') {
+
+						this.details[i].value = 'Сеть не найдена в этом блоке.';
+						this.details[i-1].value = 'INVISIBLE';
 
 					} else {
 
-						this.details[i].value = 'Сеть не найдена в этом блоке.';
+						this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
 
-						this.details[i-1].value = 'INVISIBLE';
 					}
+
 				}
 
 			} catch (e) {
@@ -971,6 +991,7 @@ class CT {	// Main class CT
 								let href = '';
 								let ip_additional_hrefs = '';
 								let email_additional_hrefs = '';
+								let network_additional_hrefs = '';
 
 								// Links to CleanTalk blacklists
 								if (detail.name === 'sender_ip' || this.details[pub_strcnt].name ==='sender_email') {
@@ -995,6 +1016,18 @@ class CT {	// Main class CT
 										'">  [CHECKER]</a></td>'
 								}
 
+								if (detail.name.includes('network_by_')
+									&&
+									!detail.value.includes('не найден')
+								){
+									network_additional_hrefs = '' +
+										'<a href="https://cleantalk.org/noc/requests?request_id=&user_id=' +
+										this.status.user_card.user_id +
+										'&sender_network=' +
+										detail.value +
+										'">  [Все запросы пользователя из этой сети]  </a><a href="https://ipinfo.io/'
+								}
+
 								// Color detail name and value in accordance with css_id of ct.details containment
 								switch (detail.css_id){
 
@@ -1011,7 +1044,9 @@ class CT {	// Main class CT
 											('<td class="details-value">'
 												+ detail.value
 												+ '</a>'+ ip_additional_hrefs
-												+ email_additional_hrefs +'</td>'));
+												+ email_additional_hrefs
+												+ network_additional_hrefs
+												+ '</td>'));
 									} break;
 
 									//CRIMSON for bad values, bad values needs to inspect
@@ -1029,7 +1064,8 @@ class CT {	// Main class CT
 												detail.value
 												+ '</a>'+ ip_additional_hrefs
 												+ email_additional_hrefs
-												+'</td>'));
+												+ network_additional_hrefs
+												+ '</td>'));
 
 									} break;
 
@@ -1049,9 +1085,10 @@ class CT {	// Main class CT
 												+ href
 												+'style="color:#009000">'
 												+ detail.value
-												+ '</a>'
-												+ ip_additional_hrefs
-												+ email_additional_hrefs +'</td>'));
+												+ '</a>'+ ip_additional_hrefs
+												+ email_additional_hrefs
+												+ network_additional_hrefs
+												+ '</td>'));
 
 									} break;
 
@@ -1069,10 +1106,10 @@ class CT {	// Main class CT
 											'beforeend',
 											('<td class="details-value"><a style="color:#CC0000">'
 												+ detail.value
-												+ '</a>'
-												+ ip_additional_hrefs
+												+ '</a>'+ ip_additional_hrefs
 												+ email_additional_hrefs
-												+'</td>'));
+												+ network_additional_hrefs
+												+ '</td>'));
 
 									}
 								}
