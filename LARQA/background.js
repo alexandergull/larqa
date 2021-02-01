@@ -46,17 +46,6 @@ class Helper {	//Helper class, called to keep misc functionality.
 		if (TIMERS_ENABLED) this.exectime = performance.now();
 	}
 
-	addTagHiddenSwitcher(target_tag_id) {
-
-		hl.addTag(target_tag_id,'beforebegin','<span class="hide_me" id="'+target_tag_id+'-visibility-switcher">Скрыть/показать</span>');
-
-		layout_window.document.getElementById(target_tag_id+'-visibility-switcher').onclick = function() {
-
-			layout_window.document.getElementById(target_tag_id).hidden = !layout_window.document.getElementById(target_tag_id).hidden;
-
-		}
-
-	}
 
 	callWindow() {	//Main window call based on "prefilled.html"
 
@@ -89,6 +78,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		ct.drawOptionsBlock();
 		ct.drawStatusBlock();
 		ct.drawHeadersTable();
+		ct.drawMessageTextareas();
 
 			hl.recordNewTimer('Drawing')
 			hl.startTimer();
@@ -110,8 +100,29 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		layout_window.focus();
 
-			hl.addTagHiddenSwitcher('options_table');
-			hl.addTagHiddenSwitcher('details_table');
+		function bindSHButtonToTag (button_id,tag_id, is_hidden){
+
+		let button = layout_window.document.getElementById(button_id);
+
+		layout_window.document.getElementById(tag_id).hidden = is_hidden;
+
+			button.onclick = function () {
+
+				layout_window.document.getElementById(tag_id).hidden = !layout_window.document.getElementById(tag_id).hidden;
+
+				button.innerText = (button.innerText === '[+] Показать:') ? '[-] Скрыть' : '[+] Показать:';
+
+				const scroll_to = layout_window.document.getElementById(tag_id).getBoundingClientRect().top;
+
+				layout_window.document.getElementById(tag_id).parentElement.parentElement.parentElement.scrollTo(scroll_to, scroll_to);
+			}
+
+		}
+
+		bindSHButtonToTag('hide-show_headers-button','headers_table', true);
+		bindSHButtonToTag('hide-show_message_decoded-button','message_decoded-hider', true);
+		bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', true);
+
 
 		}
 
@@ -180,7 +191,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		const html_section = this.getHtmlSectionFromEHTML(section_id);
 
 		if (!html_section.includes(signature)) {
-			hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}],  value founded=[INVISIBLE] `,'DEBUG');
+			//hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}],  value founded=[INVISIBLE] `,'DEBUG');
 			return 'INVISIBLE'
 
 		}
@@ -348,7 +359,6 @@ class Helper {	//Helper class, called to keep misc functionality.
 		return layout_window.document.getElementById(tag_id).innerHTML+=html_code;
 
 	}
-
 }
 
 class Status {
@@ -830,40 +840,6 @@ class CT {	// Main class CT
 			// Set details.values in accordance with initDetailsSearchData result
 			this.details[i].value = hl.getDetailBySignatureInSection(this.details[i].section_id, this.details[i].signature);
 
-			/*this.details[i].value = function getDetailBySignatureInSection() {
-
-				try {
-
-					const section_id = this.details[i].section_id;
-					const signature = this.details[i].signature;
-					const html_section = this.getHtmlSectionFromEHTML(section_id);
-
-					hl.debugMessage(`${section_id}, ${signature}, ${html_section}`);
-					if (!html_section.includes(signature)) return 'INVISIBLE';
-					let left;
-
-					if (section_id !== 'message_decoded') {
-
-						left = signature + `<td>:&nbsp;`;
-
-					} else {
-
-						left = signature;
-
-					}
-
-					let right = '</td>';
-
-					hl.debugMessage(html_section, 'SECTION FROM getDetailBySignatureInSection');
-
-					return hl.findBetween(html_section, left, right)
-
-				} catch (e) {
-					hl.debugMessage(e.stack);
-				}
-
-			}*/
-
 			// Keep the links from source HTML of sender_email and sender_ip
 			if (['sender_ip','sender_email'].includes(this.details[i].name)) {
 				this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
@@ -923,9 +899,10 @@ class CT {	// Main class CT
 					.replace(/\r/g, "\\r")
 					.replace(/\t/g, "\\t")
 					.replace(/\f/g, "\\f")
-					.replace(/<a href="\?request_id=/g, "")
-					.replace(/" target="_blank".+?[\/,,\/}]/g, "\",")
 					.replace(/<\/a>/g, "")
+					.replace(/<a href="\?request_id=/g, "")
+					.replace(/" target="_blank".+?,/g, "\",")
+					.replace(/" target="_blank".+?}/g, "\"}")
 					.replace(/<a href="http:\/\/cleantalk.org\/blacklists\//g, "")
 
 			}
@@ -934,11 +911,11 @@ class CT {	// Main class CT
 
 			let json_string = this.getDetailValueByName('all_headers');
 
-				hl.debugMessage(json_string,`json_string origin`);
+				//hl.debugMessage(json_string,`json_string origin`);
 
 			json_string = escapeSpecialChars(json_string);
 
-				hl.debugMessage(json_string,`json_string escaped`);
+				//hl.debugMessage(json_string,`json_string escaped`);
 
 			const json_obj = JSON.parse(json_string);
 
@@ -982,8 +959,8 @@ class CT {	// Main class CT
 
 					if (parseInt(detail.block_id) === block_id) {
 
-						// Skip ct_options and all_headers, this detail is used in options block and should not be shown in details tab.
-						if (!['ct_options','all_headers'].includes(detail.name)) {
+						// Skip ct_options, this detail is used in options block and should not be shown in details tab.
+						if (detail.name !== 'ct_options') {
 
 							if (detail.value !== 'INVISIBLE') {
 
@@ -1018,7 +995,6 @@ class CT {	// Main class CT
 										'">  [CHECKER]</a></td>'
 								}
 
-								// Link to all users requests from this IP range
 								if (detail.name.includes('network_by_')
 									&&
 									!detail.value.includes('не найден')
@@ -1228,10 +1204,11 @@ class CT {	// Main class CT
 	}
 
 	drawHeadersTable() {
+		let tag_id = 'headers_table_tr-header';
 
 		try {
 
-			let tag_id = 'headers_table_backplate';
+
 
 			for (let i = 0; i !== this.headers.length; i++) {
 
@@ -1249,8 +1226,14 @@ class CT {	// Main class CT
 			}
 
 		} catch (e) {
-			hl.debugMessage('drawHeadersTable() fail: '+e);
+			hl.debugMessage('drawHeadersTable() fail: '+e.stack);
+			hl.debugMessage('drawHeadersTable() fail: '+tag_id);
 		}
+	}
+
+	drawMessageTextareas() {
+		layout_window.document.getElementById('message_origin-textarea').innerText = this.getDetailValueByName('message');
+		layout_window.document.getElementById('message_decoded-textarea').innerText = this.getDetailValueByName('message_decoded');
 	}
 
 	getDetailValueByName(name) { 	// Returns a detail value by its name[name:str]
