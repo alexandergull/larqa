@@ -8,6 +8,7 @@
 const HARD_DEBUG = true;
 const FILTERS_SORT_DESC = true;
 const TIMERS_ENABLED = false;
+const DEF_CATS_HIDDEN = {"headers":false,"message":true,"message_decoded":true};
 //*** OPTIONS END ***
 
 class Helper {	//Helper class, called to keep misc functionality.
@@ -108,15 +109,25 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 				layout_window.document.getElementById(tag_id).hidden = is_hidden;
 
+				button.innerText = (!is_hidden) ? '[-] Скрыть:' : '[+] Показать:';
+
 					button.onclick = function () {
+
+						let cat_opened = (button.innerText === '[-] Скрыть:');
 
 						layout_window.document.getElementById(tag_id).hidden = !layout_window.document.getElementById(tag_id).hidden;
 
-						button.innerText = (button.innerText === '[+] Показать:') ? '[-] Скрыть' : '[+] Показать:';
+						if (cat_opened) {
 
-						const scroll_to = layout_window.document.getElementById(tag_id).getBoundingClientRect().top;
+							button.innerText = '[+] Показать:';
 
-						layout_window.document.getElementById(tag_id).parentElement.parentElement.parentElement.scrollTo(scroll_to, scroll_to);
+						} else {
+
+							button.innerText = '[-] Скрыть:';
+							let scroll_to = layout_window.document.getElementById(tag_id).getBoundingClientRect().top;
+							layout_window.document.getElementById(tag_id).parentElement.parentElement.parentElement.scrollTo(scroll_to, scroll_to);
+
+						}
 					}
 
 				} catch (e) {
@@ -124,9 +135,9 @@ class Helper {	//Helper class, called to keep misc functionality.
 			}
 		}
 
-		bindSHButtonToTag('hide-show_headers-button','headers_table', true);
-		bindSHButtonToTag('hide-show_message_decoded-button','message_decoded-hider', true);
-		bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', true);
+		bindSHButtonToTag('hide-show_headers-button','headers_table', DEF_CATS_HIDDEN.headers);
+		bindSHButtonToTag('hide-show_message_decoded-button','message_decoded-hider', DEF_CATS_HIDDEN.message);
+		bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', DEF_CATS_HIDDEN.message_decoded);
 
 
 		}
@@ -850,8 +861,16 @@ class CT {	// Main class CT
 				this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
 			}
 
-			// Subnet types handling
 			try {
+
+				//Messages handling
+				if (['message_decoded','message'].includes(this.details[i].name)){
+
+					this.details[i].css_id = 'INVISIBLE';
+
+				}
+
+				// Subnet types handling
 
 				if (['network_by_type','network_by_mask','network_by_id'].includes(this.details[i].name)) {
 
@@ -874,7 +893,7 @@ class CT {	// Main class CT
 				}
 
 			} catch (e) {
-				hl.debugMessage('initDetailsArray:Subnet types handling failed: '+e.stack);
+				hl.debugMessage(+e.stack);
 			}
 
 		}
@@ -933,8 +952,9 @@ class CT {	// Main class CT
 				})
 			}
 
-		} catch (e) {
+			ct.setDetailPropertyByName('all_headers','css_id','INVISIBLE');
 
+		} catch (e) {
 			hl.debugMessage('initHeadersArray() fail: '+e.stack);
 		}
 	}
@@ -967,7 +987,7 @@ class CT {	// Main class CT
 						// Skip ct_options, this detail is used in options block and should not be shown in details tab.
 						if (detail.name !== 'ct_options') {
 
-							if (detail.value !== 'INVISIBLE') {
+							if (detail.value !== 'INVISIBLE' && detail.css_id !== 'INVISIBLE') {
 
 							hl.addTag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
 
@@ -1237,8 +1257,11 @@ class CT {	// Main class CT
 	}
 
 	drawMessageTextareas() {
+
+
 		layout_window.document.getElementById('message_origin-textarea').innerText = this.getDetailValueByName('message');
 		layout_window.document.getElementById('message_decoded-textarea').innerText = this.getDetailValueByName('message_decoded');
+
 	}
 
 	getDetailValueByName(name) { 	// Returns a detail value by its name[name:str]
