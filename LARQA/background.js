@@ -5,7 +5,7 @@
 //todo проблема c empty_block
 
 //*** OPTIONS ***
-const HARD_DEBUG = false;
+const HARD_DEBUG = true;
 const FILTERS_SORT_DESC = true;
 const TIMERS_ENABLED = false;
 //*** OPTIONS END ***
@@ -924,7 +924,7 @@ class CT {	// Main class CT
 					.replace(/\t/g, "\\t")
 					.replace(/\f/g, "\\f")
 					.replace(/<a href="\?request_id=/g, "")
-					.replace(/" target="_blank".+?,/g, "\",")
+					.replace(/" target="_blank".+?[\/,,\/}]/g, "\",")
 					.replace(/<\/a>/g, "")
 					.replace(/<a href="http:\/\/cleantalk.org\/blacklists\//g, "")
 
@@ -934,11 +934,11 @@ class CT {	// Main class CT
 
 			let json_string = this.getDetailValueByName('all_headers');
 
-				//hl.debugMessage(json_string,`json_string origin`);
+				hl.debugMessage(json_string,`json_string origin`);
 
 			json_string = escapeSpecialChars(json_string);
 
-				//hl.debugMessage(json_string,`json_string escaped`);
+				hl.debugMessage(json_string,`json_string escaped`);
 
 			const json_obj = JSON.parse(json_string);
 
@@ -953,7 +953,7 @@ class CT {	// Main class CT
 
 		} catch (e) {
 
-			hl.debugMessage('initHeadersArray() fail: '+e);
+			hl.debugMessage('initHeadersArray() fail: '+e.stack);
 		}
 	}
 
@@ -1231,7 +1231,7 @@ class CT {	// Main class CT
 
 		try {
 
-			let tag_id = 'headers_table_tr-header'
+			let tag_id = 'headers_table_backplate';
 
 			for (let i = 0; i !== this.headers.length; i++) {
 

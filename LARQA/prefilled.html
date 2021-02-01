@@ -129,6 +129,13 @@
         margin: 4px;
     }
 
+        .hide-show-backplate{
+
+            border-style: solid;
+            border-width: 2px;
+            background: #E8E8E0;
+
+        }
 
     /*********************DETAILS BLOCK*********************/
 
@@ -225,15 +232,17 @@
             <tbody id="details_table-tbody">
             </tbody>
         </table>
-        <table id='headers_table'><h1>HTTP заголовки</h1>
-            <tbody id="headers_table_tbody">
-            <tr id="headers_table_tr-header">
-                <th class="headers_table_column-header" id="headers_table_th-header">Заголовок</th>
-                <th class="headers_table_column-value" id="headers_table_th-value">Значение</th>
-                <th class="headers_table_column-attention" id="headers_table_th-attention">Важный</th>
-            </tr>
-            </tbody>
-        </table>
+        <div class="hide-show-backplate" id="headers_table-backplate"><button class="hide-show-button">Показать/скрыть</button>
+            <table id='headers_table'><h1>HTTP заголовки</h1>
+                <tbody id="headers_table_tbody">
+                <tr id="headers_table_tr-header">
+                    <th class="headers_table_column-header" id="headers_table_th-header">Заголовок</th>
+                    <th class="headers_table_column-value" id="headers_table_th-value">Значение</th>
+                    <th class="headers_table_column-attention" id="headers_table_th-attention">Важный</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div class="bottom_blocks" id="options_block">
