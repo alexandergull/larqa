@@ -100,23 +100,28 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		layout_window.focus();
 
-		function bindSHButtonToTag (button_id,tag_id, is_hidden){
+		function bindSHButtonToTag (button_id,tag_id,is_hidden){
 
-		let button = layout_window.document.getElementById(button_id);
+			try {
 
-		layout_window.document.getElementById(tag_id).hidden = is_hidden;
+				let button = layout_window.document.getElementById(button_id);
 
-			button.onclick = function () {
+				layout_window.document.getElementById(tag_id).hidden = is_hidden;
 
-				layout_window.document.getElementById(tag_id).hidden = !layout_window.document.getElementById(tag_id).hidden;
+					button.onclick = function () {
 
-				button.innerText = (button.innerText === '[+] Показать:') ? '[-] Скрыть' : '[+] Показать:';
+						layout_window.document.getElementById(tag_id).hidden = !layout_window.document.getElementById(tag_id).hidden;
 
-				const scroll_to = layout_window.document.getElementById(tag_id).getBoundingClientRect().top;
+						button.innerText = (button.innerText === '[+] Показать:') ? '[-] Скрыть' : '[+] Показать:';
 
-				layout_window.document.getElementById(tag_id).parentElement.parentElement.parentElement.scrollTo(scroll_to, scroll_to);
+						const scroll_to = layout_window.document.getElementById(tag_id).getBoundingClientRect().top;
+
+						layout_window.document.getElementById(tag_id).parentElement.parentElement.parentElement.scrollTo(scroll_to, scroll_to);
+					}
+
+				} catch (e) {
+					hl.debugMessage(e.stack);
 			}
-
 		}
 
 		bindSHButtonToTag('hide-show_headers-button','headers_table', true);
