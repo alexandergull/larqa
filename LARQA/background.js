@@ -1,14 +1,18 @@
 //todo добавить проверку критических опций в issuesList
-//todo проверять опции перед выводом, как в details
-//todo заголовки - показывать при нажатии на параметр
 //todo отчёт в буфер обмена
 //todo нужен класс фильтров
 
 //*** OPTIONS ***
-const HARD_DEBUG = false;
+const HARD_DEBUG = true;
 const FILTERS_SORT_DESC = true;
 const TIMERS_ENABLED = false;
-const DEF_CATS_HIDDEN = {"headers":true,"message":false,"message_decoded":true,"subnet":false};
+const DEF_CATS_HIDDEN = {
+	"headers":true,
+	"message":false,
+	"message_decoded":true,
+	"subnet":false,
+	"debug":true,
+};
 //*** OPTIONS END ***
 
 class Helper {	//Helper class, called to keep misc functionality.
@@ -47,6 +51,9 @@ class Helper {	//Helper class, called to keep misc functionality.
 		if (TIMERS_ENABLED) this.exectime = performance.now();
 	}
 
+	getHref(){
+
+	}
 
 	callWindow() {	//Main window call based on "prefilled.html"
 
@@ -71,6 +78,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 			hl.startTimer();
 
 		ct.analysis.checkDetails();
+		ct.analysis.checkOptions();
 
 			hl.recordNewTimer('CheckDetails')
 			hl.startTimer();
@@ -85,7 +93,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 			hl.recordNewTimer('Drawing')
 			hl.startTimer();
 
-		ct.analysis.checkOptions();
+
 
 			hl.recordNewTimer('CheckOptions')
 			hl.startTimer();
@@ -140,6 +148,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		bindSHButtonToTag('hide-show_message_decoded-button','message_decoded-hider', DEF_CATS_HIDDEN.message);
 		bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', DEF_CATS_HIDDEN.message_decoded);
 		bindSHButtonToTag('hide-show_subnet-button','subnets_table', DEF_CATS_HIDDEN.subnet);
+		bindSHButtonToTag('hide-show_debug-button','debug-hider', DEF_CATS_HIDDEN.debug);
 
 
 		}
@@ -170,7 +179,6 @@ class Helper {	//Helper class, called to keep misc functionality.
 			return string.slice(start_from, end_with);
 
 		} catch (e) {
-			this.debugMessage(string,'string');
 			this.debugMessage(e.stack);
 		}
 
@@ -235,8 +243,10 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	getOptionsFromJSON(json) { //Return array of Option class [array] from JSON string [json:str]
 
+		try {
+
 			const json_obj = JSON.parse(json);
-			let parsed_options =[];
+			let parsed_options = [];
 
 			for (let key in json_obj) {
 				let value = json_obj[key];
@@ -245,6 +255,9 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 			return parsed_options
 
+		} catch (e) {
+			hl.debugMessage(e.stack);
+		}
 	}
 
 	trimAndLow (option_value) { //Returns trimmed string [return_string:str] in lowercase. Miscellaneous.
@@ -296,34 +309,27 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	debugMessage(msg,comment) { //Collects new message [msg:str] to [hl.debug_list:str]. If comment, shows the comment first.
 
-		if (HARD_DEBUG) {
-
 			if (comment) {
 
-				layout_window.document.writeln('['+comment+']<xmp> ['+msg+'] </xmp>');
+				this.debug_list += '\n['+comment+'] ['+msg+']\n';
 
 			} else {
 
-				layout_window.document.writeln('<xmp> ['+msg+'] </xmp>');
+				this.debug_list += '\n['+msg+']\n';
 
 			}
 
-
-
-		}
-/*		else {
-
-			this.debug_list += (comment) ?
-				('<p id="debug"> [' + comment + '] [' + msg + ']</p>')
-				: ('<p id="debug">Debug message: ' + msg + '</p>');
-
-		}*/
 	}
 
 	showDebugMsgList() { //Adds a new tag of found issues from hl.debug_list to Status table
 
-		if (this.debug_list !=='') {
-			hl.addTag('status_table-tbody', 'beforeend', ('<tr id="debug"><td>'+this.debug_list+'</td></tr>'));
+		if (this.debug_list !=='' && HARD_DEBUG ) {
+			hl.addTag('status_table-tbody', 'beforebegin', (`
+
+			<div class="hide-show-backplate" id="debug-backplate">
+				<button class="hide-show-button" id="hide-show_debug-button">[+] Показать</button><a class="hide-show-caption">Debug data</a>
+          	<div id="debug-hider"><textarea readonly id="debug">${this.debug_list}</textarea></div></div>`));
+
 			this.debug_list = '';
 		}
 
@@ -342,7 +348,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 			hl.addTag('options_table',
 				'beforebegin',
 				('<div class="report_block" id="options_table-report-block"><b>Изменено опций: (' +
-					ct.analysis.options_changed_indexes.length +
+					ct.analysis.options_changes_counter +
 					')</b>' +
 					this.changed_options_list +
 					'</div>'
@@ -701,9 +707,6 @@ class Status {
 
 	initStatus() { //Init ct.status parameters
 
-
-		if (ct.details) {
-
 			// Names the agent
 			this.agent = ct.getDetailValueByName('ct_agent');
 
@@ -737,8 +740,6 @@ class Status {
 				default:
 
 			}
-
-		} else alert('initStatus fail: ct.details is undefinied');
 
 //links.user_card.email
 
@@ -1380,16 +1381,23 @@ class Option {	// Options class
 		this.value = value;
 	}
 
+	paintThis(){
+
+		this.value = `<a style="color:red">${this.value}</a>`;
+		this.name = `<a style="color:red">${this.name}</a>`;
+
+	}
+
 }
 
 class Analysis {	// Analysis class
 
 	constructor(
 		options_default,
-		options_changed_count
+		options_changes_counter,
 	) {
 		this.options_default = options_default;
-		this.options_changed_indexes = options_changed_count;
+		this.options_changes_counter = options_changes_counter;
 	}
 
 	//todo не отрабатывает post_info для comment type
@@ -1409,10 +1417,12 @@ class Analysis {	// Analysis class
 
 	compareCtOptionsWithDefaults(def_options_agent) {	//Compares request options with defaults by agent [def_options_agent:str]
 
-		this.options_changed_indexes = [];
+		this.options_changes_counter = 0;
+
+		try {
 
 		// Collects options changed
-		for (let i = 0; i <= def_options_agent.length - 1; i++) {
+		for (let i = 0; i !== def_options_agent.length; i++) {
 
 			const def_value = hl.trimAndLow(def_options_agent[i].value);
 
@@ -1422,20 +1432,17 @@ class Analysis {	// Analysis class
 
 				if ( (def_options_agent[i].name === ct.options[j].name) && ( def_value !== req_value )) {
 
-					this.options_changed_indexes.push(j);
+					this.options_changes_counter++;
 					hl.addToChangedOptionsList(ct.options[j].name);
+					ct.options[j].paintThis();
 
 				}
 			}
 		}
 
-		// Colors changed options
-		this.options_changed_indexes.forEach(function (value) {
-			let tr_name = ('options_tier_' + value);
-			layout_window.document.getElementById(tr_name).style.color = '#FF0000';
-
-		})
-
+		} catch (e) {
+			hl.debugMessage(e.stack);
+		}
 	}
 
 	checkOptions() {	// Calls options checking compareCtOptionsWithDefaults if the agent is supported
