@@ -1,6 +1,7 @@
 //todo добавить проверку критических опций в issuesList
 //todo отчёт в буфер обмена
 //todo нужен класс фильтров
+//todo Проблема с ОС https://cleantalk.org/noc/requests?request_id=e781406b662c7b27d4bed0862317c18a
 
 //*** OPTIONS ***
 const HARD_DEBUG = true;
@@ -73,6 +74,8 @@ class Helper {	//Helper class, called to keep misc functionality.
 		ct.status.initStatus();
 		ct.analysis.initOptionsDefaults();
 		ct.initHeadersArray();
+
+		hl.debugMessage(ct.details);
 
 			hl.recordNewTimer('Init total')
 			hl.startTimer();
@@ -361,7 +364,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 			hl.addTag('options_table',
 				'beforebegin',
-				'<div class="report_block" style align="left"><b>Изменений в опциях не обнаружено ' +
+				'<div class="report_block"><b>Изменений в опциях не обнаружено ' +
 				'или отслеживание опций пока не поддерживается для агента ' + ct.status.agent + '.</b>'
 			);
 
@@ -416,7 +419,7 @@ class Status {
 
 		for (let i=0;i < filters.length;i++){
 
-			if (filters[i]==' '){
+			if (filters[i]===' '){
 
 				extracted_values_array.push(filters.slice(f_start,i))
 				f_start = i +1;
@@ -441,7 +444,7 @@ class Status {
 			}
 		}
 		//Sorts balls values
-		if (order) {balls_to_sort_array.sort( (a, b) => b - a )} else {balls_to_sort_array.sort( (a, b) => a - b )};
+		if (order) {balls_to_sort_array.sort( (a, b) => b - a )} else {balls_to_sort_array.sort( (a, b) => a - b )}
 
 		//Bolds balls values
 		let reg_exp;
@@ -562,10 +565,7 @@ class Status {
 		const filters_section = hl.getHtmlSectionFromEHTML('filters');
 		const right = 'R:';
 
-			hl.debugMessage(filters_section,'filters_section');
-
 		this.filters = hl.findBetween(filters_section,left,right);
-			hl.debugMessage(this.filters,'this.filters');
 
 		let balls_summary = (function(){
 
@@ -584,15 +584,9 @@ class Status {
 			}
 		}())
 
-		hl.debugMessage(balls_summary,'balls_summary');
-
-		hl.debugMessage(this.filters,'this.filters before cleans');
-
 		this.cleanFiltersStringFromTags();
 		this.sortFiltersByBalls(FILTERS_SORT_DESC);
 		this.colorFiltersNamesIfInSet();
-
-		hl.debugMessage(this.filters,'this.filters after cleans');
 
 			if ( +balls_summary < 80 ) {
 
@@ -1206,7 +1200,7 @@ class CT {	// Main class CT
 				//Draws feedback if so.
 				'<p style = "text-align: right"> ' + ct.status.feedback + '</p>'
 			))
-		} else hl.hardDebug('drawStatus failed: no isAllowed found')
+		} else hl.debugMessage('drawStatus failed: no isAllowed found')
 
 	}
 
@@ -1505,7 +1499,7 @@ class Analysis {	// Analysis class
 							detail.css_id = 'INCORRECT';
 							hl.addToIssuesList('Не смогли определить EMAIL', '10');
 
-						} else if (ct.getDetailValueByName('sender_email_is_bl') == 2) {
+						} else if (ct.getDetailValueByName('sender_email_is_bl') === 2) {
 
 							detail.css_id = 'BAD';
 
@@ -1546,7 +1540,7 @@ class Analysis {	// Analysis class
 							detail.css_id = 'INCORRECT';
 							hl.addToIssuesList('Не смогли определить IP адрес', '10');
 
-						} else if (ct.getDetailValueByName('sender_ip_is_bl') == 2) {
+						} else if (ct.getDetailValueByName('sender_ip_is_bl') === 2) {
 
 							detail.css_id = 'BAD';
 
@@ -1628,7 +1622,7 @@ class Analysis {	// Analysis class
 							detail.css_id = 'BAD';
 							hl.addToIssuesList('Не смогли определить наличие COOKIES', '3');
 
-						} else if (detail.value == 0) {
+						} else if (detail.value === 0) {
 
 							detail.css_id = 'BAD';
 							hl.addToIssuesList('COOKIES отключены', '10');
@@ -1641,7 +1635,7 @@ class Analysis {	// Analysis class
 					//GREYLIST
 					case 'is_greylisted': {
 
-						if (detail.value == 1) {
+						if (detail.value === 1) {
 
 							detail.css_id = 'BAD';
 							hl.addToIssuesList('Сработал GREYLIST. Смотри SUBMIT_TIME.', '3');
@@ -1654,7 +1648,7 @@ class Analysis {	// Analysis class
 					//MOBILE_UA
 					case 'is_mobile_ua': {
 
-						if (detail.value == 1) {
+						if (detail.value === 1) {
 
 							detail.css_id = 'GOOD';
 							hl.addToIssuesList('USERAGENT - мобильное устройство', '0');
@@ -1754,7 +1748,7 @@ class Analysis {	// Analysis class
 				}
 
 			}
-		} else hl.hardDebug('ct.checkdetails failed');
+		} else hl.debugMessage('ct.checkdetails failed');
 	}
 
 }
@@ -1778,7 +1772,8 @@ hl = new Helper();
 
 //*** LISTENERS ***
 
-	chrome.runtime.onMessage.addListener(function (message) {
+// noinspection JSUnresolvedVariable,JSUnresolvedVariable,JSUnresolvedVariable
+chrome.runtime.onMessage.addListener(function (message) {
 		switch (message.command) {
 
 			case "pageHtml":
@@ -1792,10 +1787,12 @@ hl = new Helper();
 	})
 
 	function logHtmlCode(tab) {
+		// noinspection JSUnresolvedFunction,JSUnresolvedVariable,JSUnresolvedVariable
 		chrome.tabs.executeScript(tab.id, {file: "send-page-code.js"});
 	}
 
-	chrome.browserAction.onClicked.addListener(logHtmlCode);
+// noinspection JSUnresolvedVariable,JSUnresolvedVariable
+chrome.browserAction.onClicked.addListener(logHtmlCode);
 //==== LISTENERS END
 //CODE END
 

@@ -27,6 +27,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Cadence.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/prefilled.html" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/prefilled.html" afterDir="false" />
@@ -83,9 +84,11 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/prefilled.html" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -195,7 +198,7 @@
       <workItem from="1610963158787" duration="10903000" />
       <workItem from="1611049671519" duration="24121000" />
       <workItem from="1611742160402" duration="3524000" />
-      <workItem from="1612263399141" duration="12181000" />
+      <workItem from="1612263399141" duration="13641000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -477,7 +480,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612268847838</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- переделал проверку опций в предварительную&#10;&#10;Новое:&#10;- запилил дебаг в кат textarea">
+      <created>1612293224060</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1612293224060</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -511,7 +521,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="-find_between moved to helper&#10;-debugger refractored" />
     <MESSAGE value="Новое:&#10;- убрал все неклассовые методы в класс Helper&#10;- рефакторинг кода, привёл все методы к каноническому виду&#10;- сделал issueslist как в debugMessages - новой строкой в таблицу status" />
     <MESSAGE value="Новое:&#10;- вывел message и username в блок details" />
     <MESSAGE value="Новое:&#10;- вывожу изменения опций и параметров в соответствующих блоках" />
@@ -536,7 +545,8 @@
     <MESSAGE value="- Cadence 01.02.2021 -&#10;&#10;Срочно: &#10;- переделать значения details.value = INVISIBLE в CSS_id invisible&#10;- исправить каты под корректный скролл, надо  допилить логику скртыь/показывать 111 стр" />
     <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Новое:&#10;- добил логику катов, добавил опцию DEF_CATS_HIDDEN скрытые по умолчанию каты тут&#10;- убрал поля messages и all_headers из details&#10;- начал делать логику INVISIBLE" />
     <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- опять с фильтрами ерунда была, привязал жёстко отсутсвие фильтров к 0 баллов&#10;&#10;Новое:&#10;- убрал типы сетей в отдельный кат" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- опять с фильтрами ерунда была, привязал жёстко отсутсвие фильтров к 0 баллов&#10;&#10;Новое:&#10;- убрал типы сетей в отдельный кат" />
+    <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- переделал проверку опций в предварительную&#10;&#10;Новое:&#10;- запилил дебаг в кат textarea" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- переделал проверку опций в предварительную&#10;&#10;Новое:&#10;- запилил дебаг в кат textarea" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">
@@ -547,10 +557,10 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="830" y="272" key="#com.intellij.ide.util.MemberChooser/0.0.2048.1112@0.0.2048.1112" timestamp="1611053425716" />
-    <state x="772" y="411" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1611057892236">
+    <state x="772" y="411" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1612293372773">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="772" y="411" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2048.1112@0.0.2048.1112" timestamp="1611057892236" />
+    <state x="772" y="411" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2048.1112@0.0.2048.1112" timestamp="1612293372773" />
     <state x="124" y="126" width="1800" height="861" key="DiffContextDialog" timestamp="1611075030554">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>

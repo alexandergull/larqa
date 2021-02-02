@@ -3,73 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title id="layout_window_title">LARQA WINDOW</title>
-</head>
-<body id="body">
-<style>
-    /*COMMON*/
+    <style>
+        /*COMMON*/
 
-    body{
-        font-family: Verdana;
-        background-color: #3090c7;
-    }
+        body{
+            font-family: Verdana;
+            background-color: #3090c7;
+        }
 
-    h1{
-        margin: 2px;
-        padding: 3px;
-        text-align: center;
-        font-size: 95%;
-    }
+        h1{
+            margin: 2px;
+            padding: 3px;
+            text-align: center;
+            font-size: 95%;
+        }
 
-    table, td, th {
-        border: 1px solid black;
-        text-align: left;
-        font-size: 10px;
-        padding-block: 0.2%;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
+        table, td, th {
+            border: 1px solid black;
+            text-align: left;
+            font-size: 10px;
+            padding-block: 0.2%;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
 
-    .hide_me{
+        .hide_me{
 
-    }
+        }
 
-    .line_block {
-        width:47%;
-        height:auto;
-        float:left;
-        margin: 0 1% 1% 0;
-        text-align:center;
-        padding: 1%;
-        background-color: #ECE9E0;
-        border-radius: 7px;
-    }
+        .line_block {
+            width:47%;
+            height:auto;
+            float:left;
+            margin: 0 1% 1% 0;
+            text-align:center;
+            padding: 1%;
+            background-color: #ECE9E0;
+            border-radius: 7px;
+        }
 
 
-    .bottom_blocks{
-        overflow: auto;
-        max-height: 700px;
-        min-height: 300px;
-        float: left;
-        margin: 0 1% 1% 0;
-        text-align: center;
-        padding: 1%;
-        background-color: #ECE9E0;
-        border-radius: 7px;
-    }
+        .bottom_blocks{
+            overflow: auto;
+            max-height: 700px;
+            min-height: 300px;
+            float: left;
+            margin: 0 1% 1% 0;
+            text-align: center;
+            padding: 1%;
+            background-color: #ECE9E0;
+            border-radius: 7px;
+        }
 
-    .report_block{
-        text-align: left;
-        border-radius: 2px;
-        border-style: dashed;
-        border-color: #000000;
-        border-width: 1px;
-        margin-bottom: 5px;
-        padding: 5px;
-        line-height: 0.8;
-        min-height: 130px;
-        max-height: 100px;
-        overflow: auto;
-    }
+        .report_block{
+            text-align: left;
+            border-radius: 2px;
+            border-style: dashed;
+            border-color: #000000;
+            border-width: 1px;
+            margin-bottom: 5px;
+            padding: 5px;
+            line-height: 0.8;
+            min-height: 130px;
+            max-height: 100px;
+            overflow: auto;
+        }
 
         .report_block-issues
         {
@@ -78,11 +76,11 @@
 
 
 
-    /*********************STATUS BLOCK*********************/
+        /*********************STATUS BLOCK*********************/
 
-    #status_block {
+        #status_block {
 
-    }
+        }
 
         .is_denied{
             display: block;
@@ -114,26 +112,30 @@
             width: 100%;
         }
 
-            .status_table_inner{
-                border: hidden;
-                background:#E9e9e1;
-                text-align:left;
-                padding: 1px;
-                margin: 1px;
-                font-size: 10px;
+        .status_table_inner{
+            border: hidden;
+            background:#E9e9e1;
+            text-align:left;
+            padding: 1px;
+            margin: 1px;
+            font-size: 10px;
 
-            }
+        }
 
-            #debug{
-                font-size: 9px;
-                margin: 4px;
-                width: 95%;
-                height: 20ch;
-                overflow: auto;
-                background: #EFEBE4;
-                resize: none;
-                padding: 10px;
-            }
+        #debug{
+            font-size: 9px;
+            margin: 4px;
+            width: 98%;
+            height: 20ch;
+            overflow: auto;
+            background: #EFEBE4;
+            resize: none;
+            padding: 10px;
+        }
+
+        #debug-backplate{
+            background: #7cab7459;
+        }
 
         .hide-show-backplate{
 
@@ -158,16 +160,16 @@
         }
 
 
-    /*********************DETAILS BLOCK*********************/
+        /*********************DETAILS BLOCK*********************/
 
-    #details_block{
-        width:57%;
-    }
+        #details_block{
+            width:57%;
+        }
 
-    #details_table{
-        word-break: break-word;
-        width:100%;
-    }
+        #details_table{
+            word-break: break-word;
+            width:100%;
+        }
 
         .details-name {
             width: max-content;
@@ -179,9 +181,9 @@
 
         }
 
-    #subnets_table{
-        width: 100%;
-    }
+        #subnets_table{
+            width: 100%;
+        }
 
         .subnet_table_td--by_what{
             width: 15%;
@@ -205,10 +207,10 @@
 
         }
 
-    #headers_table{
-        word-break: break-word;
-        width:100%;
-    }
+        #headers_table{
+            word-break: break-word;
+            width:100%;
+        }
 
         .headers_table_column-header{
             min-width:10%;
@@ -226,7 +228,7 @@
             width: 15%;
         }
 
-    #headers_table_tr-header{
+        #headers_table_tr-header{
             text-align: center;
         }
 
@@ -242,18 +244,18 @@
 
         }
 
-    .details_block-messages{
-        width: 99%;
-        resize: none;
-        background: #EFEBE4;
-    }
+        .details_block-messages{
+            width: 99%;
+            resize: none;
+            background: #EFEBE4;
+        }
 
 
-    /*********************OPTIONS BLOCK*********************/
+        /*********************OPTIONS BLOCK*********************/
 
-    #options_block{
-        width: 37%;
-    }
+        #options_block{
+            width: 37%;
+        }
 
         #options_unsupported{
             text-align: center;
@@ -266,7 +268,9 @@
             width:100%;
         }
 
-</style>
+    </style>
+</head>
+<body id="body">
 <div style="width:100%; height:1px; clear:both;"></div>
 <div style=" display: block;">
     <div class="status_block" id="status_block"><h1 id="status_block-header"></h1>
