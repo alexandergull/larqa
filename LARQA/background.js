@@ -2,13 +2,13 @@
 //todo проверять опции перед выводом, как в details
 //todo заголовки - показывать при нажатии на параметр
 //todo отчёт в буфер обмена
-//todo проблема c empty_block
+//todo нужен класс фильтров
 
 //*** OPTIONS ***
-const HARD_DEBUG = true;
+const HARD_DEBUG = false;
 const FILTERS_SORT_DESC = true;
 const TIMERS_ENABLED = false;
-const DEF_CATS_HIDDEN = {"headers":false,"message":true,"message_decoded":true};
+const DEF_CATS_HIDDEN = {"headers":true,"message":false,"message_decoded":true,"subnet":false};
 //*** OPTIONS END ***
 
 class Helper {	//Helper class, called to keep misc functionality.
@@ -80,6 +80,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		ct.drawStatusBlock();
 		ct.drawHeadersTable();
 		ct.drawMessageTextareas();
+		ct.drawSubnetsTable();
 
 			hl.recordNewTimer('Drawing')
 			hl.startTimer();
@@ -138,6 +139,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		bindSHButtonToTag('hide-show_headers-button','headers_table', DEF_CATS_HIDDEN.headers);
 		bindSHButtonToTag('hide-show_message_decoded-button','message_decoded-hider', DEF_CATS_HIDDEN.message);
 		bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', DEF_CATS_HIDDEN.message_decoded);
+		bindSHButtonToTag('hide-show_subnet-button','subnets_table', DEF_CATS_HIDDEN.subnet);
 
 
 		}
@@ -185,15 +187,10 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 				right = '<div class="section_block" data-section=';
 
-
 			} else {
 
 				right = '</td></tr></tbody>';
 
-			}
-
-			if (section_id === 'network_by_type') {
-				//hl.debugMessage(`LOOKING FOR ${section_id}`);
 			}
 
 			return this.findBetween(EXTRACTED_HTML, left, right);
@@ -207,8 +204,8 @@ class Helper {	//Helper class, called to keep misc functionality.
 		const html_section = this.getHtmlSectionFromEHTML(section_id);
 
 		if (!html_section.includes(signature)) {
-			//hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}],  value founded=[INVISIBLE] `,'DEBUG');
-			return 'INVISIBLE'
+
+			return ''
 
 		}
 
@@ -224,16 +221,8 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		}
 
-
 		let right = '</td>';
 
-		if (this.findBetween(html_section,left,right) === '' && signature.includes('network')) {
-			//hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}],  value founded=[EMPTY_BLOCK] `,'DEBUG');
-			return 'EMPTY_BLOCK'
-
-		}
-
-			//hl.debugMessage(`section_id=[${section_id}], detail signature=[${signature}], value founded=[${this.findBetween(html_section,left,right)}], html_section=[${html_section}] `,'DEBUG');
 		return this.findBetween(html_section,left,right)
 
 	}
@@ -309,7 +298,17 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		if (HARD_DEBUG) {
 
-			layout_window.document.writeln('['+comment+']<xmp> ['+msg+'] </xmp>');
+			if (comment) {
+
+				layout_window.document.writeln('['+comment+']<xmp> ['+msg+'] </xmp>');
+
+			} else {
+
+				layout_window.document.writeln('<xmp> ['+msg+'] </xmp>');
+
+			}
+
+
 
 		}
 /*		else {
@@ -469,38 +468,35 @@ class Status {
 
 	cleanFiltersStringFromTags() {	//Clear [ct.status.filters:str] from tags
 
-		let fstr = ct.status.filters
+			let fstr = ct.status.filters
+			for (let i = 0; i <= fstr.length; i++) {
 
+				if (fstr.slice(i, i + 4) === '<td>') {
+					fstr = fstr.slice(0, i) + fstr.slice(i + 4, fstr.length)
+					i--;
+				}
 
-		for (let i = 0; i <= fstr.length; i++) {
+				if (fstr.slice(i, i + 6) === '&nbsp;') {
+					fstr = fstr.slice(0, i) + fstr.slice(i + 6, fstr.length)
+					i--;
+				}
 
-			if (fstr.slice(i, i + 4) === '<td>') {
-				fstr = fstr.slice(0, i) + fstr.slice(i + 4, fstr.length)
-				i--;
+				if (fstr.slice(i, i + 5) === '</td>') {
+					fstr = fstr.slice(0, i) + fstr.slice(i + 5, fstr.length)
+					i--;
+				}
+
+				if (fstr.slice(i, i + 32) === '<a href="#" class="edit_filter">') {
+					fstr = fstr.slice(0, i) + fstr.slice(i + 32, fstr.length);
+					i--;
+				}
+
+				if (fstr.slice(i, i + 4) === '</a>') {
+					fstr = fstr.slice(0, i) + fstr.slice(i + 4, fstr.length);
+					i--;
+				}
 			}
-
-			if (fstr.slice(i, i + 6) === '&nbsp;') {
-				fstr = fstr.slice(0, i) + fstr.slice(i + 6, fstr.length)
-				i--;
-			}
-
-			if (fstr.slice(i, i + 5) === '</td>') {
-				fstr = fstr.slice(0, i) + fstr.slice(i + 5, fstr.length)
-				i--;
-			}
-
-			if (fstr.slice(i, i + 32) === '<a href="#" class="edit_filter">') {
-				fstr = fstr.slice(0, i) + fstr.slice(i + 32, fstr.length);
-				i--;
-			}
-
-			if (fstr.slice(i, i + 4) === '</a>') {
-				fstr = fstr.slice(0, i) + fstr.slice(i + 4, fstr.length);
-				i--;
-			}
-		}
-
-		ct.status.filters = fstr;
+			ct.status.filters = fstr;
 
 	}
 
@@ -559,18 +555,40 @@ class Status {
 		const left = `"Добавить в произвольный блок"></span>&nbsp;</td><td>`;
 		const filters_section = hl.getHtmlSectionFromEHTML('filters');
 		const right = 'R:';
-		const balls_summary = hl.findBetween(hl.getHtmlSectionFromEHTML('filters'),' R:','</td>')
+
+			hl.debugMessage(filters_section,'filters_section');
 
 		this.filters = hl.findBetween(filters_section,left,right);
+			hl.debugMessage(this.filters,'this.filters');
+
+		let balls_summary = (function(){
+
+			try {
+
+				if (ct.status.filters.includes('R&nbsp;</td><td>:&nbsp;0')) {
+
+					return '0';
+
+				}
+
+				return hl.findBetween(filters_section,' R:','</td>');
+
+			} catch (e) {
+				hl.debugMessage(e.stack);
+			}
+		}())
+
+		hl.debugMessage(balls_summary,'balls_summary');
+
+		hl.debugMessage(this.filters,'this.filters before cleans');
 
 		this.cleanFiltersStringFromTags();
-
 		this.sortFiltersByBalls(FILTERS_SORT_DESC);
-
 		this.colorFiltersNamesIfInSet();
 
+		hl.debugMessage(this.filters,'this.filters after cleans');
 
-		if ( +balls_summary < 80 ) {
+			if ( +balls_summary < 80 ) {
 
 			ct.status.filters = `<b style="color: green">R: ${balls_summary}</b> [${ct.status.filters}]`;
 			ct.status.filters += `<p>Не хватает для блокировки: <b>${80-balls_summary}</b>, `;
@@ -776,7 +794,6 @@ class CT {	// Main class CT
 		headers
 
 	) {
-		this.id = id;
 		this.status = status;
 		this.details = details;
 		this.options = options;
@@ -818,11 +835,11 @@ class CT {	// Main class CT
 			['message', '4', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params'],
 			['message_decoded', '4', 'title="Добавить в произвольный блок"></span>&nbsp;</td><td></td><td>', '', 'DEFAULT', 'message_decoded'],
 			['all_headers', '4', '<td>all_headers&nbsp;</td>', '', 'DEFAULT', 'params'],
-			['type_of_network__by_type', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
+			['type_of_network_by_type', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
 			['network_by_type', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
-			['type_of_network__by_id', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
+			['type_of_network_by_id', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
 			['network_by_id', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
-			['type_of_network__by_mask', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
+			['type_of_network_by_mask', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
 			['network_by_mask', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
 
 		];
@@ -839,63 +856,44 @@ class CT {	// Main class CT
 		this.details = [];
 		let details_draft = this.initDetailsSearchData();
 
+		try {
 
-		for (let i =0 ; i !== this.details_length ; i++) {
+			for (let i =0 ; i !== this.details_length ; i++) {
 
-			this.details.push(
-				new Detail(
-					(details_draft[i][0]),
-					(details_draft[i][1]),
-					(details_draft[i][2]),
-					(details_draft[i][3]),
-					(details_draft[i][4]),
-					(details_draft[i][5])
-				)
-			);
+				this.details.push(
+					new Detail(
+						(details_draft[i][0]),
+						(details_draft[i][1]),
+						(details_draft[i][2]),
+						(details_draft[i][3]),
+						(details_draft[i][4]),
+						(details_draft[i][5])
+					)
+				);
 
-			// Set details.values in accordance with initDetailsSearchData result
-			this.details[i].value = hl.getDetailBySignatureInSection(this.details[i].section_id, this.details[i].signature);
+				// Set details.values in accordance with initDetailsSearchData result
+				this.details[i].value = hl.getDetailBySignatureInSection(this.details[i].section_id, this.details[i].signature);
 
-			// Keep the links from source HTML of sender_email and sender_ip
-			if (['sender_ip','sender_email'].includes(this.details[i].name)) {
-				this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
-			}
-
-			try {
-
-				//Messages handling
-				if (['message_decoded','message'].includes(this.details[i].name)){
-
-					this.details[i].css_id = 'INVISIBLE';
-
+				// Keep the links from source HTML of sender_email and sender_ip
+				if (['sender_ip','sender_email'].includes(this.details[i].name)) {
+					this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
 				}
 
-				// Subnet types handling
 
-				if (['network_by_type','network_by_mask','network_by_id'].includes(this.details[i].name)) {
 
-					if (this.details[i - 1].value === 'EMPTY_BLOCK'){
+					//Messages and headers handling
+					if (['message_decoded','message'].includes(this.details[i].name) || this.details[i].name.includes('network')){
 
-						this.details[i].value = 'Блок не найден в запросе.';
-						this.details[i-1].value = 'INVISIBLE';
-
-					} else if (this.details[i - 1].value === 'INVISIBLE') {
-
-						this.details[i].value = 'Сеть не найдена в этом блоке.';
-						this.details[i-1].value = 'INVISIBLE';
-
-					} else {
-
-						this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
+						this.details[i].css_id = 'INVISIBLE';
 
 					}
 
-				}
+					//Empty values handling
+					if (this.details[i].value === '')  this.details[i].css_id = 'INVISIBLE';
 
-			} catch (e) {
-				hl.debugMessage(+e.stack);
 			}
-
+		} catch (e) {
+			hl.debugMessage(+e.stack);
 		}
 
 	}
@@ -995,7 +993,6 @@ class CT {	// Main class CT
 								let href = '';
 								let ip_additional_hrefs = '';
 								let email_additional_hrefs = '';
-								let network_additional_hrefs = '';
 
 								// Links to CleanTalk blacklists
 								if (detail.name === 'sender_ip' || this.details[pub_strcnt].name ==='sender_email') {
@@ -1020,18 +1017,6 @@ class CT {	// Main class CT
 										'">  [CHECKER]</a></td>'
 								}
 
-								if (detail.name.includes('network_by_')
-									&&
-									!detail.value.includes('не найден')
-								){
-									network_additional_hrefs = '' +
-										'<a href="https://cleantalk.org/noc/requests?request_id=&user_id=' +
-										this.status.user_card.user_id +
-										'&sender_network=' +
-										detail.value +
-										'">  [Все запросы пользователя из этой сети]  </a><a href="https://ipinfo.io/'
-								}
-
 								// Color detail name and value in accordance with css_id of ct.details containment
 								switch (detail.css_id){
 
@@ -1049,7 +1034,6 @@ class CT {	// Main class CT
 												+ detail.value
 												+ '</a>'+ ip_additional_hrefs
 												+ email_additional_hrefs
-												+ network_additional_hrefs
 												+ '</td>'));
 									} break;
 
@@ -1068,7 +1052,6 @@ class CT {	// Main class CT
 												detail.value
 												+ '</a>'+ ip_additional_hrefs
 												+ email_additional_hrefs
-												+ network_additional_hrefs
 												+ '</td>'));
 
 									} break;
@@ -1091,7 +1074,6 @@ class CT {	// Main class CT
 												+ detail.value
 												+ '</a>'+ ip_additional_hrefs
 												+ email_additional_hrefs
-												+ network_additional_hrefs
 												+ '</td>'));
 
 									} break;
@@ -1112,7 +1094,6 @@ class CT {	// Main class CT
 												+ detail.value
 												+ '</a>'+ ip_additional_hrefs
 												+ email_additional_hrefs
-												+ network_additional_hrefs
 												+ '</td>'));
 
 									}
@@ -1264,6 +1245,89 @@ class CT {	// Main class CT
 
 	}
 
+	drawSubnetsTable() {
+
+		try {
+
+			hl.addTag('subnets_table_tr-header', 'afterend',
+				'<tr id="subnet_table_tr-name--bytype"></tr>');
+
+			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
+				'<td class="subnet_table_td--by_what" id="subnet_table_th-name-bytype--by_what">BY_TYPE</td>');
+
+			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
+				'<td class="subnet_table_td--network" id="subnet_table_th-name-bytype--network">'+
+				this.getDetailValueByName('network_by_type')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
+				'<td class="subnet_table_td--type" id="subnet_table_th-name-bytype--type">'+
+				this.getDetailValueByName('type_of_network_by_type')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
+				'<td class="subnet_table_td--misc" id="subnet_table_th-name-bytype--misc">'+
+				'MISC'+
+				'</td>');
+
+
+
+
+
+			hl.addTag('subnet_table_tr-name--bytype', 'afterend',
+				'<tr id="subnet_table_tr-name--byid"></tr>');
+
+			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
+				'<td class="subnet_table_td--by_what" id="subnet_table_th-name-byid--by_what">BY_ID</td>');
+
+			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
+				'<td class="subnet_table_td--network" id="subnet_table_th-name-byid--network">'+
+				this.getDetailValueByName('network_by_id')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
+				'<td class="subnet_table_td--type"id="subnet_table_th-name-byid--type">'+
+				this.getDetailValueByName('type_of_network_by_id')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
+				'<td class="subnet_table_td--misc" id="subnet_table_th-name-byid--misc">'+
+				'MISC'+
+				'</td>');
+
+
+
+
+			hl.addTag('subnet_table_tr-name--byid', 'afterend',
+				'<tr id="subnet_table_tr-name--bymask"></tr>');
+
+			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
+				'<td class="subnet_table_td--by_what" id="subnet_table_th-name-bymask--by_what">BY_MASK</td>');
+
+			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
+				'<td class="subnet_table_td--network" id="subnet_table_th-name-bymask--network">'+
+				this.getDetailValueByName('network_by_mask')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
+				'<td class="subnet_table_td--type" id="subnet_table_th-name-bymask--type">'+
+				this.getDetailValueByName('type_of_network_by_mask')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
+				'<td class="subnet_table_td--misc" id="subnet_table_th-name-bymask--misc">'+
+				'MISC'+
+				'</td>');
+
+
+
+
+		} catch (e) {
+			hl.debugMessage('drawMessageTextareas() fail: '+e.stack);
+		}
+
+	}
+
 	getDetailValueByName(name) { 	// Returns a detail value by its name[name:str]
 
 		for (let i = 0; i < this.details_length; i++) {
@@ -1274,7 +1338,7 @@ class CT {	// Main class CT
 
 			}
 		}
-		hl.hardDebug(`No detail ${name} found in getDetailValueByName`);
+		hl.debugMessage(`No detail ${name} found in getDetailValueByName`);
 		return '';
 	}
 
