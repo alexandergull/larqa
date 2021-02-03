@@ -1,7 +1,6 @@
 //todo добавить проверку критических опций в issuesList
 //todo отчёт в буфер обмена
 //todo нужен класс фильтров
-//todo Проблема с ОС https://cleantalk.org/noc/requests?request_id=e781406b662c7b27d4bed0862317c18a
 
 //*** OPTIONS ***
 const HARD_DEBUG = true;
@@ -14,6 +13,11 @@ const DEF_CATS_HIDDEN = {
 	"subnet":false,
 	"debug":true,
 };
+const CURRENT_VERSIONS = new Map(
+	[
+		['wordpress','wordpress-51524']
+	]
+)
 //*** OPTIONS END ***
 
 class Helper {	//Helper class, called to keep misc functionality.
@@ -160,24 +164,32 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		try {
 
-			let start_from;
-			let end_with;
+			let start_from = 0;
+			let end_with = 0;
+
+			if (!string.includes(left)) {hl.debugMessage(`Left part not found: [${left}] in ${string.slice(0,15)}...`,'findBetween report:')};
+			if (!string.includes(right)) {hl.debugMessage(`Right part not found: [${right}] in ${string.slice(0,15)}...`,'findBetween report:')};
 
 			for (let i = 0; i < string.length; i++) {
 
 				if (string.slice(i, i + left.length) === left) {
 
 					start_from = i + left.length;
+
 					for (let j = start_from; j < string.length; j++) {
+
 						if (string.slice(j, j + right.length) === right) {
+
 							end_with = j;
 							break;
+
 						}
 					}
 					break;
 				}
 			}
-			return string.slice(start_from, end_with);
+
+				return string.slice(start_from, end_with);
 
 		} catch (e) {
 			this.debugMessage(e.stack);
@@ -659,19 +671,23 @@ class Status {
 	initFeedback() { //Extracts feedback from EXTRACTED_HTML.
 
 		const feedback_signature = 'Решение пользователя';
-		//const feedback_signature_yes = 'Решение пользователя:</div><div class="div_feedback col-xs-1"><span class="text-success">'
-		const feedback_signature_no = 'Решение пользователя:</div><div class="div_feedback col-xs-1"><span class="text-danger">';
+
+		const feedback_signature_no = `Решение пользователя:
+                    </div>
+                    <div class="div_feedback col-xs-1">
+                        <span class="text-danger">`;
 
 		if (EXTRACTED_HTML.includes(feedback_signature)) {
 
 			this.feedback = EXTRACTED_HTML.includes(feedback_signature);
 
 			const user_dec = hl.findBetween(EXTRACTED_HTML,feedback_signature_no,'</span>');
-			this.feedback = user_dec ==='NO' ? 0:1;
 
-			if (ct.status.feedback === 1) {
+			this.feedback = (user_dec ==='NO') ? 0:1;
 
-				ct.status.feedback = '<a style="color: #009900" >[ Внимание, ОС! -> Одобрено пользователем. ]<a>';
+			if (this.feedback === 1) {
+
+				this.feedback = '<a style="color: #009900" >[ Внимание, ОС! -> Одобрено пользователем. ]<a>';
 
 				if (+ct.getDetailValueByName('denied_by_pl')) {
 
@@ -681,7 +697,7 @@ class Status {
 
 			} else if (this.feedback === 0) {
 
-				ct.status.feedback = '<a style="color: #990000">[ Внимание, ОС! -> запрещено пользователем! ]<a>';
+				this.feedback = '<a style="color: #990000">[ Внимание, ОС! -> запрещено пользователем! ]<a>';
 
 				if (+ct.getDetailValueByName('allowed_by_pl')) {
 
@@ -689,7 +705,8 @@ class Status {
 
 				}
 			}
-		} else ct.status.feedback = 'Обратной связи нет.';
+
+		} else this.feedback = 'Обратной связи нет.';
 
 	}
 
@@ -864,7 +881,7 @@ class CT {	// Main class CT
 				this.details[i].value = hl.getDetailBySignatureInSection(this.details[i].section_id, this.details[i].signature);
 
 				// Keep the links from source HTML of sender_email and sender_ip
-				if (['sender_ip','sender_email'].includes(this.details[i].name)) {
+				if (['sender_ip','sender_email'].includes(this.details[i].name) && this.details[i].value !== '') {
 					this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
 				}
 
@@ -1497,7 +1514,7 @@ class Analysis {	// Analysis class
 						if (detail.value === '') {
 
 							detail.css_id = 'BAD';
-							hl.addToIssuesList('EMAIL передан, но пустой', '3');
+							hl.addToIssuesList('EMAIL пустой.', '3');
 
 						} else if (detail.value === null) {
 
@@ -1742,7 +1759,6 @@ class Analysis {	// Analysis class
 					case 'pl_has_records': {
 						if (+detail.value!==0) {
 							detail.css_id = 'GOOD';
-							hl.addToIssuesList('Есть записи в ПС Анти-Спам', '0');
 						}
 						else
 
@@ -1759,11 +1775,6 @@ class Analysis {	// Analysis class
 }
 
 //*** DECLARE BLOCK ***
-const CURRENT_VERSIONS = new Map(
-	[
-		['wordpress','wordpress-51514']
-	]
-)
 
 let EXTRACTED_HTML;
 
