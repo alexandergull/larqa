@@ -60,6 +60,24 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	}
 
+	async ipinfoApiCall() {
+
+		try {
+
+			const request = await fetch(`https://ipinfo.io/${ct.getDetailValueByName('sender_ip')}/json?token=93445218020efd`)
+			const json = await request.json()
+
+			let msg = JSON.stringify(json)
+
+			this.addTag('subnets_table_tbody','beforeend',`<tr><td class="subnet_table_td--by_what">IPINFO</td><td colspan="3" id="ipinfo-tr">${msg}</td></tr>`);
+
+		} catch (e) {
+
+			alert('STACK ' + e.stack);
+
+		}
+	}
+
 	callWindow() {	//Main window call based on "prefilled.html"
 
 		hl.initHelperData();
@@ -102,6 +120,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 			hl.recordNewTimer('CheckOptions')
 			hl.startTimer();
+			hl.ipinfoApiCall();
 
 		hl.showIssuesList();
 		hl.showDebugMsgList();
@@ -154,6 +173,8 @@ class Helper {	//Helper class, called to keep misc functionality.
 		bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', DEF_CATS_HIDDEN.message_decoded);
 		bindSHButtonToTag('hide-show_subnet-button','subnets_table', DEF_CATS_HIDDEN.subnet);
 		bindSHButtonToTag('hide-show_debug-button','debug-hider', DEF_CATS_HIDDEN.debug);
+
+
 
 
 		}
@@ -389,6 +410,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		return layout_window.document.getElementById(tag_id).innerHTML+=html_code;
 
 	}
+
 }
 
 class Status {
