@@ -29,7 +29,6 @@
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LARQA/prefilled.html" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/prefilled.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,13 +129,6 @@
       <workItem from="1604134536468" duration="25593000" />
       <workItem from="1604213951006" duration="27407000" />
     </task>
-    <task id="LOCAL-00003" summary="removed OLD folder">
-      <created>1604140834694</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1604140834694</updated>
-    </task>
     <task id="LOCAL-00004" summary="- перенёс конструктор блоков HTML в класс Ct_request&#10;- рефакторинг некоторых названий и переменных&#10;- избавился от setdata.js и layout .js">
       <created>1604172362109</created>
       <option name="number" value="00004" />
@@ -183,7 +175,7 @@
       <workItem from="1610963158787" duration="10903000" />
       <workItem from="1611049671519" duration="24121000" />
       <workItem from="1611742160402" duration="3524000" />
-      <workItem from="1612263399141" duration="32800000" />
+      <workItem from="1612263399141" duration="36560000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -493,7 +485,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612351741484</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах&#10;- Правки по обратной связи&#10;&#10;Новое: &#10;- протащил API запрос к ipinfo.io в таблице subnets">
+      <created>1612375302768</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1612375302768</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -527,7 +526,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Новое:&#10;- причесал код&#10;- избавился от класса ID&#10;- вывел конец requaest id в имя окна larqa" />
     <MESSAGE value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- унёс разбор фильтров в отдельный метод clearFiltersString();&#10;Правки:&#10;- канонизировал class Status" />
     <MESSAGE value="- alexthegull  20.01.2021 -&#10;Правки:&#10;- канонизировал все классы" />
     <MESSAGE value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- добавил метод helper.hardDebug для жёсткого дебага HTML кода" />
@@ -552,7 +550,8 @@
     <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- правки тудулистов, по мелочи ещё поправил дебаг" />
     <MESSAGE value="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах" />
     <MESSAGE value="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах&#10;- Правки по обратной связи" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах&#10;- Правки по обратной связи" />
+    <MESSAGE value="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах&#10;- Правки по обратной связи&#10;&#10;Новое: &#10;- протащил API запрос к ipinfo.io в таблице subnets" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах&#10;- Правки по обратной связи&#10;&#10;Новое: &#10;- протащил API запрос к ipinfo.io в таблице subnets" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">
@@ -586,11 +585,11 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="746" y="298" width="540" height="524" key="StructurePopup/0.0.2048.1112@0.0.2048.1112" timestamp="1612245806611" />
-    <state x="481" y="196" key="Vcs.Push.Dialog.v2" timestamp="1612351744157">
+    <state x="481" y="196" key="Vcs.Push.Dialog.v2" timestamp="1612375304141">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1611743394169" />
-    <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1612351744157" />
+    <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1612375304141" />
     <state x="771" y="440" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611832180606">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>

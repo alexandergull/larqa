@@ -1,4 +1,3 @@
-//todo добавить проверку критических опций в issuesList
 //todo отчёт в буфер обмена
 //todo нужен класс фильтров
 
@@ -8,7 +7,7 @@ const FILTERS_SORT_DESC = true;
 const TIMERS_ENABLED = false;
 const DEF_CATS_HIDDEN = {
 	"headers":true,
-	"message":false,
+	"message":true,
 	"message_decoded":true,
 	"subnet":false,
 	"debug":true,
@@ -18,6 +17,7 @@ const CURRENT_VERSIONS = new Map(
 		['wordpress','wordpress-51524']
 	]
 )
+const CAPD_SIGNATURES = ['general_postdata_test','anynewsignature'];
 //*** OPTIONS END ***
 
 class Helper {	//Helper class, called to keep misc functionality.
@@ -1147,12 +1147,9 @@ class CT {	// Main class CT
 	drawOptionsBlock() {	//Draws details block in layout_window
 
 		if (this.options !== 'INVISIBLE' && this.options) {
-
 			//Nulls string counter
 			window.pub_strcnt = 0;
-
 			hl.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
-
 			for (let i = 0; i < this.options.length; i++) {
 
 				if (pub_strcnt <= i) {
@@ -1169,10 +1166,7 @@ class CT {	// Main class CT
 
 		} else {
 
-			hl.addTag('options_table', 'beforebegin', (
-				' <div class="report_block">Вывод опций не поддерживается в этом плагине</div>'
-			));
-
+			hl.addTag('options_table', 'beforebegin', (' <div class="report_block">Вывод опций не поддерживается в этом плагине</div>'));
 			layout_window.document.getElementById('options_table').hidden = true;
 
 		}
@@ -1249,11 +1243,10 @@ class CT {	// Main class CT
 	}
 
 	drawHeadersTable() {
+
 		let tag_id = 'headers_table_tr-header';
 
 		try {
-
-
 
 			for (let i = 0; i !== this.headers.length; i++) {
 
@@ -1269,15 +1262,14 @@ class CT {	// Main class CT
 				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-attention-' + i + '">' + this.headers[i].is_attention + '</td>');
 
 			}
-
 		} catch (e) {
 			hl.debugMessage('drawHeadersTable() fail: '+e.stack);
 			hl.debugMessage('drawHeadersTable() fail: '+tag_id);
 		}
+
 	}
 
 	drawMessageTextareas() {
-
 
 		layout_window.document.getElementById('message_origin-textarea').innerText = this.getDetailValueByName('message');
 		layout_window.document.getElementById('message_decoded-textarea').innerText = this.getDetailValueByName('message_decoded');
@@ -1310,9 +1302,6 @@ class CT {	// Main class CT
 				'</td>');
 
 
-
-
-
 			hl.addTag('subnet_table_tr-name--bytype', 'afterend',
 				'<tr id="subnet_table_tr-name--byid"></tr>');
 
@@ -1335,8 +1324,6 @@ class CT {	// Main class CT
 				'</td>');
 
 
-
-
 			hl.addTag('subnet_table_tr-name--byid', 'afterend',
 				'<tr id="subnet_table_tr-name--bymask"></tr>');
 
@@ -1357,9 +1344,6 @@ class CT {	// Main class CT
 				'<td class="subnet_table_td--misc" id="subnet_table_th-name-bymask--misc">'+
 				'MISC'+
 				'</td>');
-
-
-
 
 		} catch (e) {
 			hl.debugMessage('drawMessageTextareas() fail: '+e.stack);
@@ -1403,7 +1387,6 @@ class CT {	// Main class CT
 				}
 			}
 		}
-
 	}
 
 }
@@ -1424,6 +1407,10 @@ class Option {	// Options class
 		this.value = `<a style="color:red">${this.value}</a>`;
 		this.name = `<a style="color:red">${this.name}</a>`;
 
+	}
+
+	setCAPD(){
+		hl.addToIssuesList(`У клиента включена проверка всех постданных: ${this.name}:${this.value}`,`10`);
 	}
 
 }
@@ -1447,52 +1434,51 @@ class Analysis {	// Analysis class
 			drupal: '',
 			joomla: '',
 		}
-
 		//JSON handling
 		this.options_default.wordpress = hl.getOptionsFromJSON('{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"20","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
 
 	}
 
-	compareCtOptionsWithDefaults(def_options_agent) {	//Compares request options with defaults by agent [def_options_agent:str]
+	compareCtOptionsWithDefaults(default_options) {	//Compares request options with defaults by agent [default_options:str]
 
 		this.options_changes_counter = 0;
-
 		try {
+			// Collects options changed
+			for (let i = 0; i !== default_options.length; i++) {
 
-		// Collects options changed
-		for (let i = 0; i !== def_options_agent.length; i++) {
+				const def_value = hl.trimAndLow(default_options[i].value);
 
-			const def_value = hl.trimAndLow(def_options_agent[i].value);
+				for (let j = 0; j<= ct.options.length -1; j++) {
 
-			for (let j = 0; j<= ct.options.length -1; j++) {
+					let ct_option = ct.options[j]
+					const req_value = hl.trimAndLow(ct_option.value);
 
-				const req_value = hl.trimAndLow(ct.options[j].value);
+					if ( (default_options[i].name === ct_option.name) && ( def_value !== req_value ) ) {
 
-				if ( (def_options_agent[i].name === ct.options[j].name) && ( def_value !== req_value )) {
+						this.options_changes_counter++;
+						hl.addToChangedOptionsList(ct_option.name);
+						ct_option.paintThis();
 
-					this.options_changes_counter++;
-					hl.addToChangedOptionsList(ct.options[j].name);
-					ct.options[j].paintThis();
+					}
 
+					if ( CAPD_SIGNATURES.includes(ct_option.name) ) {
+						ct_option.setCAPD();
+					}
 				}
 			}
-		}
-
 		} catch (e) {
 			hl.debugMessage(e.stack);
 		}
 	}
 
 	checkOptions() {	// Calls options checking compareCtOptionsWithDefaults if the agent is supported
-
 		//todo Дублирование опций обойти https://cleantalk.org/noc/requests?request_id=460ecc492b54f98b5b5bbf26a3629848
-
 		if (ct.status.agent.includes('wordpress')) {
 
 			this.compareCtOptionsWithDefaults(this.options_default.wordpress);
 
 		}
-		// The place for other agents if released
+		// The place for other agents if released (switch)
 	}
 
 	checkDetails() {	//Checks details, main analysis logic implementation
@@ -1500,9 +1486,7 @@ class Analysis {	// Analysis class
 		if (ct.details) {
 
 			for (let i = 0; i <= ct.details.length - 1; i++) {
-
 				let detail = ct.details[i];
-
 				switch (detail.name) {
 
 					//SHORTCACHES
@@ -1514,7 +1498,6 @@ class Analysis {	// Analysis class
 							hl.addToIssuesList('EMAIL в шорткэше', '0');
 
 						} else detail.value = 'INVISIBLE';
-
 					}
 					break;
 
@@ -1526,7 +1509,6 @@ class Analysis {	// Analysis class
 							hl.addToIssuesList('IP в шорткэше', '0');
 
 						} else detail.value = 'INVISIBLE';
-
 					}
 					break;
 
@@ -1548,8 +1530,6 @@ class Analysis {	// Analysis class
 							detail.css_id = 'BAD';
 
 						} else detail.css_id = 'GOOD';
-
-
 					}
 					break;
 
@@ -1557,16 +1537,24 @@ class Analysis {	// Analysis class
 					case 'js_status': {
 
 						if (Number(detail.value) === -1) {
+
 							detail.css_id = 'BAD';
 							hl.addToIssuesList('JS отключен в браузере', '3');
+
 						} else if (Number(detail.value) === 1) {
+
 							detail.css_id = 'GOOD';
+
 						} else if (Number(detail.value) === 0) {
+
 							detail.css_id = 'BAD'
 							hl.addToIssuesList('Тест JS провален', '3');
+
 						} else {
+
 							detail.css_id = 'INCORRECT';
 							hl.addToIssuesList('Не смогли определить JS', '10');
+
 						}
 					}
 					break;
@@ -1589,7 +1577,6 @@ class Analysis {	// Analysis class
 							detail.css_id = 'BAD';
 
 						} else detail.css_id = 'GOOD';
-
 					}
 					break;
 
@@ -1607,7 +1594,6 @@ class Analysis {	// Analysis class
 							hl.addToIssuesList('Поисковик в REFERRER', '10');
 
 						} else detail.css_id = 'GOOD';
-
 					}
 					break;
 
@@ -1625,7 +1611,6 @@ class Analysis {	// Analysis class
 							hl.addToIssuesList('Поисковик в PRE-REFERRER', '10');
 
 						} else detail.css_id = 'GOOD';
-
 					}
 					break;
 
@@ -1633,25 +1618,39 @@ class Analysis {	// Analysis class
 					case 'submit_time': {
 
 						if (detail.value === undefined || detail.value === '') {
+
 							detail.css_id = 'INCORRECT';
 							hl.addToIssuesList('Не смогли определить SUBMIT_TIME.', '10');
+
 						} else if (Number(detail.value) === 0) {
+
 							detail.css_id = 'BAD';
 							hl.addToIssuesList('SUBMIT_TIME = 0. Возможен GREYLISTING', '5');
+
 						} else if (Number(detail.value) === 1) {
+
 							detail.css_id = 'INCORRECT'
 							hl.addToIssuesList('SUBMIT_TIME = 1, так быть не должно. Делай тест.', '10');
+
 						} else if (1 <= Number(detail.value) && Number(detail.value <= 5)) {
+
 							detail.css_id = 'BAD'
 							hl.addToIssuesList('1 <= SUBMIT_TIME < 5, слишком низкий.', '3');
+
 						} else if (500 <= Number(detail.value) && Number(detail.value) <= 3000) {
+
 							detail.css_id = 'BAD'
 							hl.addToIssuesList('3000 > SUBMIT_TIME > 500, многовато.', '3');
+
 						} else if (Number(detail.value) > 3000) {
+
 							detail.css_id = 'BAD'
 							hl.addToIssuesList('SUBMIT_TIME > 3000, есть проблемы.', '3');
+
 						} else {
+
 							detail.css_id = 'GOOD';
+
 						}
 
 					}
