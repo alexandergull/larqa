@@ -75,8 +75,6 @@ class Helper {	//Helper class, called to keep misc functionality.
 		ct.analysis.initOptionsDefaults();
 		ct.initHeadersArray();
 
-		hl.debugMessage(ct.details);
-
 			hl.recordNewTimer('Init total')
 			hl.startTimer();
 
@@ -360,13 +358,9 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 			this.changed_options_list = '';
 
-		} else {
+		} else if (this.changed_options_list === 'INVISIBLE'){
 
-			hl.addTag('options_table',
-				'beforebegin',
-				'<div class="report_block"><b>Изменений в опциях не обнаружено ' +
-				'или отслеживание опций пока не поддерживается для агента ' + ct.status.agent + '.</b>'
-			);
+			layout_window.document.getElementById('options_table').hidden = true;
 
 		}
 
@@ -895,13 +889,21 @@ class CT {	// Main class CT
 
 	initOptionsArray() {	// Init JSON of request options using hl.getOptionsFromJSON and this.getDetailValueByName
 
-		if (this.getDetailValueByName('ct_options') === 'INVISIBLE') {
+		if (
 
+			['php-api','unknown'].includes(ct.getDetailValueByName('ct_agent'))
+			||
+			this.getDetailValueByName('ct_options') === 'INVISIBLE'
+			||
+			this.getDetailValueByName('ct_options') === ''
+		) {
+
+			hl.debugMessage('initOptionsArray:UNSUPPORTED OPTIONS AGENT');
 			this.options = 'INVISIBLE';
 
 		} else {
 
-			this.options = hl.getOptionsFromJSON(this.getDetailValueByName("ct_options"));
+			this.options = hl.getOptionsFromJSON(this.getDetailValueByName('ct_options'));
 
 		}
 
@@ -1105,7 +1107,7 @@ class CT {	// Main class CT
 
 	drawOptionsBlock() {	//Draws details block in layout_window
 
-		if (this.options !== 'INVISIBLE') {
+		if (this.options !== 'INVISIBLE' && this.options) {
 
 			//Nulls string counter
 			window.pub_strcnt = 0;
@@ -1125,11 +1127,14 @@ class CT {	// Main class CT
 
 				}
 			}
+
 		} else {
 
 			hl.addTag('options_table', 'beforebegin', (
 				' <div class="report_block">Вывод опций не поддерживается в этом плагине</div>'
 			));
+
+			layout_window.document.getElementById('options_table').hidden = true;
 
 		}
 

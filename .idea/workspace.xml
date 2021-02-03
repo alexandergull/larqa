@@ -27,7 +27,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Cadence.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/prefilled.html" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/prefilled.html" afterDir="false" />
@@ -198,7 +197,7 @@
       <workItem from="1610963158787" duration="10903000" />
       <workItem from="1611049671519" duration="24121000" />
       <workItem from="1611742160402" duration="3524000" />
-      <workItem from="1612263399141" duration="13641000" />
+      <workItem from="1612263399141" duration="19395000" />
     </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
@@ -487,7 +486,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612293224060</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- правки тудулистов, по мелочи ещё поправил дебаг">
+      <created>1612294719733</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1612294719733</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -521,7 +527,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Новое:&#10;- убрал все неклассовые методы в класс Helper&#10;- рефакторинг кода, привёл все методы к каноническому виду&#10;- сделал issueslist как в debugMessages - новой строкой в таблицу status" />
     <MESSAGE value="Новое:&#10;- вывел message и username в блок details" />
     <MESSAGE value="Новое:&#10;- вывожу изменения опций и параметров в соответствующих блоках" />
     <MESSAGE value="Новое:&#10;- причесал код&#10;- избавился от класса ID&#10;- вывел конец requaest id в имя окна larqa" />
@@ -546,7 +551,8 @@
     <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Новое:&#10;- добил логику катов, добавил опцию DEF_CATS_HIDDEN скрытые по умолчанию каты тут&#10;- убрал поля messages и all_headers из details&#10;- начал делать логику INVISIBLE" />
     <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- опять с фильтрами ерунда была, привязал жёстко отсутсвие фильтров к 0 баллов&#10;&#10;Новое:&#10;- убрал типы сетей в отдельный кат" />
     <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- переделал проверку опций в предварительную&#10;&#10;Новое:&#10;- запилил дебаг в кат textarea" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- переделал проверку опций в предварительную&#10;&#10;Новое:&#10;- запилил дебаг в кат textarea" />
+    <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- правки тудулистов, по мелочи ещё поправил дебаг" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- правки тудулистов, по мелочи ещё поправил дебаг" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">
@@ -580,11 +586,11 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="746" y="298" width="540" height="524" key="StructurePopup/0.0.2048.1112@0.0.2048.1112" timestamp="1612245806611" />
-    <state x="481" y="196" key="Vcs.Push.Dialog.v2" timestamp="1612268855441">
+    <state x="481" y="196" key="Vcs.Push.Dialog.v2" timestamp="1612294726398">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1611743394169" />
-    <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1612268855441" />
+    <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1612294726398" />
     <state x="771" y="440" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611832180606">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
