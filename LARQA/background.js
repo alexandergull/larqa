@@ -64,12 +64,16 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		try {
 
-			const request = await fetch(`https://ipinfo.io/${ct.getDetailValueByName('sender_ip')}/json?token=93445218020efd`)
-			const json = await request.json()
+			if (ct.getDetailValueByName('sender_ip') !== '') {
 
-			let msg = JSON.stringify(json)
+				const request = await fetch(`https://ipinfo.io/${ct.getDetailValueByName('sender_ip')}/json?token=93445218020efd`)
+				const json = await request.json()
 
-			this.addTag('subnets_table_tbody','beforeend',`<tr><td class="subnet_table_td--by_what">IPINFO</td><td colspan="3" id="ipinfo-tr">${msg}</td></tr>`);
+				let msg = JSON.stringify(json)
+
+				this.addTag('subnets_table_tbody', 'beforeend', `<tr><td class="subnet_table_td--by_what">IPINFO</td><td colspan="3" id="ipinfo-tr">${msg}</td></tr>`);
+
+			}
 
 		} catch (e) {
 
@@ -116,8 +120,6 @@ class Helper {	//Helper class, called to keep misc functionality.
 			hl.recordNewTimer('Drawing')
 			hl.startTimer();
 
-
-
 			hl.recordNewTimer('CheckOptions')
 			hl.startTimer();
 			hl.ipinfoApiCall();
@@ -132,9 +134,11 @@ class Helper {	//Helper class, called to keep misc functionality.
 					hl.addTag('body','afterbegin',`<p style="font-size: 8px">exec time [${hl.timers[key]} ms]</p>`);
 			}
 
+		ct.painter.bindButtons();
+
 		layout_window.focus();
 
-		function bindSHButtonToTag (button_id,tag_id,is_hidden){
+		/*function bindSHButtonToTag (button_id,tag_id,is_hidden){
 
 			try {
 
@@ -172,7 +176,9 @@ class Helper {	//Helper class, called to keep misc functionality.
 		bindSHButtonToTag('hide-show_message_decoded-button','message_decoded-hider', DEF_CATS_HIDDEN.message);
 		bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', DEF_CATS_HIDDEN.message_decoded);
 		bindSHButtonToTag('hide-show_subnet-button','subnets_table', DEF_CATS_HIDDEN.subnet);
-		bindSHButtonToTag('hide-show_debug-button','debug-hider', DEF_CATS_HIDDEN.debug);
+		bindSHButtonToTag('hide-show_debug-button','debug-hider', DEF_CATS_HIDDEN.debug);*/
+
+
 
 
 
@@ -408,6 +414,54 @@ class Helper {	//Helper class, called to keep misc functionality.
 	addInnerHtmlToTag(tag_id,html_code){ //Shortens code for tag insert
 
 		return layout_window.document.getElementById(tag_id).innerHTML+=html_code;
+
+	}
+
+}
+
+class Painter{
+
+	bindSHButtonToTag (button_id,tag_id,is_hidden){
+
+		try {
+
+			let button = layout_window.document.getElementById(button_id);
+
+			layout_window.document.getElementById(tag_id).hidden = is_hidden;
+
+			button.innerText = (!is_hidden) ? '[-] Скрыть:' : '[+] Показать:';
+
+			button.onclick = function () {
+
+				let cat_opened = (button.innerText === '[-] Скрыть:');
+
+				layout_window.document.getElementById(tag_id).hidden = !layout_window.document.getElementById(tag_id).hidden;
+
+				if (cat_opened) {
+
+					button.innerText = '[+] Показать:';
+
+				} else {
+
+					button.innerText = '[-] Скрыть:';
+					let scroll_to = layout_window.document.getElementById(tag_id).getBoundingClientRect().top;
+					layout_window.document.getElementById(tag_id).parentElement.parentElement.parentElement.scrollTo(scroll_to, scroll_to);
+
+				}
+			}
+
+		} catch (e) {
+			hl.debugMessage(e.stack);
+		}
+	}
+
+	bindButtons (){
+
+		this.bindSHButtonToTag('hide-show_headers-button','headers_table', DEF_CATS_HIDDEN.headers);
+		this.bindSHButtonToTag('hide-show_message_decoded-button','message_decoded-hider', DEF_CATS_HIDDEN.message);
+		this.bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', DEF_CATS_HIDDEN.message_decoded);
+		this.bindSHButtonToTag('hide-show_subnet-button','subnets_table', DEF_CATS_HIDDEN.subnet);
+		this.bindSHButtonToTag('hide-show_debug-button','debug-hider', DEF_CATS_HIDDEN.debug);
 
 	}
 
@@ -819,7 +873,8 @@ class CT {	// Main class CT
 		options,
 		analysis,
 		details_length,
-		headers
+		headers,
+		painter
 
 	) {
 		this.status = status;
@@ -828,6 +883,7 @@ class CT {	// Main class CT
 		this.analysis = analysis;
 		this.details_length = details_length;
 		this.headers = headers;
+		this.painter = painter;
 	}
 
 	initDetailsSearchData() {	// Init start search data, returns [][]
@@ -1802,6 +1858,7 @@ let EXTRACTED_HTML;
 let ct = new CT();
 ct.analysis = new Analysis();
 ct.status = new Status();
+ct.painter = new Painter();
 hl = new Helper();
 
 
