@@ -84,104 +84,55 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	callWindow() {	//Main window call based on "prefilled.html"
 
-		hl.initHelperData();
-		hl.startTimer();
+		this.initHelperData();
 
-		window.layout_window = window.open(
-			'prefilled.html',
-			'_blank');
-		layout_window.onload = function() {	// Processes starts here.
+			this.startTimer();
 
-		window.pub_strcnt = 0;
+		window.interface_window = window.open('prefilled.html', '_blank');
+		interface_window.onload = function() {	// Processes starts here.
 
-		ct.analysis.initOptionsDefaults();
-		ct.initDetailsArray();
-		ct.initOptionsArray();
-		ct.status.initStatus();
-		ct.analysis.initOptionsDefaults();
-		ct.initHeadersArray();
+			ct.initCTData();
 
-			hl.recordNewTimer('Init total')
-			hl.startTimer();
+			ct.analysis.initOptionsDefaults();
+			ct.status.initStatus();
 
-		ct.analysis.checkDetails();
-		ct.analysis.checkOptions();
+				hl.recordNewTimer('Init total')
+				hl.startTimer();
 
-			hl.recordNewTimer('CheckDetails')
-			hl.startTimer();
+			ct.analysis.checkDetails();
 
-		ct.drawDetailsBlock();
-		ct.drawOptionsBlock();
-		ct.drawStatusBlock();
-		ct.drawHeadersTable();
-		ct.drawMessageTextareas();
-		ct.drawSubnetsTable();
+				hl.recordNewTimer('CheckDetails')
+				hl.startTimer();
 
-			hl.recordNewTimer('Drawing')
-			hl.startTimer();
+			ct.analysis.checkOptions();
 
-			hl.recordNewTimer('CheckOptions')
-			hl.startTimer();
+				hl.recordNewTimer('CheckOptions')
+				hl.startTimer();
+
+			ct.drawInterface();
+
+				hl.recordNewTimer('Drawing')
+				hl.startTimer();
+
 			hl.ipinfoApiCall();
 
-		hl.showIssuesList();
-		hl.showDebugMsgList();
-		hl.showChangedOptionsList();
+				hl.recordNewTimer('IpInfo call')
+				hl.startTimer();
 
-			hl.recordNewTimer('Reports')
-			if (TIMERS_ENABLED)
-				for (let key in hl.timers){
-					hl.addTag('body','afterbegin',`<p style="font-size: 8px">exec time [${hl.timers[key]} ms]</p>`);
-			}
+			hl.showIssuesList();
+			hl.showDebugMsgList();
+			hl.showChangedOptionsList();
 
-		ct.painter.bindButtons();
-
-		layout_window.focus();
-
-		/*function bindSHButtonToTag (button_id,tag_id,is_hidden){
-
-			try {
-
-				let button = layout_window.document.getElementById(button_id);
-
-				layout_window.document.getElementById(tag_id).hidden = is_hidden;
-
-				button.innerText = (!is_hidden) ? '[-] Скрыть:' : '[+] Показать:';
-
-					button.onclick = function () {
-
-						let cat_opened = (button.innerText === '[-] Скрыть:');
-
-						layout_window.document.getElementById(tag_id).hidden = !layout_window.document.getElementById(tag_id).hidden;
-
-						if (cat_opened) {
-
-							button.innerText = '[+] Показать:';
-
-						} else {
-
-							button.innerText = '[-] Скрыть:';
-							let scroll_to = layout_window.document.getElementById(tag_id).getBoundingClientRect().top;
-							layout_window.document.getElementById(tag_id).parentElement.parentElement.parentElement.scrollTo(scroll_to, scroll_to);
-
-						}
-					}
-
-				} catch (e) {
-					hl.debugMessage(e.stack);
-			}
-		}
-
-		bindSHButtonToTag('hide-show_headers-button','headers_table', DEF_CATS_HIDDEN.headers);
-		bindSHButtonToTag('hide-show_message_decoded-button','message_decoded-hider', DEF_CATS_HIDDEN.message);
-		bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', DEF_CATS_HIDDEN.message_decoded);
-		bindSHButtonToTag('hide-show_subnet-button','subnets_table', DEF_CATS_HIDDEN.subnet);
-		bindSHButtonToTag('hide-show_debug-button','debug-hider', DEF_CATS_HIDDEN.debug);*/
+				hl.recordNewTimer('Reports')
+				if (TIMERS_ENABLED)
+					for (let key in hl.timers){
+						hl.addTag('body','afterbegin',`<p style="font-size: 8px">exec time [${hl.timers[key]} ms]</p>`);
+				}
 
 
+			interface_window.focus();
 
-
-
+			ct.painter.bindButtons();
 
 		}
 
@@ -277,7 +228,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	addTag(position_tag_id, align, html) { // Adds HTML tag [html:str] to target tag [position_tag_id:str] with alignment [align:str]
 
-		layout_window.document.getElementById(position_tag_id).insertAdjacentHTML(align, html);
+		interface_window.document.getElementById(position_tag_id).insertAdjacentHTML(align, html);
 
 	}
 
@@ -399,7 +350,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		} else if (this.changed_options_list === 'INVISIBLE'){
 
-			layout_window.document.getElementById('options_table').hidden = true;
+			interface_window.document.getElementById('options_table').hidden = true;
 
 		}
 
@@ -407,13 +358,13 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	setInnerHtmlOfTag(tag_id,html_code){ //Shortens code for tag set
 
-		return layout_window.document.getElementById(tag_id).innerHTML=html_code;
+		return interface_window.document.getElementById(tag_id).innerHTML=html_code;
 
 	}
 
 	addInnerHtmlToTag(tag_id,html_code){ //Shortens code for tag insert
 
-		return layout_window.document.getElementById(tag_id).innerHTML+=html_code;
+		return interface_window.document.getElementById(tag_id).innerHTML+=html_code;
 
 	}
 
@@ -425,9 +376,9 @@ class Painter{
 
 		try {
 
-			let button = layout_window.document.getElementById(button_id);
+			let button = interface_window.document.getElementById(button_id);
 
-			layout_window.document.getElementById(tag_id).hidden = is_hidden;
+			interface_window.document.getElementById(tag_id).hidden = is_hidden;
 
 			button.innerText = (!is_hidden) ? '[-] Скрыть:' : '[+] Показать:';
 
@@ -435,7 +386,7 @@ class Painter{
 
 				let cat_opened = (button.innerText === '[-] Скрыть:');
 
-				layout_window.document.getElementById(tag_id).hidden = !layout_window.document.getElementById(tag_id).hidden;
+				interface_window.document.getElementById(tag_id).hidden = !interface_window.document.getElementById(tag_id).hidden;
 
 				if (cat_opened) {
 
@@ -444,8 +395,8 @@ class Painter{
 				} else {
 
 					button.innerText = '[-] Скрыть:';
-					let scroll_to = layout_window.document.getElementById(tag_id).getBoundingClientRect().top;
-					layout_window.document.getElementById(tag_id).parentElement.parentElement.parentElement.scrollTo(scroll_to, scroll_to);
+					let scroll_to = interface_window.document.getElementById(tag_id).getBoundingClientRect().top;
+					interface_window.document.getElementById(tag_id).parentElement.parentElement.parentElement.scrollTo(scroll_to, scroll_to);
 
 				}
 			}
@@ -462,6 +413,378 @@ class Painter{
 		this.bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', DEF_CATS_HIDDEN.message_decoded);
 		this.bindSHButtonToTag('hide-show_subnet-button','subnets_table', DEF_CATS_HIDDEN.subnet);
 		this.bindSHButtonToTag('hide-show_debug-button','debug-hider', DEF_CATS_HIDDEN.debug);
+
+	}
+
+	drawOptionsBlock(ct_options) {	//Draws details block in layout_window
+
+		if (ct_options !== 'INVISIBLE' && ct_options) {
+			//Nulls string counter
+			let string_counter = 0;
+			hl.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
+			for (let i = 0; i < ct_options.length; i++) {
+
+				if (string_counter <= i) {
+
+					hl.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_' + string_counter + '"></tr>'));
+					hl.addTag(('options_tier_' + string_counter), 'beforeend', ('<td class="options-name">' + ct_options[string_counter].name + ':</td>'));
+					hl.addTag(('options_tier_' + string_counter), 'beforeend', ('<td class="options-value">' + ct_options[string_counter].value + '</td>'));
+
+					//Finishes a detail tag
+					string_counter++;
+
+				}
+			}
+
+		} else {
+
+			hl.addTag('options_table', 'beforebegin', (' <div class="report_block">Вывод опций не поддерживается в этом плагине</div>'));
+			interface_window.document.getElementById('options_table').hidden = true;
+
+		}
+
+	}
+
+	drawDetailsBlock(ct_details) {	// Draws details block in layout_window
+
+		try {
+
+			let string_counter = 0;
+
+			let array_of_details = [];
+
+			for (let j = 0; j < ct.details_length; j++) {
+
+				array_of_details.push(parseInt(ct_details[j].block_id));
+
+			}
+
+			//Defines number of blocks
+			const number_of_blocks = Math.max.apply(null, array_of_details) + 1;
+
+			//Details block HTML handling
+			for (let block_id = 0; block_id !== number_of_blocks; block_id++) {
+
+				for (let i = 0; i < ct.details_length; i++) {
+
+					// Draw a new tag if string counter for a block <= number of details
+					if (string_counter <= i) {
+
+						let detail = ct_details[string_counter];
+
+						if (parseInt(detail.block_id) === block_id) {
+
+							// Skip ct_options, this detail is used in options block and should not be shown in details tab.
+							if (detail.name !== 'ct_options') {
+
+								if (detail.value !== 'INVISIBLE' && detail.css_id !== 'INVISIBLE') {
+
+									hl.addTag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + string_counter + '"></tr>'));
+
+									// Special templates for sender IP and sender email to show tools links
+									let href = '';
+									let ip_additional_hrefs = '';
+									let email_additional_hrefs = '';
+
+									// Links to CleanTalk blacklists
+									if (detail.name === 'sender_ip' || ct_details[string_counter].name === 'sender_email') {
+										href = 'href=https://cleantalk.org/blacklists/' + ct_details[string_counter].value + ' ';
+									}
+
+									// Link to all requests contain IP and IPINFO tool
+									if (detail.name === 'sender_ip') {
+										ip_additional_hrefs = '<a href="https://cleantalk.org/noc/requests?sender_ip=' +
+											detail.value +
+											'">  [Все запросы с этим IP]  </a><a href="https://ipinfo.io/' +
+											detail.value +
+											'">  [IPINFO]</a></td>'
+									}
+
+									// Link to all requests contains this EMAIL and CleanTalk checker tool
+									if (detail.name === 'sender_email') {
+										email_additional_hrefs = '<a href="https://cleantalk.org/noc/requests?sender_email=' +
+											detail.value +
+											'">  [Все запросы с этим EMAIL]  </a><a href="https://cleantalk.org/email-checker/' +
+											detail.value +
+											'">  [CHECKER]</a></td>'
+									}
+
+									// Color detail name and value in accordance with css_id of ct.details containment
+									switch (detail.css_id) {
+
+										//BLACK for defaults
+										case 'DEFAULT': {
+											hl.addTag(('details_tier_' + string_counter),
+												'beforeend',
+												('<td class="details-name">'
+													+ detail.name
+													+ ':</td>'));
+											hl.addTag(
+												('details_tier_' + string_counter),
+												'beforeend',
+												('<td class="details-value">'
+													+ detail.value
+													+ '</a>' + ip_additional_hrefs
+													+ email_additional_hrefs
+													+ '</td>'));
+										}
+											break;
+
+										//CRIMSON for bad values, bad values needs to inspect
+										case 'BAD': {
+
+											hl.addTag(('details_tier_' + string_counter),
+												'beforeend',
+												('<td class="details-name"><a style="color:#C02000">'
+													+ detail.name + ':</td>'));
+
+											hl.addTag(
+												('details_tier_' + string_counter),
+												'beforeend',
+												('<td class="details-value"><a ' + href + 'style="color:#C02000">' +
+													detail.value
+													+ '</a>' + ip_additional_hrefs
+													+ email_additional_hrefs
+													+ '</td>'));
+
+										}
+											break;
+
+										//GREEN for good values
+										case 'GOOD': {
+
+											hl.addTag(('details_tier_' + string_counter),
+												'beforeend',
+												('<td class="details-name"><a style="color:#009000">'
+													+ detail.name
+													+ ':</a></td>'));
+
+											hl.addTag(
+												('details_tier_' + string_counter),
+												'beforeend',
+												('<td class="details-value"><a '
+													+ href
+													+ 'style="color:#009000">'
+													+ detail.value
+													+ '</a>' + ip_additional_hrefs
+													+ email_additional_hrefs
+													+ '</td>'));
+
+										}
+											break;
+
+										//RED for incorrect values, this should be inspected at CleanTalk side
+										case 'INCORRECT': {
+
+											hl.addTag(('details_tier_' + string_counter),
+												'beforeend',
+												('<td class="details-name"><a style="color:#CC0000">'
+													+ detail.name
+													+ ':</a></td>'));
+
+											hl.addTag(
+												('details_tier_' + string_counter),
+												'beforeend',
+												('<td class="details-value"><a style="color:#CC0000">'
+													+ detail.value
+													+ '</a>' + ip_additional_hrefs
+													+ email_additional_hrefs
+													+ '</td>'));
+
+										}
+									}
+								}
+							}
+							//Finishes a detail tag
+							string_counter++;
+						}
+					}
+				}
+			}
+		} catch (e) {
+			hl.debugMessage(e.stack);
+		}
+	}
+
+	drawStatusBlock(ct_status) {	//Draws details block in layout_window
+
+		try {
+
+			hl.addInnerHtmlToTag('status_table-filter-raw', (
+				'<p>Сайт: <a class="status_table_inner" href="http://' + ct_status.links.to_website + '">' + ct_status.links.to_website + '</a>' +
+				', агент: [' + ct_status.agent +
+				']</p>'
+			));
+
+			hl.addInnerHtmlToTag('status_table-filter-raw', (
+				'<p class="status_table_inner">Фильтры (отсортированы по убыванию): ' + ct_status.filters + '</p>'
+			));
+
+			hl.addInnerHtmlToTag('status_table-filter-raw', (
+				'<p class="status_table_inner">Полезные ссылки: ' +
+				'<a href="' + ct_status.links.to_noc + '">[Запрос в НОК] </a>' +
+				'<a href="' + ct_status.links.to_dashboard + '">[Запрос в ПУ] </a>' +
+				'<a href="' + ct_status.links.to_user_card + '">[Карта пользователя] </a>' +
+				'<a href="' + ct_status.links.to_service_requests + '">[Все запросы сервиса] </a>' +
+				'<a href="' + ct_status.links.to_user_requests + '">[Все запросы пользователя] </a>' +
+				'<a href="' + ct_status.links.to_feedback + '">[Все запросы пользователя c обратной связью] </a>' +
+				'</p>'
+			));
+
+			//
+
+			ct_status.id_value.short = (
+				' ID=..' +
+				ct_status.id_value.full.slice(ct_status.id_value.full.length - 5, ct_status.id_value.full.length));
+
+			hl.setInnerHtmlOfTag('layout_window_title', (
+				ct_status.id_value.short +
+				' [' + ct_status.isAllowed +
+				']'
+			));
+
+			let header_text;
+
+			if (ct_status.isAllowed === 'ALLOWED') {
+
+				header_text = '<a style="color: #009900">';
+				interface_window.document.getElementById('status_block').className = 'is_allowed';
+
+			} else {
+
+				header_text = '<a style="color: #990000">';
+				interface_window.document.getElementById('status_block').className = 'is_denied';
+
+			}
+
+			//Draws if Private lists found and triggered
+			if (ct_status.isAllowed) {
+				header_text += (ct_status.isAllowed === 'ALLOWED') ? 'ALLOWED' : 'DENIED';
+				header_text += (+(ct.getDetailValueByName('allowed_by_pl')) === 1) ? ' BY PRIVATE LIST' : '';
+				header_text += (+(ct.getDetailValueByName('denied_by_pl')) === 1) ? ' BY PRIVATE LIST' : '';
+
+				hl.addInnerHtmlToTag('status_block-header', (
+					'Статус запроса ' +
+					'<a href="' + ct_status.links.to_noc + '">' +
+					ct_status.id_value.short + '</a>' +
+					' ' +
+					'<a class="status_header">: ' + header_text + '</a>' +
+
+					//Draws feedback if so.
+					'<p style = "text-align: right"> ' + ct_status.feedback + '</p>'
+				))
+			} else hl.debugMessage('drawStatus failed: no isAllowed found')
+
+		} catch(e) {
+			hl.debugMessage(e.stack,'drawStatusBlock FAIL:')
+		}
+	}
+
+	drawHeadersTable(ct_headers) {
+
+		try {
+
+			let tag_id = 'headers_table_tr-header';
+
+			for (let i = 0; i !== ct_headers.length; i++) {
+
+				if (i > 0) {
+					i--;
+					tag_id = 'headers_table_tier-' + i;
+					i++;
+				}
+
+				hl.addTag(tag_id, 'afterend', '<tr id="headers_table_tier-' + i + '"></tr>')
+				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-name-' + i + '">' + ct_headers[i].name + '</td>');
+				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-value-' + i + '">' + ct_headers[i].value + '</td>');
+				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-attention-' + i + '">' + ct_headers[i].is_attention + '</td>');
+
+			}
+		} catch (e) {
+			hl.debugMessage(e.stack,'drawHeadersTable FAIL:');
+		}
+
+	}
+
+	drawMessageTextareas() {
+
+		interface_window.document.getElementById('message_origin-textarea').innerText = ct.getDetailValueByName('message');
+		interface_window.document.getElementById('message_decoded-textarea').innerText = ct.getDetailValueByName('message_decoded');
+
+	}
+
+	drawSubnetsTable() {
+
+		try {
+
+			hl.addTag('subnets_table_tr-header', 'afterend',
+				'<tr id="subnet_table_tr-name--bytype"></tr>');
+
+			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
+				'<td class="subnet_table_td--by_what" id="subnet_table_th-name-bytype--by_what">BY_TYPE</td>');
+
+			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
+				'<td class="subnet_table_td--network" id="subnet_table_th-name-bytype--network">'+
+				ct.getDetailValueByName('network_by_type')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
+				'<td class="subnet_table_td--type" id="subnet_table_th-name-bytype--type">'+
+				ct.getDetailValueByName('type_of_network_by_type')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
+				'<td class="subnet_table_td--misc" id="subnet_table_th-name-bytype--misc">'+
+				'MISC'+
+				'</td>');
+
+
+			hl.addTag('subnet_table_tr-name--bytype', 'afterend',
+				'<tr id="subnet_table_tr-name--byid"></tr>');
+
+			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
+				'<td class="subnet_table_td--by_what" id="subnet_table_th-name-byid--by_what">BY_ID</td>');
+
+			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
+				'<td class="subnet_table_td--network" id="subnet_table_th-name-byid--network">'+
+				ct.getDetailValueByName('network_by_id')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
+				'<td class="subnet_table_td--type"id="subnet_table_th-name-byid--type">'+
+				ct.getDetailValueByName('type_of_network_by_id')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
+				'<td class="subnet_table_td--misc" id="subnet_table_th-name-byid--misc">'+
+				'MISC'+
+				'</td>');
+
+
+			hl.addTag('subnet_table_tr-name--byid', 'afterend',
+				'<tr id="subnet_table_tr-name--bymask"></tr>');
+
+			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
+				'<td class="subnet_table_td--by_what" id="subnet_table_th-name-bymask--by_what">BY_MASK</td>');
+
+			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
+				'<td class="subnet_table_td--network" id="subnet_table_th-name-bymask--network">'+
+				ct.getDetailValueByName('network_by_mask')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
+				'<td class="subnet_table_td--type" id="subnet_table_th-name-bymask--type">'+
+				ct.getDetailValueByName('type_of_network_by_mask')+
+				'</td>');
+
+			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
+				'<td class="subnet_table_td--misc" id="subnet_table_th-name-bymask--misc">'+
+				'MISC'+
+				'</td>');
+
+		} catch (e) {
+			hl.debugMessage(e.stack,'drawSubnetsTable FAIL:');
+		}
 
 	}
 
@@ -984,24 +1307,28 @@ class CT {	// Main class CT
 
 	initOptionsArray() {	// Init JSON of request options using hl.getOptionsFromJSON and this.getDetailValueByName
 
-		if (
+		try {
 
-			['php-api','unknown'].includes(ct.getDetailValueByName('ct_agent'))
-			||
-			this.getDetailValueByName('ct_options') === 'INVISIBLE'
-			||
-			this.getDetailValueByName('ct_options') === ''
-		) {
+			if (
 
-			hl.debugMessage('initOptionsArray:UNSUPPORTED OPTIONS AGENT');
-			this.options = 'INVISIBLE';
+				['php-api', 'unknown'].includes(ct.getDetailValueByName('ct_agent'))
+				||
+				this.getDetailValueByName('ct_options') === 'INVISIBLE'
+				||
+				this.getDetailValueByName('ct_options') === ''
+			) {
 
-		} else {
+				hl.debugMessage('initOptionsArray:UNSUPPORTED OPTIONS AGENT');
+				this.options = 'INVISIBLE';
 
-			this.options = hl.getOptionsFromJSON(this.getDetailValueByName('ct_options'));
+			} else {
 
+				this.options = hl.getOptionsFromJSON(this.getDetailValueByName('ct_options'));
+
+			}
+		}catch(e){
+			hl.debugMessage(e.stack,'initOptionsArray FAIL');
 		}
-
 	}
 
 	initHeadersArray() {
@@ -1049,361 +1376,22 @@ class CT {	// Main class CT
 		}
 	}
 
-	drawDetailsBlock() {	// Draws details block in layout_window
+	initCTData(){
 
-		let array_of_details = [];
-
-		for (let j = 0; j < this.details_length; j++) {
-
-			array_of_details.push(parseInt(this.details[j].block_id));
-
-		}
-
-		//Defines number of blocks
-		const number_of_blocks = Math.max.apply(null, array_of_details) + 1;
-
-		//Details block HTML handling
-		for (let block_id = 0; block_id !== number_of_blocks; block_id++) {
-
-			for (let i = 0; i < this.details_length; i++) {
-
-				// Draw a new tag if string counter for a block <= number of details
-				if (pub_strcnt <= i) {
-
-					let detail = this.details[pub_strcnt];
-
-					if (parseInt(detail.block_id) === block_id) {
-
-						// Skip ct_options, this detail is used in options block and should not be shown in details tab.
-						if (detail.name !== 'ct_options') {
-
-							if (detail.value !== 'INVISIBLE' && detail.css_id !== 'INVISIBLE') {
-
-							hl.addTag('details_table-tbody', 'beforeend', ('<tr id="details_tier_' + pub_strcnt + '"></tr>'));
-
-								// Special templates for sender IP and sender email to show tools links
-								let href = '';
-								let ip_additional_hrefs = '';
-								let email_additional_hrefs = '';
-
-								// Links to CleanTalk blacklists
-								if (detail.name === 'sender_ip' || this.details[pub_strcnt].name ==='sender_email') {
-									href = 'href=https://cleantalk.org/blacklists/'+ this.details[pub_strcnt].value + ' ';
-								}
-
-								// Link to all requests contain IP and IPINFO tool
-								if (detail.name === 'sender_ip'){
-									ip_additional_hrefs = '<a href="https://cleantalk.org/noc/requests?sender_ip=' +
-										detail.value +
-										'">  [Все запросы с этим IP]  </a><a href="https://ipinfo.io/' +
-										detail.value +
-										'">  [IPINFO]</a></td>'
-								}
-
-								// Link to all requests contains this EMAIL and CleanTalk checker tool
-								if (detail.name === 'sender_email'){
-									email_additional_hrefs = '<a href="https://cleantalk.org/noc/requests?sender_email=' +
-										detail.value +
-										'">  [Все запросы с этим EMAIL]  </a><a href="https://cleantalk.org/email-checker/' +
-										detail.value +
-										'">  [CHECKER]</a></td>'
-								}
-
-								// Color detail name and value in accordance with css_id of ct.details containment
-								switch (detail.css_id){
-
-									//BLACK for defaults
-									case 'DEFAULT':{
-										hl.addTag(('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-name">'
-												+ detail.name
-												+ ':</td>'));
-										hl.addTag(
-											('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-value">'
-												+ detail.value
-												+ '</a>'+ ip_additional_hrefs
-												+ email_additional_hrefs
-												+ '</td>'));
-									} break;
-
-									//CRIMSON for bad values, bad values needs to inspect
-									case 'BAD':{
-
-										hl.addTag(('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-name"><a style="color:#C02000">'
-												+ detail.name + ':</td>'));
-
-										hl.addTag(
-											('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-value"><a '+href+'style="color:#C02000">' +
-												detail.value
-												+ '</a>'+ ip_additional_hrefs
-												+ email_additional_hrefs
-												+ '</td>'));
-
-									} break;
-
-									//GREEN for good values
-									case 'GOOD':{
-
-										hl.addTag(('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-name"><a style="color:#009000">'
-												+ detail.name
-												+ ':</a></td>'));
-
-										hl.addTag(
-											('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-value"><a '
-												+ href
-												+'style="color:#009000">'
-												+ detail.value
-												+ '</a>'+ ip_additional_hrefs
-												+ email_additional_hrefs
-												+ '</td>'));
-
-									} break;
-
-									//RED for incorrect values, this should be inspected at CleanTalk side
-									case 'INCORRECT':{
-
-										hl.addTag(('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-name"><a style="color:#CC0000">'
-												+ detail.name
-												+ ':</a></td>'));
-
-										hl.addTag(
-											('details_tier_' + pub_strcnt),
-											'beforeend',
-											('<td class="details-value"><a style="color:#CC0000">'
-												+ detail.value
-												+ '</a>'+ ip_additional_hrefs
-												+ email_additional_hrefs
-												+ '</td>'));
-
-									}
-								}
-							}
-						}
-						//Finishes a detail tag
-						pub_strcnt++;
-					}
-				}
-			}
-		}
-	}
-
-	drawOptionsBlock() {	//Draws details block in layout_window
-
-		if (this.options !== 'INVISIBLE' && this.options) {
-			//Nulls string counter
-			window.pub_strcnt = 0;
-			hl.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_block></tr>'));
-			for (let i = 0; i < this.options.length; i++) {
-
-				if (pub_strcnt <= i) {
-
-					hl.addTag('options_table-tbody', 'beforeend', ('<tr id="options_tier_' + pub_strcnt + '"></tr>'));
-					hl.addTag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-name">' + this.options[pub_strcnt].name + ':</td>'));
-					hl.addTag(('options_tier_' + pub_strcnt), 'beforeend', ('<td class="options-value">' + this.options[pub_strcnt].value + '</td>'));
-
-					//Finishes a detail tag
-					pub_strcnt++;
-
-				}
-			}
-
-		} else {
-
-			hl.addTag('options_table', 'beforebegin', (' <div class="report_block">Вывод опций не поддерживается в этом плагине</div>'));
-			layout_window.document.getElementById('options_table').hidden = true;
-
-		}
+		this.initDetailsArray();
+		this.initOptionsArray();
+		this.initHeadersArray();
 
 	}
 
-	drawStatusBlock() {	//Draws details block in layout_window
+	drawInterface(){
 
-		hl.addInnerHtmlToTag('status_table-filter-raw',(
-			'<p>Сайт: <a class="status_table_inner" href="http://' + ct.status.links.to_website + '">' + ct.status.links.to_website + '</a>'+
-			', агент: [' + ct.status.agent +
-			']</p>'
-		));
-
-		hl.addInnerHtmlToTag('status_table-filter-raw',(
-			'<p class="status_table_inner">Фильтры (отсортированы по убыванию): ' + ct.status.filters + '</p>'
-		));
-
-		hl.addInnerHtmlToTag('status_table-filter-raw',(
-			'<p class="status_table_inner">Полезные ссылки: ' +
-			'<a href="' + ct.status.links.to_noc +'">[Запрос в НОК] </a>'+
-			'<a href="' + ct.status.links.to_dashboard +'">[Запрос в ПУ] </a>' +
-			'<a href="' + ct.status.links.to_user_card +'">[Карта пользователя] </a>' +
-			'<a href="' + ct.status.links.to_service_requests +'">[Все запросы сервиса] </a>' +
-			'<a href="' + ct.status.links.to_user_requests +'">[Все запросы пользователя] </a>' +
-			'<a href="' + ct.status.links.to_feedback +'">[Все запросы пользователя c обратной связью] </a>' +
-			'</p>'
-		));
-
-		//
-
-		ct.status.id_value.short = (
-			' ID=..' +
-			ct.status.id_value.full.slice( ct.status.id_value.full.length-5,ct.status.id_value.full.length ) );
-
-		hl.setInnerHtmlOfTag('layout_window_title',(
-			ct.status.id_value.short +
-			' [' + ct.status.isAllowed +
-			']'
-		));
-
-		let header_text;
-
-		if (this.status.isAllowed === 'ALLOWED') {
-
-			header_text ='<a style="color: #009900">';
-			layout_window.document.getElementById('status_block').className = 'is_allowed';
-
-		} else {
-
-			header_text ='<a style="color: #990000">';
-			layout_window.document.getElementById('status_block').className = 'is_denied';
-
-		}
-
-		//Draws if Private lists found and triggered
-		if (this.status.isAllowed) {
-			header_text += (this.status.isAllowed === 'ALLOWED') ? 'ALLOWED' : 'DENIED';
-			header_text += (+(this.getDetailValueByName('allowed_by_pl')) === 1) ? ' BY PRIVATE LIST' : '';
-			header_text += (+(this.getDetailValueByName('denied_by_pl')) === 1) ? ' BY PRIVATE LIST' : '';
-
-			hl.addInnerHtmlToTag('status_block-header', (
-				'Статус запроса ' +
-				'<a href="' + this.status.links.to_noc + '">' +
-				ct.status.id_value.short + '</a>' +
-				' ' +
-				'<a class="status_header">: ' + header_text + '</a>' +
-
-				//Draws feedback if so.
-				'<p style = "text-align: right"> ' + ct.status.feedback + '</p>'
-			))
-		} else hl.debugMessage('drawStatus failed: no isAllowed found')
-
-	}
-
-	drawHeadersTable() {
-
-		let tag_id = 'headers_table_tr-header';
-
-		try {
-
-			for (let i = 0; i !== this.headers.length; i++) {
-
-				if (i > 0) {
-					i--;
-					tag_id = 'headers_table_tier-' + i;
-					i++;
-				}
-
-				hl.addTag(tag_id, 'afterend', '<tr id="headers_table_tier-' + i + '"></tr>')
-				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-name-' + i + '">' + this.headers[i].name + '</td>');
-				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-value-' + i + '">' + this.headers[i].value + '</td>');
-				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-attention-' + i + '">' + this.headers[i].is_attention + '</td>');
-
-			}
-		} catch (e) {
-			hl.debugMessage('drawHeadersTable() fail: '+e.stack);
-			hl.debugMessage('drawHeadersTable() fail: '+tag_id);
-		}
-
-	}
-
-	drawMessageTextareas() {
-
-		layout_window.document.getElementById('message_origin-textarea').innerText = this.getDetailValueByName('message');
-		layout_window.document.getElementById('message_decoded-textarea').innerText = this.getDetailValueByName('message_decoded');
-
-	}
-
-	drawSubnetsTable() {
-
-		try {
-
-			hl.addTag('subnets_table_tr-header', 'afterend',
-				'<tr id="subnet_table_tr-name--bytype"></tr>');
-
-			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
-				'<td class="subnet_table_td--by_what" id="subnet_table_th-name-bytype--by_what">BY_TYPE</td>');
-
-			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
-				'<td class="subnet_table_td--network" id="subnet_table_th-name-bytype--network">'+
-				this.getDetailValueByName('network_by_type')+
-				'</td>');
-
-			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
-				'<td class="subnet_table_td--type" id="subnet_table_th-name-bytype--type">'+
-				this.getDetailValueByName('type_of_network_by_type')+
-				'</td>');
-
-			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
-				'<td class="subnet_table_td--misc" id="subnet_table_th-name-bytype--misc">'+
-				'MISC'+
-				'</td>');
-
-
-			hl.addTag('subnet_table_tr-name--bytype', 'afterend',
-				'<tr id="subnet_table_tr-name--byid"></tr>');
-
-			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
-				'<td class="subnet_table_td--by_what" id="subnet_table_th-name-byid--by_what">BY_ID</td>');
-
-			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
-				'<td class="subnet_table_td--network" id="subnet_table_th-name-byid--network">'+
-				this.getDetailValueByName('network_by_id')+
-				'</td>');
-
-			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
-				'<td class="subnet_table_td--type"id="subnet_table_th-name-byid--type">'+
-				this.getDetailValueByName('type_of_network_by_id')+
-				'</td>');
-
-			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
-				'<td class="subnet_table_td--misc" id="subnet_table_th-name-byid--misc">'+
-				'MISC'+
-				'</td>');
-
-
-			hl.addTag('subnet_table_tr-name--byid', 'afterend',
-				'<tr id="subnet_table_tr-name--bymask"></tr>');
-
-			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
-				'<td class="subnet_table_td--by_what" id="subnet_table_th-name-bymask--by_what">BY_MASK</td>');
-
-			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
-				'<td class="subnet_table_td--network" id="subnet_table_th-name-bymask--network">'+
-				this.getDetailValueByName('network_by_mask')+
-				'</td>');
-
-			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
-				'<td class="subnet_table_td--type" id="subnet_table_th-name-bymask--type">'+
-				this.getDetailValueByName('type_of_network_by_mask')+
-				'</td>');
-
-			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
-				'<td class="subnet_table_td--misc" id="subnet_table_th-name-bymask--misc">'+
-				'MISC'+
-				'</td>');
-
-		} catch (e) {
-			hl.debugMessage('drawMessageTextareas() fail: '+e.stack);
-		}
+		this.painter.drawOptionsBlock(this.options);
+		this.painter.drawDetailsBlock(this.details);
+		this.painter.drawStatusBlock(this.status);
+		this.painter.drawHeadersTable(this.headers);
+		this.painter.drawMessageTextareas();
+		this.painter.drawSubnetsTable();
 
 	}
 
