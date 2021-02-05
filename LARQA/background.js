@@ -1,5 +1,7 @@
 //todo отчёт в буфер обмена
 //todo нужен класс фильтров
+//todo https://cleantalk.org/noc/requests?request_id=188c64d6c57907988cd189b58388866a проблема с headers
+// todo проблема с запросами без шаблонов
 
 //*** OPTIONS ***
 const HARD_DEBUG = true;
@@ -1341,9 +1343,9 @@ class CT {	// Main class CT
 					.replace(/\t/g, "\\t")
 					.replace(/\f/g, "\\f")
 					.replace(/<\/a>/g, "")
-					.replace(/<a href="\?request_id=/g, "")
-					.replace(/" target="_blank".+?,/g, "\",")
-					.replace(/" target="_blank".+?}/g, "\"}")
+					.replace(/<a href="\?request_id=/g, ``)
+					.replace(/" target="_blank".+?","/g, `\",\"`)
+					.replace(/" target="_blank".+?}/g, `\"}`)
 					.replace(/<a href="http:\/\/cleantalk.org\/blacklists\//g, "")
 
 			}
