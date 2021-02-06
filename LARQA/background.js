@@ -1,7 +1,5 @@
 //todo отчёт в буфер обмена
 //todo нужен класс фильтров
-//todo https://cleantalk.org/noc/requests?request_id=188c64d6c57907988cd189b58388866a проблема с headers
-// todo проблема с запросами без шаблонов
 
 //*** OPTIONS ***
 const HARD_DEBUG = true;
@@ -14,11 +12,293 @@ const DEF_CATS_HIDDEN = {
 	"subnet":false,
 	"debug":true,
 };
-const CURRENT_VERSIONS = new Map(
-	[
-		['wordpress','wordpress-51524']
-	]
-)
+
+function initApplicationsData(){
+
+	let apps_map = new Map();
+
+	//WORDPRESS
+	apps_map.set('wordpress', new Application(
+		{
+			"native_number":"wordpress-51525",
+			"int_number":"51525"
+		},
+		true,
+		true,
+		false,
+		`{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"20","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}`
+	))
+
+	//JOOMLA3
+	apps_map.set('joomla3', new Application(
+		{
+			"native_number":"joomla3-62",
+			"int_number":"62"
+		},
+		true,
+		false,
+		false,
+		``
+	))
+
+	//JOOMLA4
+	apps_map.set('joomla4', new Application(
+		{
+			"native_number":"joomla34-17",
+			"int_number":"17"
+		},
+		true,
+		false,
+		false,
+		``
+	))
+
+	//DRUPAL7
+	apps_map.set('drupal', new Application(
+		{
+			"native_number":"drupal-46",
+			"int_number":"46"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//DRUPAL8
+	apps_map.set('drupal8', new Application(
+		{
+			"native_number":"drupal8-46",
+			"int_number":"46"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//DRUPAL9
+	apps_map.set('drupal9', new Application(
+		{
+			"native_number":"drupal9-15",
+			"int_number":"15"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//UNI
+	apps_map.set('uni', new Application(
+		{
+			"native_number":"uni-23",
+			"int_number":"23"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//PHPBB3
+	apps_map.set('phpbb3', new Application(
+		{
+			"native_number":"ct-phpbb-43",
+			"int_number":"43"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//OPENCART
+	apps_map.set('opencart', new Application(
+		{
+			"native_number":"opencart-21",
+			"int_number":"21"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//PHPBB31
+	apps_map.set('phpbb31', new Application(
+		{
+			"native_number":"phpbb31-573",
+			"int_number":"573"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//IPB
+	apps_map.set('ipboard', new Application(
+		{
+			"native_number":"ipboard-20",
+			"int_number":"20"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//IPS
+	apps_map.set('ipboard4', new Application(
+		{
+			"native_number":"ipboard4-200",
+			"int_number":"200"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//BITRIX
+	apps_map.set('bitrix', new Application(
+		{
+			"native_number":"bitrix-31113",
+			"int_number":"31113"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//SMF
+	apps_map.set('smf', new Application(
+		{
+			"native_number":"smf-231",
+			"int_number":"231"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//XENFORO
+	apps_map.set('xenforo', new Application(
+		{
+			"native_number":"xenforo-26",
+			"int_number":"26"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//XENFORO2
+	apps_map.set('xenforo2', new Application(
+		{
+			"native_number":"xenforo2-25",
+			"int_number":"25"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//MAGENTO1
+	apps_map.set('magento', new Application(
+		{
+			"native_number":"magento-129",
+			"int_number":"129"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//MAGENTO2
+	apps_map.set('magento2', new Application(
+		{
+			"native_number":"magento2-14",
+			"int_number":"14"
+		},
+		true,
+		true,
+		false,
+		``
+	))
+
+	//VBULLETIN4
+	apps_map.set('vbulletin', new Application(
+		{
+			"native_number":"vbulletin-23",
+			"int_number":"23"
+		},
+		true,
+		true,
+		true,
+		``
+	))
+
+	//VBULLETIN5
+	apps_map.set('vbulletin5', new Application(
+		{
+			"native_number":"vbulletin5-11",
+			"int_number":"11"
+		},
+		true,
+		true,
+		true,
+		``
+	))
+
+	//MYBB
+	apps_map.set('mybb', new Application(
+		{
+			"native_number":"mybb-14",
+			"int_number":"14"
+		},
+		true,
+		true,
+		true,
+		``
+	))
+
+	//MODX
+	apps_map.set('modx', new Application(
+		{
+			"native_number":"modx-13",
+			"int_number":"13"
+		},
+		true,
+		true,
+		true,
+		``
+	))
+
+	//DLE
+	apps_map.set('dle', new Application(
+		{
+			"native_number":"dle-303",
+			"int_number":"303"
+		},
+		true,
+		true,
+		true,
+		``
+	))
+
+
+
+	return apps_map;
+
+};
+
 const CAPD_SIGNATURES = ['general_postdata_test','anynewsignature'];
 //*** OPTIONS END ***
 
@@ -59,7 +339,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 	}
 
 	getHref(){
-
+applicat
 	}
 
 	async ipinfoApiCall() {
@@ -147,8 +427,8 @@ class Helper {	//Helper class, called to keep misc functionality.
 			let start_from = 0;
 			let end_with = 0;
 
-			if (!string.includes(left)) {hl.debugMessage(`Left part not found: [${left}] in ${string.slice(0,15)}...`,'findBetween report:')};
-			if (!string.includes(right)) {hl.debugMessage(`Right part not found: [${right}] in ${string.slice(0,15)}...`,'findBetween report:')};
+			if (!string.includes(left)) {hl.debugMessage(`Left part not found: [${left}] in ${string.slice(0,15)}...`,'findBetween report:')}
+			if (!string.includes(right)) {hl.debugMessage(`Right part not found: [${right}] in ${string.slice(0,15)}...`,'findBetween report:')}
 
 			for (let i = 0; i < string.length; i++) {
 
@@ -814,7 +1094,6 @@ class Status {
 		this.links = links;
 		this.user_card = user_card;
 		this.api_calls = api_calls;
-
 	}
 
 	sortFiltersByBalls(order) {	//Sorts filters by dec, expect FILTERS_SORT_DESC
@@ -1117,7 +1396,7 @@ class Status {
 			this.agent = ct.getDetailValueByName('ct_agent');
 
 			//Checks if the plugin is up-to-date
-			if (this.agent !== CURRENT_VERSIONS.get('wordpress'))  {
+			/*if (this.agent !== CURRENT_VERSIONS.get('wordpress'))  {
 
 				this.agent = '<a title="Плагин устарел" style  = "color: red">'+this.agent+'</a>';
 				hl.addToIssuesList('Версия плагина устарела','3');
@@ -1127,7 +1406,7 @@ class Status {
 
 				this.agent = '<a title="Версия в порядке" style = "color: green">'+this.agent+'</a>';
 
-			}
+			}*/
 
 			//Checks if is allowed
 			this.isAllowed = (ct.getDetailValueByName('is_allowed') === '1') ? 'ALLOWED' : 'DENIED';
@@ -1160,6 +1439,24 @@ class Status {
 	}
 
 
+
+}
+
+class Application{
+
+	constructor(
+		version,
+		is_options_supported,
+		is_larqa_options_check_supported,
+		is_exotic,
+		options_defaults,
+	) {
+		this.version = version;
+		this.is_options_supported = is_options_supported;
+		this.options_defaults = options_defaults;
+		this.is_exotic = is_exotic;
+		this.is_larqa_options_check_supported = is_larqa_options_check_supported;
+	}
 
 }
 
@@ -1384,6 +1681,7 @@ class CT {	// Main class CT
 		this.initOptionsArray();
 		this.initHeadersArray();
 
+
 	}
 
 	drawInterface(){
@@ -1466,32 +1764,51 @@ class Analysis {	// Analysis class
 	constructor(
 		options_default,
 		options_changes_counter,
+		version_control
 	) {
 		this.options_default = options_default;
 		this.options_changes_counter = options_changes_counter;
+		this.applications_data = version_control;
 	}
 
 	//todo не отрабатывает post_info для comment type
 
 	initOptionsDefaults() {	//Init object of default options [this.options_default] from specified JSON of options. JSON source sets up manually form current versions of ClenTalk plugins
 
-		this.options_default = {
-			wordpress: '',
-			drupal: '',
-			joomla: '',
+		try {
+
+			this.applications_data = initApplicationsData();
+
+		} catch (e) {
+			hl.debugMessage(e.stack);
 		}
-		//JSON handling
-		this.options_default.wordpress = hl.getOptionsFromJSON('{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"20","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}');
+	}
+
+	getDefaultOptionsByAgent(ct_agent){
+
+		for (let entry of this.applications_data) {
+
+			if (entry[1].is_options_supported) {
+
+				if (ct_agent.includes(entry[0])) {
+
+					return this.applications_data.get(entry[0]).options_defaults
+
+				}
+
+			} else return false
+
+		}
 
 	}
 
-	compareCtOptionsWithDefaults(default_options) {	//Compares request options with defaults by agent [default_options:str]
+	findOptionsChanged(default_options) {	//Compares request options with defaults by agent [default_options:str]
 
 		this.options_changes_counter = 0;
 		try {
 			// Collects options changed
 			for (let i = 0; i !== default_options.length; i++) {
-
+				hl.trimAndLow(default_options[i].value)
 				const def_value = hl.trimAndLow(default_options[i].value);
 
 				for (let j = 0; j<= ct.options.length -1; j++) {
@@ -1517,14 +1834,17 @@ class Analysis {	// Analysis class
 		}
 	}
 
-	checkOptions() {	// Calls options checking compareCtOptionsWithDefaults if the agent is supported
-		//todo Дублирование опций обойти https://cleantalk.org/noc/requests?request_id=460ecc492b54f98b5b5bbf26a3629848
-		if (ct.status.agent.includes('wordpress')) {
+	checkOptions() {	// Calls options checking findOptionsChanged
 
-			this.compareCtOptionsWithDefaults(this.options_default.wordpress);
+		//todo Дублирование опций обойти https://cleantalk.org/noc/requests?request_id=460ecc492b54f98b5b5bbf26a3629848
+
+		if (this.getDefaultOptionsByAgent(ct.status.agent)) {
+
+			let options_array_from_json = hl.getOptionsFromJSON(this.getDefaultOptionsByAgent(ct.status.agent));
+			this.findOptionsChanged(options_array_from_json);
 
 		}
-		// The place for other agents if released (switch)
+
 	}
 
 	checkDetails() {	//Checks details, main analysis logic implementation
