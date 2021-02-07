@@ -129,34 +129,6 @@
       <workItem from="1604134536468" duration="25593000" />
       <workItem from="1604213951006" duration="27407000" />
     </task>
-    <task active="true" id="LOCAL-00007" summary="CURRENT">
-      <branch name="dev" repository="D:\Megadisk\larqa\gitcopy" />
-      <changelist id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="" />
-      <created>1604254444639</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1604254471446</updated>
-      <workItem from="1604254472083" duration="347000" />
-      <workItem from="1604306045214" duration="5698000" />
-      <workItem from="1604377790985" duration="7148000" />
-      <workItem from="1604654240579" duration="49357000" />
-      <workItem from="1604909412343" duration="57117000" />
-      <workItem from="1606284307013" duration="4498000" />
-      <workItem from="1610429510145" duration="21000" />
-      <workItem from="1610429572428" duration="169000" />
-      <workItem from="1610430016117" duration="58000" />
-      <workItem from="1610430088063" duration="13938000" />
-      <workItem from="1610535513450" duration="14960000" />
-      <workItem from="1610606240104" duration="2972000" />
-      <workItem from="1610624796123" duration="10445000" />
-      <workItem from="1610943539998" duration="16283000" />
-      <workItem from="1610963158787" duration="10903000" />
-      <workItem from="1611049671519" duration="24121000" />
-      <workItem from="1611742160402" duration="3524000" />
-      <workItem from="1612263399141" duration="36560000" />
-      <workItem from="1612507021861" duration="3481000" />
-    </task>
     <task id="LOCAL-00008" summary="- передалал туду листы">
       <created>1604254763003</created>
       <option name="number" value="00008" />
@@ -493,7 +465,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612642471741</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="- Cadence 07.02.2021 -&#10;&#10;Новое:&#10;- опции Drupal 7">
+      <created>1612675103684</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1612675103684</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -527,7 +506,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- вывожу красиво измения в опциях и параметрах, добавил класс  .report_block, чуть поправил вёрстку" />
     <MESSAGE value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- сделал обёрку, если вывод опций в запросе не поддерживается плагином" />
     <MESSAGE value="- alexthegull  22.01.2021 -&#10;Правки:&#10;- перенёс initHelperData в callWindow, не обнулялся issues_list при открытии нового окна" />
     <MESSAGE value="- alexthegull  22.01.2021 -&#10;Правки:&#10;- поправил ещё helper.initHelperData();" />
@@ -552,7 +530,8 @@
     <MESSAGE value="- класс Painter ввёл пока непонятно зачем" />
     <MESSAGE value="- класс Painter ввёл пока непонятно зачем&#10;- фикс ipinfoCall для пустых IP адресов" />
     <MESSAGE value="- Cadence 07.02.2021 -&#10;Фикс:&#10;- исправил падение при нестандартных агентах&#10;&#10;Новое:&#10;- добавил класс Application&#10;- реализована поддержка опций для всех агентов (требуется заполнение options_default и is_supported), раньше было только для wordpress. Параметры приложений заполняются в анонимной initApplicationsData" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 07.02.2021 -&#10;Фикс:&#10;- исправил падение при нестандартных агентах&#10;&#10;Новое:&#10;- добавил класс Application&#10;- реализована поддержка опций для всех агентов (требуется заполнение options_default и is_supported), раньше было только для wordpress. Параметры приложений заполняются в анонимной initApplicationsData" />
+    <MESSAGE value="- Cadence 07.02.2021 -&#10;&#10;Новое:&#10;- опции Drupal 7" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 07.02.2021 -&#10;&#10;Новое:&#10;- опции Drupal 7" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">

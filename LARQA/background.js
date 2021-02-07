@@ -374,6 +374,34 @@ class Helper {	//Helper class, called to keep misc functionality.
 		}
 	}
 
+	async cleantalkApiCall() {
+
+		try {
+
+			if (ct.getDetailValueByName('sender_ip') !== '') {
+
+				const request = await fetch(`http://ct.webtm.ru/api_redirect.php?method=get&api_url=
+				https://api.cleantalk.org
+				&method_name=spam_check
+				&auth_key=w4pvofhy03br
+				&email=${ct.getDetailValueByName('sender_email')}
+				&ip=${ct.getDetailValueByName('sender_ip')}
+				&security=some_shiet`)
+				const json = await request.json()
+
+				let msg = JSON.stringify(json)
+
+				this.addTag('subnets_table_tbody', 'beforeend', `<tr><td class="subnet_table_td--by_what">API:spam_check</td><td colspan="3" id="ipinfo-tr">${msg}</td></tr>`);
+
+			}
+
+		} catch (e) {
+
+			alert('STACK ' + e.stack);
+
+		}
+	}
+
 	callWindow() {	//Main window call based on "prefilled.html"
 
 		this.initHelperData();
@@ -407,6 +435,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 				hl.startTimer();
 
 			hl.ipinfoApiCall();
+			hl.cleantalkApiCall();
 
 				hl.recordNewTimer('IpInfo call')
 				hl.startTimer();
