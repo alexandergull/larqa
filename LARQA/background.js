@@ -1,7 +1,9 @@
 //todo отчёт в буфер обмена
 //todo нужен класс фильтров
+// нужна обработка кук https://cleantalk.org/noc/requests?request_id=a70392bd8cafdee2289f601962f5b0ff
 
 //*** OPTIONS ***
+
 const HARD_DEBUG = true;
 const FILTERS_SORT_DESC = true;
 const TIMERS_ENABLED = false;
@@ -42,10 +44,10 @@ function initApplicationsData(){
 	))
 
 	//JOOMLA4
-	apps_map.set('joomla4', new Application(
+	apps_map.set('joomla15', new Application(
 		{
-			"native_number":"joomla34-17",
-			"int_number":"17"
+			"native_number":"joomla15-372",
+			"int_number":"372"
 		},
 		true,
 		false,
@@ -53,7 +55,19 @@ function initApplicationsData(){
 		``
 	))
 
-	//DRUPAL7
+	//JOOMLA15
+	apps_map.set('joomla3', new Application(
+		{
+			"native_number":"joomla3-62",
+			"int_number":"62"
+		},
+		true,
+		false,
+		false,
+		``
+	))
+
+	//DRUPAL7//070221
 	apps_map.set('drupal', new Application(
 		{
 			"native_number":"drupal-46",
@@ -62,7 +76,7 @@ function initApplicationsData(){
 		true,
 		true,
 		false,
-		``
+		`{"access_key":"","cleantalk_check_comments":1,"cleantalk_check_comments_automod":0,"cleantalk_check_comments_min_approved":"3","cleantalk_check_register":1,"cleantalk_check_webforms":0,"cleantalk_check_contact_forms":1,"cleantalk_check_forum_topics":0,"cleantalk_check_ccf":0,"cleantalk_check_search_form":1,"cleantalk_add_search_noindex":0,"cleantalk_url_exclusions":"","cleantalk_url_exclusions_regexp":0,"cleantalk_fields_exclusions":"","cleantalk_roles_exclusions":"4,1,2,12,11","cleantalk_set_cookies":1,"cleantalk_alternative_cookies_session":0,"cleantalk_sfw":0,"cleantalk_ssl":"","cleantalk_link":0}`
 	))
 
 	//DRUPAL8
@@ -173,16 +187,16 @@ function initApplicationsData(){
 		``
 	))
 
-	//SMF
+	//SMF//070221
 	apps_map.set('smf', new Application(
 		{
 			"native_number":"smf-231",
 			"int_number":"231"
 		},
-		true,
-		true,
 		false,
-		``
+		false,
+		false,
+		`NONE`
 	))
 
 	//XENFORO
@@ -300,6 +314,7 @@ function initApplicationsData(){
 };
 
 const CAPD_SIGNATURES = ['general_postdata_test','anynewsignature'];
+
 //*** OPTIONS END ***
 
 class Helper {	//Helper class, called to keep misc functionality.
@@ -327,7 +342,6 @@ class Helper {	//Helper class, called to keep misc functionality.
 		this.timers = [];
 		this.exectime = 0;
 
-
 	}
 
 	recordNewTimer(name) {
@@ -336,10 +350,6 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	startTimer() {
 		if (TIMERS_ENABLED) this.exectime = performance.now();
-	}
-
-	getHref(){
-applicat
 	}
 
 	async ipinfoApiCall() {
@@ -2164,19 +2174,17 @@ class Analysis {	// Analysis class
 //*** DECLARE BLOCK ***
 
 let EXTRACTED_HTML;
-
 let ct = new CT();
 ct.analysis = new Analysis();
 ct.status = new Status();
 ct.painter = new Painter();
 hl = new Helper();
 
-
 //*** DECLARE BLOCK END ***
 
 //*** LISTENERS ***
 
-// noinspection JSUnresolvedVariable,JSUnresolvedVariable,JSUnresolvedVariable
+
 chrome.runtime.onMessage.addListener(function (message) {
 		switch (message.command) {
 
@@ -2191,11 +2199,11 @@ chrome.runtime.onMessage.addListener(function (message) {
 	})
 
 	function logHtmlCode(tab) {
-		// noinspection JSUnresolvedFunction,JSUnresolvedVariable,JSUnresolvedVariable
+
 		chrome.tabs.executeScript(tab.id, {file: "send-page-code.js"});
 	}
 
-// noinspection JSUnresolvedVariable,JSUnresolvedVariable
+
 chrome.browserAction.onClicked.addListener(logHtmlCode);
 //==== LISTENERS END
 //CODE END
