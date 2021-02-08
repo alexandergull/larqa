@@ -14,6 +14,7 @@ const DEF_CATS_HIDDEN = {
 	"subnet":false,
 	"debug":true,
 };
+const CAPD_SIGNATURES = ['general_postdata_test','anynewsignature'];
 
 function initApplicationsData(){
 
@@ -312,8 +313,54 @@ function initApplicationsData(){
 	return apps_map;
 
 };
+function initDetailsSearchData() {	// Init start search data, returns [][]
 
-const CAPD_SIGNATURES = ['general_postdata_test','anynewsignature'];
+	const values = [
+		// detail name, block id, signature, reserved, css_id, section to lookup
+		['timestamp', '0', '<td>timestamp&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['sender_email', '0', '<td>email&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['sender_email_is_bl', '0', '<td>email_in_list&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['sender_email_is_sc', '0', '<td>short_cache_email&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['sender_email_is_disp', '0', '<td>mail_domain_one_raz&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['sender_ip', '1', '<td>ip&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['sender_ip_is_bl', '1', '<td>ip_in_list&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['sender_ip_is_sc', '1', '<td>short_cache_ip&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['username', '1', '<td>username&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['ct_options', '2', '<td>ct_options&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['ct_agent', '3', '<td>agent&nbsp;</td>', '', 'DEFAULT', 'params'],
+		['js_status', '4', '<td>js_passed&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['submit_time', '4', '<td>submit_time&nbsp;</td>', '', 'DEFAULT', 'params'],
+		['cookies_enabled', '4', '<td>cookies_enabled&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['page_referrer', '4', '<td>REFFERRER&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['page_pre_referrer', '4', '<td>REFFERRER_PREVIOUS&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['page_url', '4', '<td>page_url&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['sender_url', '4', '<td>sender_url&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['comment_type', '4', '<td>comment_type&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['hook_type', '4', '<td>hook&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['is_greylisted', '4', '<td>grey_list_stop&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['is_mobile_ua', '4', '<td>is_mobile_UA&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['allowed_by_pl', '4', '<td>private_list_allow&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['denied_by_pl', '4', '<td>private_list_deny&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['pl_has_records', '4', '<td>private_list_detected&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['is_allowed', '4', '<td>allow&nbsp;</td>', '', 'DEFAULT', 'response'],
+		['method_name', '4', '<td>method_name&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['message', '4', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params'],
+		['message_decoded', '4', 'title="Добавить в произвольный блок"></span>&nbsp;</td><td></td><td>', '', 'DEFAULT', 'message_decoded'],
+		['all_headers', '4', '<td>all_headers&nbsp;</td>', '', 'DEFAULT', 'params'],
+		['type_of_network_by_type', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
+		['network_by_type', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
+		['type_of_network_by_id', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
+		['network_by_id', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
+		['type_of_network_by_mask', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
+		['network_by_mask', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
+
+	];
+
+	ct.details_length = values.length;
+
+	return values;
+
+}
 
 //*** OPTIONS END ***
 
@@ -507,9 +554,10 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 				right = '<div class="section_block" data-section=';
 
+
 			} else {
 
-				right = '</td></tr></tbody>';
+				right = '</tr></tbody>';
 
 			}
 
@@ -531,14 +579,14 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		let left;
 
-		if (section_id!=='message_decoded') {
+		if (section_id !== 'message_decoded') {
 
 			left = signature + `<td>:&nbsp;`;
 
 		} else {
 
 			left = signature;
-
+			let right = '</td>';
 		}
 
 		let right = '</td>';
@@ -686,6 +734,16 @@ class Helper {	//Helper class, called to keep misc functionality.
 	addInnerHtmlToTag(tag_id,html_code){ //Shortens code for tag insert
 
 		return interface_window.document.getElementById(tag_id).innerHTML+=html_code;
+
+	}
+
+	extractIP(string, is_subnet){
+
+		let regexp = new RegExp('(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)','gi');
+		let regexp_subnet = new RegExp(
+			'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/[^"]+'
+		);
+		return (is_subnet) ?  string.match(regexp_subnet)[0] : string.match(regexp);
 
 	}
 
@@ -983,6 +1041,7 @@ class Painter{
 				header_text += (ct_status.isAllowed === 'ALLOWED') ? 'ALLOWED' : 'DENIED';
 				header_text += (+(ct.getDetailValueByName('allowed_by_pl')) === 1) ? ' BY PRIVATE LIST' : '';
 				header_text += (+(ct.getDetailValueByName('denied_by_pl')) === 1) ? ' BY PRIVATE LIST' : '';
+				let request_time = new Date(parseInt( ct.getDetailValueByName( 'timestamp' ) +'000' ) ).toLocaleString();
 
 				hl.addInnerHtmlToTag('status_block-header', (
 					'Статус запроса ' +
@@ -990,6 +1049,8 @@ class Painter{
 					ct_status.id_value.short + '</a>' +
 					' ' +
 					'<a class="status_header">: ' + header_text + '</a>' +
+
+					'<a> on [' + request_time + ']</a>'+
 
 					//Draws feedback if so.
 					'<p style = "text-align: right"> ' + ct_status.feedback + '</p>'
@@ -1038,6 +1099,39 @@ class Painter{
 
 		try {
 
+			function formatDate(date_obj){
+				let day = date_obj.getDate();
+				let month = date_obj.getMonth();
+				let year = date_obj.getFullYear();
+				day = (day<10) ? `0${day}`: {}
+				month = (month<10) ? `0${month+1}`: `${month+1}`
+				return `${year}.${month}.${day}`
+			}
+
+			function getURIToLastWeekRequests(subnet){
+				let weekago_date = formatDate(new Date(Date.now()-604800000 ));
+				let current_date = formatDate(new Date());
+				subnet = subnet.replace(/\//,"%2F");
+
+				let URI = `https://cleantalk.org/noc/requests?sender_network=${subnet}&date_range=${weekago_date}%2F00%3A00-${current_date}%2F23%3A59`
+				return URI;
+			}
+
+			function getURIToManagement(subnet){
+
+				let URI = `https://cleantalk.org/noc/ip-networks?network_dec=${subnet}`
+				return URI;
+			}
+
+			function generateLinksTagsForSubnets(network_by) {
+				let subnet = ct.getDetailValueByName(network_by);
+				if (subnet !== '') {
+					return `
+					<a href="${getURIToManagement(subnet)}">[Управление сетью]</a>>
+					<a href="${getURIToLastWeekRequests(subnet)}">[Все запросы из этой сети за неделю]</a>`
+				} else return ``;
+			}
+
 			hl.addTag('subnets_table_tr-header', 'afterend',
 				'<tr id="subnet_table_tr-name--bytype"></tr>');
 
@@ -1056,7 +1150,7 @@ class Painter{
 
 			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
 				'<td class="subnet_table_td--misc" id="subnet_table_th-name-bytype--misc">'+
-				'MISC'+
+				generateLinksTagsForSubnets('network_by_type')+
 				'</td>');
 
 
@@ -1077,8 +1171,8 @@ class Painter{
 				'</td>');
 
 			hl.addTag('subnet_table_tr-name--byid', 'beforeend',
-				'<td class="subnet_table_td--misc" id="subnet_table_th-name-byid--misc">'+
-				'MISC'+
+				'<td class="subnet_table_td--misc" id="subnet_table_th-name-byid--misc">' +
+				generateLinksTagsForSubnets('network_by_id') +
 				'</td>');
 
 
@@ -1100,7 +1194,7 @@ class Painter{
 
 			hl.addTag('subnet_table_tr-name--bymask', 'beforeend',
 				'<td class="subnet_table_td--misc" id="subnet_table_th-name-bymask--misc">'+
-				'MISC'+
+				generateLinksTagsForSubnets('network_by_mask') +
 				'</td>');
 
 		} catch (e) {
@@ -1547,59 +1641,11 @@ class CT {	// Main class CT
 		this.painter = painter;
 	}
 
-	initDetailsSearchData() {	// Init start search data, returns [][]
-
-		const values = [
-			// detail name, block id, signature, reserved, css_id, section to lookup
-			['sender_email', '0', '<td>email&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['sender_email_is_bl', '0', '<td>email_in_list&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['sender_email_is_sc', '0', '<td>short_cache_email&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['sender_email_is_disp', '0', '<td>mail_domain_one_raz&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['sender_ip', '1', '<td>ip&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['sender_ip_is_bl', '1', '<td>ip_in_list&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['sender_ip_is_sc', '1', '<td>short_cache_ip&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['username', '1', '<td>username&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['ct_options', '2', '<td>ct_options&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['ct_agent', '3', '<td>agent&nbsp;</td>', '', 'DEFAULT', 'params'],
-			['js_status', '4', '<td>js_passed&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['submit_time', '4', '<td>submit_time&nbsp;</td>', '', 'DEFAULT', 'params'],
-			['cookies_enabled', '4', '<td>cookies_enabled&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['page_referrer', '4', '<td>REFFERRER&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['page_pre_referrer', '4', '<td>REFFERRER_PREVIOUS&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['page_url', '4', '<td>page_url&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['sender_url', '4', '<td>sender_url&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['comment_type', '4', '<td>comment_type&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['hook_type', '4', '<td>hook&nbsp;</td>', '', 'DEFAULT', 'sender'],
-			['is_greylisted', '4', '<td>grey_list_stop&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['is_mobile_ua', '4', '<td>is_mobile_UA&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['allowed_by_pl', '4', '<td>private_list_allow&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['denied_by_pl', '4', '<td>private_list_deny&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['pl_has_records', '4', '<td>private_list_detected&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['is_allowed', '4', '<td>allow&nbsp;</td>', '', 'DEFAULT', 'response'],
-			['method_name', '4', '<td>method_name&nbsp;</td>', '', 'DEFAULT', 'details'],
-			['message', '4', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params'],
-			['message_decoded', '4', 'title="Добавить в произвольный блок"></span>&nbsp;</td><td></td><td>', '', 'DEFAULT', 'message_decoded'],
-			['all_headers', '4', '<td>all_headers&nbsp;</td>', '', 'DEFAULT', 'params'],
-			['type_of_network_by_type', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
-			['network_by_type', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
-			['type_of_network_by_id', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
-			['network_by_id', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
-			['type_of_network_by_mask', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
-			['network_by_mask', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
-
-		];
-
-		this.details_length = values.length;
-
-		return values;
-
-	}
-
 	initDetailsArray() {	//Init this.details [array of Detail class]
 
 		// Creates a new array of Detail class
 		this.details = [];
-		let details_draft = this.initDetailsSearchData();
+		let details_draft = initDetailsSearchData();
 
 		try {
 
@@ -1624,17 +1670,22 @@ class CT {	// Main class CT
 					this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
 				}
 
+				//Messages and headers handling
+				if (['message_decoded','message'].includes(this.details[i].name) || this.details[i].name.includes('network')){
 
+					this.details[i].css_id = 'INVISIBLE';
 
-					//Messages and headers handling
-					if (['message_decoded','message'].includes(this.details[i].name) || this.details[i].name.includes('network')){
+				}
 
-						this.details[i].css_id = 'INVISIBLE';
+				//Subnets handling
+				if (this.details[i].value.includes('network') && !this.details[i].value.includes('type_of')) {
 
-					}
+					this.details[i].value = hl.extractIP(this.details[i].value,true);
 
-					//Empty values handling
-					if (this.details[i].value === '')  this.details[i].css_id = 'INVISIBLE';
+				}
+
+				//Empty values handling
+				if (this.details[i].value === '')  this.details[i].css_id = 'INVISIBLE';
 
 			}
 		} catch (e) {
@@ -1863,7 +1914,7 @@ class Analysis {	// Analysis class
 
 					}
 
-					if ( CAPD_SIGNATURES.includes(ct_option.name) ) {
+					if ( CAPD_SIGNATURES.includes(ct_option.name) && +ct_option.value === 1 ) {
 						ct_option.setCAPD();
 					}
 				}
@@ -2126,7 +2177,7 @@ class Analysis {	// Analysis class
 					case 'page_url': {
 
 						if (detail.value.includes('members') ||
-							detail.value.includes('admin') ||
+							detail.value.includes('edit') ||
 							detail.value.includes('login')
 						) {
 
