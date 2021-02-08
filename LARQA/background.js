@@ -655,8 +655,9 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 			if (list !== '') {
 				hl.addTag('details_table', 'beforebegin', (
-					' <div class="report_block"><b>Отчёт аналитики. Обратить внимание: (' + issues_number + ')</b>' + list + '</div>'
+					' <div class="report_block" id="details_table-report-block"><b>Отчёт аналитики. Обратить внимание: (' + issues_number + ')</b>' + list + '</div>'
 				));
+				ct.painter.resizeReportBlock('details_table-report-block');
 			} else {
 				hl.addTag('details_table', 'beforebegin', (
 					'<div class="report_block" id="details_table-report-block"><b>Отчёт аналитики. Проблемы не обнаружены.</b></div>'
@@ -715,6 +716,8 @@ class Helper {	//Helper class, called to keep misc functionality.
 				)
 			);
 
+			ct.painter.resizeReportBlock('options_table-report-block');
+
 			this.changed_options_list = '';
 
 		} else if (this.changed_options_list === 'INVISIBLE'){
@@ -755,7 +758,7 @@ class Painter{
 
 		try {
 
-			let button = interface_window.document.getElementById(button_id);
+			const button = interface_window.document.getElementById(button_id);
 
 			interface_window.document.getElementById(tag_id).hidden = is_hidden;
 
@@ -783,6 +786,17 @@ class Painter{
 		} catch (e) {
 			hl.debugMessage(e.stack);
 		}
+	}
+
+	resizeReportBlock (report_block_id){
+
+		const report_block = interface_window.document.getElementById(report_block_id);
+		report_block.onclick = function () {
+
+			report_block.style.maxHeight = (report_block.style.maxHeight === '50px') ? 'none' : '50px';
+
+		}
+
 	}
 
 	bindButtons (){
