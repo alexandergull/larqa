@@ -31,17 +31,6 @@
 
         }
 
-        .line_block {
-            width:47%;
-            height:auto;
-            float:left;
-            margin: 0 1% 1% 0;
-            text-align:center;
-            padding: 1%;
-            background-color: #ECE9E0;
-            border-radius: 7px;
-        }
-
 
         .bottom_blocks{
             overflow: auto;
@@ -79,7 +68,7 @@
         /*********************STATUS BLOCK*********************/
 
         #status_block {
-
+            display: block;
         }
 
         .is_denied{
@@ -114,7 +103,6 @@
 
         .status_table_inner{
             border: hidden;
-            background:#E9e9e1;
             text-align:left;
             padding: 1px;
             margin: 1px;
@@ -251,8 +239,11 @@
 
         .details_block-messages{
             width: 99%;
-            resize: none;
+            resize: vertical;
+            height: 100px;
+            font-size: 10px;
             background: #EFEBE4;
+            overflow-wrap: break-word;
         }
 
 
@@ -276,8 +267,7 @@
     </style>
 </head>
 <body id="body">
-<div style="width:100%; height:1px; clear:both;"></div>
-<div style=" display: block;">
+
     <div class="status_block" id="status_block"><h1 id="status_block-header"></h1>
         <table id='status_table'>
             <tbody id="status_table-tbody">
@@ -286,7 +276,7 @@
             </tbody>
         </table>
     </div>
-</div>
+
 
 <div class="bottom_blocks" id="details_block">
 
@@ -346,5 +336,6 @@
         </div>
     </div>
 </div>
+<button id="change_theme">Change theme</button>
 </body>
 </html>

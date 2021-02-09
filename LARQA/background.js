@@ -15,7 +15,7 @@ const DEF_CATS_HIDDEN = {
 	"debug":true,
 };
 const CAPD_SIGNATURES = ['general_postdata_test','anynewsignature'];
-
+const IS_DARK_THEME = true;
 function initApplicationsData(){
 
 	let apps_map = new Map();
@@ -312,12 +312,12 @@ function initApplicationsData(){
 
 	return apps_map;
 
-};
+}
 function initDetailsSearchData() {	// Init start search data, returns [][]
 
 	const values = [
 		// detail name, block id, signature, reserved, css_id, section to lookup
-		['timestamp', '0', '<td>timestamp&nbsp;</td>', '', 'DEFAULT', 'details'],
+		['timestamp', '0', '<td>timestamp&nbsp;</td>', '', 'INVISIBLE', 'details'],
 		['sender_email', '0', '<td>email&nbsp;</td>', '', 'DEFAULT', 'sender'],
 		['sender_email_is_bl', '0', '<td>email_in_list&nbsp;</td>', '', 'DEFAULT', 'details'],
 		['sender_email_is_sc', '0', '<td>short_cache_email&nbsp;</td>', '', 'DEFAULT', 'details'],
@@ -344,15 +344,15 @@ function initDetailsSearchData() {	// Init start search data, returns [][]
 		['pl_has_records', '4', '<td>private_list_detected&nbsp;</td>', '', 'DEFAULT', 'details'],
 		['is_allowed', '4', '<td>allow&nbsp;</td>', '', 'DEFAULT', 'response'],
 		['method_name', '4', '<td>method_name&nbsp;</td>', '', 'DEFAULT', 'details'],
-		['message', '4', '<td>message&nbsp;</td>', '', 'DEFAULT', 'params'],
-		['message_decoded', '4', 'title="Добавить в произвольный блок"></span>&nbsp;</td><td></td><td>', '', 'DEFAULT', 'message_decoded'],
-		['all_headers', '4', '<td>all_headers&nbsp;</td>', '', 'DEFAULT', 'params'],
-		['type_of_network_by_type', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
-		['network_by_type', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_type'],
-		['type_of_network_by_id', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
-		['network_by_id', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_id'],
-		['type_of_network_by_mask', '4', '<td>Network_type&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
-		['network_by_mask', '4', '<td>Network&nbsp;</td>', '', 'DEFAULT', 'network_by_mask'],
+		['message', '4', '</td><td></td><td>', '', 'INVISIBLE', 'message'],
+		['message_decoded', '4', '</td><td></td><td>', '', 'INVISIBLE', 'message_decoded'],
+		['all_headers', '4', '<td>all_headers&nbsp;</td>', '', 'INVISIBLE', 'params'],
+		['type_of_network_by_type', '4', '<td>Network_type&nbsp;</td>', '', 'INVISIBLE', 'network_by_type'],
+		['network_by_type', '4', '<td>Network&nbsp;</td>', '', 'INVISIBLE', 'network_by_type'],
+		['type_of_network_by_id', '4', '<td>Network_type&nbsp;</td>', '', 'INVISIBLE', 'network_by_id'],
+		['network_by_id', '4', '<td>Network&nbsp;</td>', '', 'INVISIBLE', 'network_by_id'],
+		['type_of_network_by_mask', '4', '<td>Network_type&nbsp;</td>', '', 'INVISIBLE', 'network_by_mask'],
+		['network_by_mask', '4', '<td>Network&nbsp;</td>', '', 'INVISIBLE', 'network_by_mask'],
 
 	];
 
@@ -513,8 +513,8 @@ class Helper {	//Helper class, called to keep misc functionality.
 			let start_from = 0;
 			let end_with = 0;
 
-			if (!string.includes(left)) {hl.debugMessage(`Left part not found: [${left}] in ${string.slice(0,15)}...`,'findBetween report:')}
-			if (!string.includes(right)) {hl.debugMessage(`Right part not found: [${right}] in ${string.slice(0,15)}...`,'findBetween report:')}
+			if (!string.includes(left)) {hl.debugMessage(`Left part not found: [${left}] in ${string.slice(0,50)}...`,'findBetween report:')}
+			if (!string.includes(right)) {hl.debugMessage(`Right part not found: [${right}] in ${string.slice(0,50)}...`,'findBetween report:')}
 
 			for (let i = 0; i < string.length; i++) {
 
@@ -545,15 +545,14 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	getHtmlSectionFromEHTML(section_id) { //Returns a HTML section(str) of EXTRACTED_HTML(const:str) by section_name(str), the list of available section_name is in initDetailsSignatureData.Выкл
 
+		let left = '<div class="section_block" data-section="' + section_id + '">';
+		let right;
+
 		if (EXTRACTED_HTML.includes(section_id)) {
 
-			let left = '<div class="section_block" data-section="' + section_id + '">';
-			let right;
-
-			if (section_id !== 'message_decoded') {
+			if (section_id !== ct.last_section_id) {
 
 				right = '<div class="section_block" data-section=';
-
 
 			} else {
 
@@ -571,27 +570,29 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		const html_section = this.getHtmlSectionFromEHTML(section_id);
 
-		if (!html_section.includes(signature)) {
+		try {
 
-			return ''
+			if (!html_section.includes(signature)) {
 
-		}
+				return ''
 
-		let left;
+			}
 
-		if (section_id !== 'message_decoded') {
+			let left;
 
-			left = signature + `<td>:&nbsp;`;
+			if (section_id.includes('message')) {
 
-		} else {
+				left = signature;
 
-			left = signature;
+			} else left = signature + `<td>:&nbsp;`
+
 			let right = '</td>';
+
+			return this.findBetween(html_section, left, right)
+
+		} catch(e){
+			hl.debugMessage(e.stack,'getDetailBySignatureInSection FAIL:')
 		}
-
-		let right = '</td>';
-
-		return this.findBetween(html_section,left,right)
 
 	}
 
@@ -740,14 +741,26 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	}
 
-	extractIP(string, is_subnet){
+	extractIP(string, is_subnet) {
 
-		let regexp = new RegExp('(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)','gi');
-		let regexp_subnet = new RegExp(
-			'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/[^"]+'
-		);
-		return (is_subnet) ?  string.match(regexp_subnet)[0] : string.match(regexp);
+		try {
 
+			let regexp = new RegExp('(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)', 'gi');
+			let regexp_subnet = new RegExp(
+				'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/[^"]+'
+			);
+
+			if (string.match(regexp)=== null || string.match(regexp_subnet) === null) return ''
+
+			if (is_subnet) {
+				return string.match(regexp_subnet)[0];
+			} else {
+				return string.match(regexp)[0];
+			}
+
+		} catch (e) {
+			hl.debugMessage(e.stack,'extractIP FAIL:')
+		}
 	}
 
 }
@@ -799,6 +812,34 @@ class Painter{
 
 	}
 
+	changeTheme(){
+
+			const doc = interface_window.document;
+
+			function changeClassColor(class_name, color){
+				for (let key of doc.getElementsByClassName(class_name)) {
+					key.style.backgroundColor = color;
+				}
+			}
+
+			//BACKGROUND
+
+			doc.getElementById('body').style.backgroundColor = '#062232';
+			doc.getElementById('status_table').style.backgroundColor = '#164f71';
+			doc.getElementById('status_block').style.backgroundColor = '#103a53';
+
+			changeClassColor('details_block-messages','#164f71')
+			changeClassColor('bottom_blocks','#103a53')
+			changeClassColor('hide-show-backplate','#103a53')
+			changeClassColor('hide-show-button','#12505f')
+
+			//FONTS
+			doc.getElementById('body').style.color = '#41a6b6';
+			doc.getElementById('body').setAttribute('vLink','#297936');
+			doc.getElementById('body').setAttribute('aLink','#245f53');
+
+	}
+
 	bindButtons (){
 
 		this.bindSHButtonToTag('hide-show_headers-button','headers_table', DEF_CATS_HIDDEN.headers);
@@ -806,6 +847,9 @@ class Painter{
 		this.bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', DEF_CATS_HIDDEN.message_decoded);
 		this.bindSHButtonToTag('hide-show_subnet-button','subnets_table', DEF_CATS_HIDDEN.subnet);
 		this.bindSHButtonToTag('hide-show_debug-button','debug-hider', DEF_CATS_HIDDEN.debug);
+		interface_window.document.getElementById('change_theme').onclick = function () {
+			ct.painter.changeTheme();
+		}
 
 	}
 
@@ -846,7 +890,7 @@ class Painter{
 
 			let array_of_details = [];
 
-			for (let j = 0; j < ct.details_length; j++) {
+			for (let j = 0; j !== ct_details.length; j++) {
 
 				array_of_details.push(parseInt(ct_details[j].block_id));
 
@@ -858,10 +902,10 @@ class Painter{
 			//Details block HTML handling
 			for (let block_id = 0; block_id !== number_of_blocks; block_id++) {
 
-				for (let i = 0; i < ct.details_length; i++) {
+				for (let i = 0; i < ct.details.length; i++) {
 
 					// Draw a new tag if string counter for a block <= number of details
-					if (string_counter <= i) {
+					if (string_counter < i) {
 
 						let detail = ct_details[string_counter];
 
@@ -995,7 +1039,7 @@ class Painter{
 				}
 			}
 		} catch (e) {
-			hl.debugMessage(e.stack);
+			hl.debugMessage(e.stack, 'DrawDetailsblok FAIL:');
 		}
 	}
 
@@ -1117,8 +1161,8 @@ class Painter{
 				let day = date_obj.getDate();
 				let month = date_obj.getMonth();
 				let year = date_obj.getFullYear();
-				day = (day<10) ? `0${day}`: {}
-				month = (month<10) ? `0${month+1}`: `${month+1}`
+				day = (day<10) ? `0${day}`:day;
+				month = (month<10) ? `0${month+1}`: month+1;
 				return `${year}.${month}.${day}`
 			}
 
@@ -1146,6 +1190,8 @@ class Painter{
 				} else return ``;
 			}
 
+			//BY_TYPE
+
 			hl.addTag('subnets_table_tr-header', 'afterend',
 				'<tr id="subnet_table_tr-name--bytype"></tr>');
 
@@ -1154,19 +1200,26 @@ class Painter{
 
 			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
 				'<td class="subnet_table_td--network" id="subnet_table_th-name-bytype--network">'+
+
 				ct.getDetailValueByName('network_by_type')+
+
 				'</td>');
 
 			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
 				'<td class="subnet_table_td--type" id="subnet_table_th-name-bytype--type">'+
+
 				ct.getDetailValueByName('type_of_network_by_type')+
+
 				'</td>');
 
 			hl.addTag('subnet_table_tr-name--bytype', 'beforeend',
 				'<td class="subnet_table_td--misc" id="subnet_table_th-name-bytype--misc">'+
+
 				generateLinksTagsForSubnets('network_by_type')+
+
 				'</td>');
 
+			//BY_ID
 
 			hl.addTag('subnet_table_tr-name--bytype', 'afterend',
 				'<tr id="subnet_table_tr-name--byid"></tr>');
@@ -1189,6 +1242,7 @@ class Painter{
 				generateLinksTagsForSubnets('network_by_id') +
 				'</td>');
 
+			//BY_MASK
 
 			hl.addTag('subnet_table_tr-name--byid', 'afterend',
 				'<tr id="subnet_table_tr-name--bymask"></tr>');
@@ -1502,7 +1556,19 @@ class Status {
 		const feedback_signature_no = `Решение пользователя:
                     </div>
                     <div class="div_feedback col-xs-1">
+                        <span class="text-success">`;
+
+		if (EXTRACTED_HTML.includes(`Решение пользователя:
+                    </div>
+                    <div class="div_feedback col-xs-1">
+                        <span class="text-danger">`)) {
+
+			const feedback_signature_no = `Решение пользователя:
+                    </div>
+                    <div class="div_feedback col-xs-1">
                         <span class="text-danger">`;
+
+		}
 
 		if (EXTRACTED_HTML.includes(feedback_signature)) {
 
@@ -1637,7 +1703,7 @@ class CT {	// Main class CT
 	constructor(
 
 		id,
-		status,
+		last_section_id,
 		details,
 		options,
 		analysis,
@@ -1646,7 +1712,7 @@ class CT {	// Main class CT
 		painter
 
 	) {
-		this.status = status;
+		this.last_section_id = last_section_id;
 		this.details = details;
 		this.options = options;
 		this.analysis = analysis;
@@ -1660,10 +1726,11 @@ class CT {	// Main class CT
 		// Creates a new array of Detail class
 		this.details = [];
 		let details_draft = initDetailsSearchData();
+		this.getLastSectionIdFromEHTML();
 
 		try {
 
-			for (let i =0 ; i !== this.details_length ; i++) {
+			for (let i in details_draft) {
 
 				this.details.push(
 					new Detail(
@@ -1684,15 +1751,8 @@ class CT {	// Main class CT
 					this.details[i].value =  hl.findBetween(this.details[i].value,'"_blank">','</a>');
 				}
 
-				//Messages and headers handling
-				if (['message_decoded','message'].includes(this.details[i].name) || this.details[i].name.includes('network')){
-
-					this.details[i].css_id = 'INVISIBLE';
-
-				}
-
 				//Subnets handling
-				if (this.details[i].value.includes('network') && !this.details[i].value.includes('type_of')) {
+				if (this.details[i].name.includes('network') && !this.details[i].name.includes('type_of')) {
 
 					this.details[i].value = hl.extractIP(this.details[i].value,true);
 
@@ -1702,8 +1762,9 @@ class CT {	// Main class CT
 				if (this.details[i].value === '')  this.details[i].css_id = 'INVISIBLE';
 
 			}
+
 		} catch (e) {
-			hl.debugMessage(+e.stack);
+			hl.debugMessage(+e.stack,'initDetailsArray Fail:');
 		}
 
 	}
@@ -1796,6 +1857,32 @@ class CT {	// Main class CT
 		this.painter.drawHeadersTable(this.headers);
 		this.painter.drawMessageTextareas();
 		this.painter.drawSubnetsTable();
+		if (IS_DARK_THEME) ct.painter.changeTheme();
+
+	}
+
+	getLastSectionIdFromEHTML() {
+
+			const last_section_left_signature = `<div class="section_block" data-section="`
+			const last_right_signature = `"><span class="fa fa-chevron-down`
+			let last_section_id_start;
+			let last_section_id_end;
+
+			for (let i = EXTRACTED_HTML.length; i !== 0; i--) {
+				if (EXTRACTED_HTML.slice(i - last_section_left_signature.length, i) === last_section_left_signature) {
+					last_section_id_start = i;
+					break;
+				}
+			}
+
+			for (let i = last_section_id_start; i !== EXTRACTED_HTML.length; i++) {
+				if (EXTRACTED_HTML.slice(i, i + last_right_signature.length) === last_right_signature) {
+					last_section_id_end = i;
+					break;
+				}
+			}
+
+			this.last_section_id = EXTRACTED_HTML.slice(last_section_id_start, last_section_id_end);
 
 	}
 
@@ -1815,7 +1902,7 @@ class CT {	// Main class CT
 
 	setDetailPropertyByName(detail_name, property, new_value) {	// Set a new property [property:str] value[value:str] in this.details by detail name[detail_name:str]
 
-		for (let i = 0; i < this.details_length; i++) {
+		for (let i = 0; i === this.details_length; i++) {
 
 			if (this.details[i].name === detail_name) {
 
