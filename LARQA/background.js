@@ -14,7 +14,7 @@ const DEF_CATS_HIDDEN = {
 	"subnet":false,
 	"debug":true,
 };
-const CAPD_SIGNATURES = ['general_postdata_test','anynewsignature'];
+const CAPD_SIGNATURES = ['general_postdata_test','data_processing'];
 const IS_DARK_THEME = true;
 function initApplicationsData(){
 
@@ -32,19 +32,19 @@ function initApplicationsData(){
 		`{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"20","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}`
 	))
 
-	//JOOMLA3
-	apps_map.set('joomla3', new Application(
+	//JOOMLA34
+	apps_map.set('joomla34', new Application(
 		{
-			"native_number":"joomla3-62",
-			"int_number":"62"
+			"native_number":"joomla34-17",
+			"int_number":"17"
 		},
 		true,
+		true,
 		false,
-		false,
-		``
+		`{"apikey":"aqyqy6u3ypyg","form_protection":["check_register","check_contact_forms","check_custom_contact_forms","check_external","check_search"],"comments_and_messages":["jcomments_check_comments"],"cookies":["set_cookies"],"other_settings":["sfw_enable"],"url_exclusions":"","fields_exclusions":"","roles_exclusions":["7","8"],"remote_calls":{"close_renew_banner":{"last_call":0},"sfw_update":{"last_call":1612940479},"sfw_send_logs":{"last_call":0},"update_plugin":{"last_call":0}},"sfw_last_check":1612940480,"sfw_last_send_log":1612940480,"ct_key_is_ok":1,"acc_status_last_check":1612940480,"show_notice":0,"renew":0,"trial":0,"user_token":"eQy9e3ebaJevuJeXuWuGuWemunyHuHug","spam_count":0,"moderate_ip":0,"moderate":1,"show_review":0,"service_id":884143,"license_trial":0,"account_name_ob":"galy****@cleantalk.org","valid":1,"auto_update_app":0,"show_auto_update_notice":0,"ip_license":0,"work_url":"https:\\/\\/moderate3.cleantalk.org","server_ttl":845,"server_changed":1612940505,"connection_reports":{"success":2,"negative":0,"negative_report":null},"js_keys":{"829121296":1612940511}}`
 	))
 
-	//JOOMLA4
+	//JOOMLA15
 	apps_map.set('joomla15', new Application(
 		{
 			"native_number":"joomla15-372",
@@ -56,7 +56,7 @@ function initApplicationsData(){
 		``
 	))
 
-	//JOOMLA15
+	//JOOMLA3
 	apps_map.set('joomla3', new Application(
 		{
 			"native_number":"joomla3-62",
@@ -399,7 +399,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		if (TIMERS_ENABLED) this.exectime = performance.now();
 	}
 
-	async ipinfoApiCall() {
+	async callIpinfoAPI(ip) {
 
 		try {
 
@@ -410,7 +410,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 				let msg = JSON.stringify(json)
 
-				this.addTag('subnets_table_tbody', 'beforeend', `<tr><td class="subnet_table_td--by_what">IPINFO</td><td colspan="3" id="ipinfo-tr">${msg}</td></tr>`);
+				ct.painter.drawAPICall(`IPINFO API`,msg);
 
 			}
 
@@ -421,32 +421,36 @@ class Helper {	//Helper class, called to keep misc functionality.
 		}
 	}
 
-	async cleantalkApiCall() {
+	async callCleantalkApi(method_name) {
 
 		try {
 
-			if (ct.getDetailValueByName('sender_ip') !== '') {
+			const email = ct.getDetailValueByName('sender_email');
+			const ip = ct.getDetailValueByName('sender_ip');
+			let msg;
+			switch (method_name){
 
-				const request = await fetch(`http://ct.webtm.ru/api_redirect.php?method=get&api_url=
-				https://api.cleantalk.org
-				&method_name=spam_check
-				&auth_key=w4pvofhy03br
-				&email=${ct.getDetailValueByName('sender_email')}
-				&ip=${ct.getDetailValueByName('sender_ip')}
-				&security=some_shiet`)
-				const json = await request.json()
-
-				let msg = JSON.stringify(json)
-
-				this.addTag('subnets_table_tbody', 'beforeend', `<tr><td class="subnet_table_td--by_what">API:spam_check</td><td colspan="3" id="ipinfo-tr">${msg}</td></tr>`);
+				case `spam_check`:{
+					const request = await fetch(`http://ct.webtm.ru/api_redirect.php?method=get&api_url=
+												https://api.cleantalk.org
+												&method_name=spam_check
+												&auth_key=w4pvofhy03br
+												&email=${email}
+												&ip=${ip}
+												&security=some_shiet`);
+					const json = await request.json();
+					msg = JSON.stringify(json);
+				}break
 
 			}
+			ct.painter.drawAPICall(`BLAPI:spam_check`,msg);
 
 		} catch (e) {
 
 			alert('STACK ' + e.stack);
 
 		}
+
 	}
 
 	callWindow() {	//Main window call based on "prefilled.html"
@@ -481,8 +485,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 				hl.recordNewTimer('Drawing')
 				hl.startTimer();
 
-			hl.ipinfoApiCall();
-			hl.cleantalkApiCall();
+
 
 				hl.recordNewTimer('IpInfo call')
 				hl.startTimer();
@@ -605,6 +608,19 @@ class Helper {	//Helper class, called to keep misc functionality.
 	getOptionsFromJSON(json) { //Return array of Option class [array] from JSON string [json:str]
 
 		try {
+
+			function fixJoomlaOptions(json){
+
+				json = json.replace(/.+(data\":)/,"")
+					.replace(/,\"\\u0000\*\\.+/,"")
+					.replace(/(\"<a href).+(\"_blank\">)/,"\"")
+					.replace(/<\/a>/,"");
+
+				return json
+
+			}
+
+			if (ct.getDetailValueByName('ct_agent').includes('joomla')) json = fixJoomlaOptions(json);
 
 			const json_obj = JSON.parse(json);
 			let parsed_options = [];
@@ -851,6 +867,14 @@ class Painter{
 			ct.painter.changeTheme();
 		}
 
+	}
+
+	drawAPICall(api_name,api_call){
+
+		hl.addTag('subnets_table_tbody', 'beforeend', `<tr>
+																				<td class="subnet_table_td--by_what">${api_name}</td>
+																				<td colspan="3" id="ipinfo-tr">${api_call}</td>
+																			  </tr>`);
 	}
 
 	drawOptionsBlock(ct_options) {	//Draws details block in layout_window
@@ -1857,6 +1881,8 @@ class CT {	// Main class CT
 		this.painter.drawHeadersTable(this.headers);
 		this.painter.drawMessageTextareas();
 		this.painter.drawSubnetsTable();
+		hl.callIpinfoAPI();
+		hl.callCleantalkApi('spam_check');
 		if (IS_DARK_THEME) ct.painter.changeTheme();
 
 	}
@@ -1930,11 +1956,13 @@ class Option {	// Options class
 
 	constructor(
 		name,
-		value
+		value,
+		is_excluded_option
 	) {
 
 		this.name = name;
 		this.value = value;
+		this.is_excluded_option = is_excluded_option;
 	}
 
 	paintThis(){
@@ -1945,7 +1973,15 @@ class Option {	// Options class
 	}
 
 	setCAPD(){
+
 		hl.addToIssuesList(`У клиента включена проверка всех постданных: ${this.name}:${this.value}`,`10`);
+
+	}
+
+	setAsAnalysisExclusion(){
+
+		this.is_excluded_option = true;
+
 	}
 
 }
@@ -1996,9 +2032,14 @@ class Analysis {	// Analysis class
 	findOptionsChanged(default_options) {	//Compares request options with defaults by agent [default_options:str]
 
 		this.options_changes_counter = 0;
+
+
 		try {
+
+
 			// Collects options changed
 			for (let i = 0; i !== default_options.length; i++) {
+
 				hl.trimAndLow(default_options[i].value)
 				const def_value = hl.trimAndLow(default_options[i].value);
 
@@ -2007,7 +2048,29 @@ class Analysis {	// Analysis class
 					let ct_option = ct.options[j]
 					const req_value = hl.trimAndLow(ct_option.value);
 
-					if ( (default_options[i].name === ct_option.name) && ( def_value !== req_value ) ) {
+					if ([
+						'apikey',
+						'user_token',
+						'remote_calls',
+						'service_id',
+						'sfw_last_check',
+						'sfw_last_send_log',
+						'server_changed',
+						'connection_reports',
+						'js_keys',
+						'work_url',
+						'server_ttl',
+						'acc_status_last_check',
+						'spam_count',
+						'show_review',
+						'account_name_ob'
+					].includes(ct_option.name)) ct_option.setAsAnalysisExclusion();
+
+					if ((default_options[i].name === ct_option.name)
+						&&
+						(def_value !== req_value)
+						&&
+						(!ct_option.is_excluded_option)) {
 
 						this.options_changes_counter++;
 						hl.addToChangedOptionsList(ct_option.name);
@@ -2027,12 +2090,10 @@ class Analysis {	// Analysis class
 
 	checkOptions() {	// Calls options checking findOptionsChanged
 
-		//todo Дублирование опций обойти https://cleantalk.org/noc/requests?request_id=460ecc492b54f98b5b5bbf26a3629848
-
 		if (this.getDefaultOptionsByAgent(ct.status.agent)) {
 
-			let options_array_from_json = hl.getOptionsFromJSON(this.getDefaultOptionsByAgent(ct.status.agent));
-			this.findOptionsChanged(options_array_from_json);
+			let default_options = hl.getOptionsFromJSON(this.getDefaultOptionsByAgent(ct.status.agent));
+			this.findOptionsChanged(default_options);
 
 		}
 
