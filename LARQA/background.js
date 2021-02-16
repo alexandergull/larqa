@@ -14,8 +14,8 @@ const DEF_CATS_HIDDEN = {
 	"subnet":false,
 	"debug":true,
 };
-const CAPD_SIGNATURES = ['general_postdata_test','data_processing'];
-const IS_DARK_THEME = true;
+const CAPD_SIGNATURES = ['general_postdata_test','data_processing','check_all_post'];
+const IS_DARK_THEME = false;
 function initApplicationsData(){
 
 	let apps_map = new Map();
@@ -50,26 +50,27 @@ function initApplicationsData(){
 			"native_number":"joomla15-372",
 			"int_number":"372"
 		},
-		true,
 		false,
 		false,
-		``
+		false,
+		`NOT_SUPPORTED`
 	))
 
 	//JOOMLA3
+
 	apps_map.set('joomla3', new Application(
 		{
 			"native_number":"joomla3-62",
 			"int_number":"62"
 		},
 		true,
+		true,
 		false,
-		false,
-		``
+		`{"apikey":"aqyqy6u3ypyg","form_protection":["check_register","check_contact_forms","check_custom_contact_forms","check_external","check_search"],"comments_and_messages":["jcomments_check_comments"],"cookies":["set_cookies"],"other_settings":["sfw_enable"],"url_exclusions":"","fields_exclusions":"","roles_exclusions":["7","8"],"remote_calls":{"close_renew_banner":{"last_call":0},"sfw_update":{"last_call":1612940479},"sfw_send_logs":{"last_call":0},"update_plugin":{"last_call":0}},"sfw_last_check":1612940480,"sfw_last_send_log":1612940480,"ct_key_is_ok":1,"acc_status_last_check":1612940480,"show_notice":0,"renew":0,"trial":0,"user_token":"eQy9e3ebaJevuJeXuWuGuWemunyHuHug","spam_count":0,"moderate_ip":0,"moderate":1,"show_review":0,"service_id":884143,"license_trial":0,"account_name_ob":"galy****@cleantalk.org","valid":1,"auto_update_app":0,"show_auto_update_notice":0,"ip_license":0,"work_url":"https:\\/\\/moderate3.cleantalk.org","server_ttl":845,"server_changed":1612940505,"connection_reports":{"success":2,"negative":0,"negative_report":null},"js_keys":{"829121296":1612940511}}`
 	))
 
 	//DRUPAL7//070221
-	apps_map.set('drupal', new Application(
+ 	apps_map.set('drupal', new Application(
 		{
 			"native_number":"drupal-46",
 			"int_number":"46"
@@ -89,7 +90,7 @@ function initApplicationsData(){
 		true,
 		true,
 		false,
-		``
+		`{"access_key":"","cleantalk_check_comments":true,"cleantalk_check_comments_automod":false,"cleantalk_check_comments_min_approved":3,"cleantalk_check_register":true,"cleantalk_check_webforms":true,"cleantalk_check_contact_forms":true,"cleantalk_check_forum_topics":false,"cleantalk_check_search_form":true,"cleantalk_url_exclusions":"","cleantalk_url_regexp":false,"cleantalk_fields_exclusions":"","cleantalk_roles_exclusions":"administrator","cleantalk_add_search_noindex":null,"cleantalk_search_noindex":false,"cleantalk_set_cookies":true,"cleantalk_alternative_cookies_session":false,"cleantalk_check_ccf":false,"cleantalk_check_external":0,"cleantalk_link":false,"cleantalk_sfw":true}`
 	))
 
 	//DRUPAL9
@@ -101,7 +102,7 @@ function initApplicationsData(){
 		true,
 		true,
 		false,
-		``
+		`{"access_key":"","cleantalk_check_comments":true,"cleantalk_check_comments_automod":false,"cleantalk_check_comments_min_approved":3,"cleantalk_check_register":true,"cleantalk_check_webforms":true,"cleantalk_check_contact_forms":true,"cleantalk_check_forum_topics":false,"cleantalk_check_search_form":true,"cleantalk_url_exclusions":"","cleantalk_url_regexp":false,"cleantalk_fields_exclusions":"","cleantalk_roles_exclusions":"administrator","cleantalk_add_search_noindex":null,"cleantalk_search_noindex":false,"cleantalk_set_cookies":true,"cleantalk_alternative_cookies_session":false,"cleantalk_check_ccf":false,"cleantalk_check_external":0,"cleantalk_link":false,"cleantalk_sfw":true}`
 	))
 
 	//UNI
@@ -682,11 +683,15 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	trimAndLow (option_value) { //Returns trimmed string [return_string:str] in lowercase. Miscellaneous.
 
-		let return_string = option_value;
-		return_string = return_string.toString().trim();
-		return_string = return_string.toLowerCase();
+		if (option_value != null) {
 
-		return (return_string);
+			let return_string = option_value;
+			return_string = return_string.toString().trim();
+			return_string = return_string.toLowerCase();
+
+			return (return_string);
+
+		} else return option_value;
 
 	}
 
@@ -1519,40 +1524,46 @@ class Status {
 		const filters_section = hl.getHtmlSectionFromEHTML('filters');
 		const right = 'R:';
 
-		this.filters = hl.findBetween(filters_section,left,right);
+		if (!EXTRACTED_HTML.includes(`<td>R&nbsp;</td><td>:&nbsp;0</td>`)) {
 
-		let balls_summary = (function(){
+			this.filters = hl.findBetween(filters_section, left, right);
 
-			try {
 
-				if (ct.status.filters.includes('R&nbsp;</td><td>:&nbsp;0')) {
 
-					return '0';
+			let balls_summary = (function () {
 
+				try {
+
+					if (ct.status.filters.includes('R&nbsp;</td><td>:&nbsp;0')) {
+
+						return '0';
+
+					}
+
+					return hl.findBetween(filters_section, ' R:', '</td>');
+
+				} catch (e) {
+					hl.debugMessage(e.stack);
 				}
+			}())
 
-				return hl.findBetween(filters_section,' R:','</td>');
+			this.cleanFiltersStringFromTags();
+			this.sortFiltersByBalls(FILTERS_SORT_DESC);
+			this.colorFiltersNamesIfInSet();
 
-			} catch (e) {
-				hl.debugMessage(e.stack);
+			if (+balls_summary < 80) {
+
+				ct.status.filters = `<b style="color: green">R: ${balls_summary}</b> [${ct.status.filters}]`;
+				ct.status.filters += `<p>Не хватает для блокировки: <b>${80 - balls_summary}</b>, `;
+
+			} else {
+
+				ct.status.filters = `<b style="color: #990000">R: ${balls_summary}</b> [${ct.status.filters}]`;
+				ct.status.filters += `<p>Превышено на: <b>${balls_summary - 80}</b>, `;
+
 			}
-		}())
 
-		this.cleanFiltersStringFromTags();
-		this.sortFiltersByBalls(FILTERS_SORT_DESC);
-		this.colorFiltersNamesIfInSet();
-
-			if ( +balls_summary < 80 ) {
-
-			ct.status.filters = `<b style="color: green">R: ${balls_summary}</b> [${ct.status.filters}]`;
-			ct.status.filters += `<p>Не хватает для блокировки: <b>${80-balls_summary}</b>, `;
-
-		} else {
-
-			ct.status.filters = `<b style="color: #990000">R: ${balls_summary}</b> [${ct.status.filters}]`;
-			ct.status.filters += `<p>Превышено на: <b>${balls_summary-80}</b>, `;
-
-		}
+		} else this.filters = `<b>R:0</b> `
 
 		ct.status.filters += `Настроить: `;
 		ct.status.filters += `<a href="${ct.status.links.to_service_filters}">[Фильтры для service_id:${this.user_card.service_id}]</a>, `;
@@ -2056,20 +2067,42 @@ class Analysis {	// Analysis class
 
 	getDefaultOptionsByAgent(ct_agent){
 
+		function fixAppNames(app_name) {
+
+			let result;
+
+			result = (app_name === `drupal`) ? `drupal7` :  app_name;
+			result = (app_name.includes(`drupal-`)) ? `drupal7` : app_name;
+			result = (app_name.includes(`joomla-`)) ? app_name.replace(/joomla-/,`joomla15-`) : app_name;
+
+			return result
+
+		}
+
 		for (let entry of this.applications_data) {
 
 			if (entry[1].is_options_supported) {
 
+				entry[0] = fixAppNames(entry[0]);
+				ct_agent = fixAppNames(ct_agent);
+
+				hl.debugMessage(ct_agent, 'ct_agent ');
+				hl.debugMessage(entry[0], 'entry[0] ');
+
 				if (ct_agent.includes(entry[0])) {
+
+					hl.debugMessage(ct_agent, 'ct_agent found');
+					hl.debugMessage(entry[0], 'entry[0] found');
+					hl.debugMessage(this.applications_data.get(entry[0]).options_defaults, 'this.applications_data.get(entry[1]).options_defaults found');
 
 					return this.applications_data.get(entry[0]).options_defaults
 
 				}
 
-			} else return false
-
+			}
 		}
 
+		return false
 	}
 
 	findOptionsChanged(default_options) {	//Compares request options with defaults by agent [default_options:str]
@@ -2078,7 +2111,6 @@ class Analysis {	// Analysis class
 
 
 		try {
-
 
 			// Collects options changed
 			for (let i = 0; i !== default_options.length; i++) {
@@ -2106,7 +2138,8 @@ class Analysis {	// Analysis class
 						'acc_status_last_check',
 						'spam_count',
 						'show_review',
-						'account_name_ob'
+						'account_name_ob',
+						'cleantalk_roles_exclusions'
 					].includes(ct_option.name)) ct_option.setAsAnalysisExclusion();
 
 					if ((default_options[i].name === ct_option.name)
