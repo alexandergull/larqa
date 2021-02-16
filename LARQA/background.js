@@ -6,7 +6,7 @@
 
 const HARD_DEBUG = true;
 const FILTERS_SORT_DESC = true;
-const TIMERS_ENABLED = false;
+const BENCHMARK_ENABLED = false;
 const DEF_CATS_HIDDEN = {
 	"headers":true,
 	"message":true,
@@ -371,14 +371,12 @@ class Helper {	//Helper class, called to keep misc functionality.
 		debug_list,
 		issues_list,
 		changed_options_list,
-		timers,
-		exectime,
+		benchmark,
 	) {
 		this.debug_list = debug_list;
 		this.issues_list = issues_list;
 		this.changed_options_list = changed_options_list;
-		this.timers = timers;
-		this.exectime = exectime;
+		this.benchmark = benchmark;
 	}
 
 	initHelperData() {	//Initialize Helper necessary data.
@@ -386,20 +384,18 @@ class Helper {	//Helper class, called to keep misc functionality.
 		this.debug_list = '';
 		this.issues_list = new Map();
 		this.changed_options_list = '';
-		this.timers = [];
-		this.exectime = 0;
+		this.benchmark = [];
 
 	}
 
-	recordNewTimer(name) {
-		if (TIMERS_ENABLED) hl.timers.push(`${name}: ${(performance.now() - this.exectime).toFixed(1)}`);
+	setBenchmarkPoint(point_name) {
+
+		if (BENCHMARK_ENABLED) hl.debugMessage(new Date().getTime(),point_name);
+
 	}
 
-	startTimer() {
-		if (TIMERS_ENABLED) this.exectime = performance.now();
-	}
 
-	async callIpinfoAPI(ip) {
+	async callIpinfoAPI() {
 
 		try {
 
@@ -416,7 +412,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		} catch (e) {
 
-			alert('STACK ' + e.stack);
+			hl.debugMessage('STACK ' + e.stack);
 
 		}
 	}
@@ -447,6 +443,48 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		} catch (e) {
 
+			hl.debugMessage('STACK ' + e.stack);
+
+		}
+
+	}
+
+	async callCleantalkApiCustom(method_name,ip,email) {
+
+		try {
+
+			let msg;
+			switch (method_name){
+
+				case `spam_check`:{
+					const request = await fetch(`http://ct.webtm.ru/api_redirect.php?method=get&api_url=
+												https://api.cleantalk.org
+												&method_name=spam_check
+												&auth_key=w4pvofhy03br
+												&email=${email}
+												&ip=${ip}
+												&security=some_shiet`);
+					const json = await request.json();
+					msg = JSON.stringify(json);
+				}break
+
+				case `spam_check_cms`:{
+					const request = await fetch(`http://ct.webtm.ru/api_redirect.php?method=get&api_url=
+												https://api.cleantalk.org
+												&method_name=spam_check_cms
+												&auth_key=9arymagatetu
+												&email=${email}
+												&ip=${ip}
+												&security=some_shiet`);
+					const json = await request.json();
+					msg = JSON.stringify(json);
+				}break
+
+			}
+			await ct.painter.drawAPICall(`BLAPI:${method_name}`,msg);
+
+		} catch (e) {
+
 			alert('STACK ' + e.stack);
 
 		}
@@ -457,53 +495,58 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 		this.initHelperData();
 
-			this.startTimer();
-
 		window.interface_window = window.open('prefilled.html', '_blank');
 		interface_window.onload = function() {	// Processes starts here.
 
 			ct.initCTData();
 
+			hl.setBenchmarkPoint(`init`)
+
 			ct.analysis.initOptionsDefaults();
 			ct.status.initStatus();
 
-				hl.recordNewTimer('Init total')
-				hl.startTimer();
+			hl.setBenchmarkPoint(`init 2`)
 
 			ct.analysis.checkDetails();
-
-				hl.recordNewTimer('CheckDetails')
-				hl.startTimer();
-
 			ct.analysis.checkOptions();
 
-				hl.recordNewTimer('CheckOptions')
-				hl.startTimer();
+			hl.setBenchmarkPoint(`analytics`)
 
 			ct.drawInterface();
 
-				hl.recordNewTimer('Drawing')
-				hl.startTimer();
-
-
-
-				hl.recordNewTimer('IpInfo call')
-				hl.startTimer();
+			hl.setBenchmarkPoint(`interfaces`)
 
 			hl.showIssuesList();
 			hl.showDebugMsgList();
 			hl.showChangedOptionsList();
 
-				hl.recordNewTimer('Reports')
-				if (TIMERS_ENABLED)
-					for (let key in hl.timers){
-						hl.addTag('body','afterbegin',`<p style="font-size: 8px">exec time [${hl.timers[key]} ms]</p>`);
-				}
-
-
 			interface_window.focus();
 
 			ct.painter.bindButtons();
+
+			/*let testdata = [];
+			testdata.push({"method":"spam_check","ip":"177.136.210.102","email":"yourmail@gmail.com"})
+			testdata.push({"method":"spam_check","ip":"206.189.151.17","email":"rafailzagaraeva19975638nw@mail.ru\t"})
+			testdata.push({"method":"spam_check","ip":"52.87.213.117","email":"ericjonesonline@outlook.com"})
+			testdata.push({"method":"spam_check","ip":"54.172.223.43","email":"starostindamir4291@yandex.ru"})
+			testdata.push({"method":"spam_check","ip":"125.26.175.109","email":"alexandr.g@diptown.ru"})
+			testdata.push({"method":"spam_check","ip":"95.99.45.74","email":"s@cleantalk.org"})
+			testdata.push({"method":"spam_check","ip":"11.25.46.135","email":"galyshev@cleantalk.org"})
+			testdata.push({"method":"spam_check","ip":"91.98.25.49","email":"r2e5@ya.ru"})
+			testdata.push({"method":"spam_check_cms","ip":"177.136.210.102","email":"yourmail@gmail.com"})
+			testdata.push({"method":"spam_check_cms","ip":"206.189.151.17","email":"rafailzagaraeva19975638nw@mail.ru\t"})
+			testdata.push({"method":"spam_check_cms","ip":"52.87.213.117","email":"ericjonesonline@outlook.com"})
+			testdata.push({"method":"spam_check_cms","ip":"54.172.223.43","email":"starostindamir4291@yandex.ru"})
+			testdata.push({"method":"spam_check_cms","ip":"125.26.175.109","email":"alexandr.g@diptown.ru"})
+			testdata.push({"method":"spam_check_cms","ip":"95.99.45.74","email":"s@cleantalk.org"})
+			testdata.push({"method":"spam_check_cms","ip":"11.25.46.135","email":"galyshev@cleantalk.org"})
+			testdata.push({"method":"spam_check_cms","ip":"91.98.25.49","email":"r2e5@ya.ru"})
+
+			for (let key of testdata){
+
+				hl.callCleantalkApiCustom(key.method,key.ip,key.email);
+
+			}*/
 
 		}
 
@@ -1577,7 +1620,7 @@ class Status {
 
 		const feedback_signature = 'Решение пользователя';
 
-		const feedback_signature_no = `Решение пользователя:
+		let feedback_signature_no = `Решение пользователя:
                     </div>
                     <div class="div_feedback col-xs-1">
                         <span class="text-success">`;
@@ -1587,7 +1630,7 @@ class Status {
                     <div class="div_feedback col-xs-1">
                         <span class="text-danger">`)) {
 
-			const feedback_signature_no = `Решение пользователя:
+			feedback_signature_no = `Решение пользователя:
                     </div>
                     <div class="div_feedback col-xs-1">
                         <span class="text-danger">`;
@@ -1883,7 +1926,7 @@ class CT {	// Main class CT
 		this.painter.drawSubnetsTable();
 		hl.callIpinfoAPI();
 		hl.callCleantalkApi('spam_check');
-		if (IS_DARK_THEME) ct.painter.changeTheme();
+		if (IS_DARK_THEME) this.painter.changeTheme();
 
 	}
 
