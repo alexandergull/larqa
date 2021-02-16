@@ -14,49 +14,43 @@ const DEF_CATS_HIDDEN = {
 	"subnet":false,
 	"debug":true,
 };
-const CAPD_SIGNATURES = ['general_postdata_test','data_processing','check_all_post'];
+const CAPD_SIGNATURES = ['general_postdata_test','data_processing','check_all_post','form_global_check_without_email'];
 const IS_DARK_THEME = false;
 function initApplicationsData(){
 
 	let apps_map = new Map();
 
-	//WORDPRESS
+	//WORDPRESS//17022021
 	apps_map.set('wordpress', new Application(
 		{
 			"native_number":"wordpress-51525",
 			"int_number":"51525"
 		},
 		true,
-		true,
-		false,
 		`{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"20","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}`
 	))
 
-	//JOOMLA34
+	//JOOMLA34//17022021
 	apps_map.set('joomla34', new Application(
 		{
 			"native_number":"joomla34-17",
 			"int_number":"17"
 		},
 		true,
-		true,
-		false,
 		`{"apikey":"aqyqy6u3ypyg","form_protection":["check_register","check_contact_forms","check_custom_contact_forms","check_external","check_search"],"comments_and_messages":["jcomments_check_comments"],"cookies":["set_cookies"],"other_settings":["sfw_enable"],"url_exclusions":"","fields_exclusions":"","roles_exclusions":["7","8"],"remote_calls":{"close_renew_banner":{"last_call":0},"sfw_update":{"last_call":1612940479},"sfw_send_logs":{"last_call":0},"update_plugin":{"last_call":0}},"sfw_last_check":1612940480,"sfw_last_send_log":1612940480,"ct_key_is_ok":1,"acc_status_last_check":1612940480,"show_notice":0,"renew":0,"trial":0,"user_token":"eQy9e3ebaJevuJeXuWuGuWemunyHuHug","spam_count":0,"moderate_ip":0,"moderate":1,"show_review":0,"service_id":884143,"license_trial":0,"account_name_ob":"galy****@cleantalk.org","valid":1,"auto_update_app":0,"show_auto_update_notice":0,"ip_license":0,"work_url":"https:\\/\\/moderate3.cleantalk.org","server_ttl":845,"server_changed":1612940505,"connection_reports":{"success":2,"negative":0,"negative_report":null},"js_keys":{"829121296":1612940511}}`
 	))
 
-	//JOOMLA15
+	//JOOMLA15//17022021
 	apps_map.set('joomla15', new Application(
 		{
 			"native_number":"joomla15-372",
 			"int_number":"372"
 		},
 		false,
-		false,
-		false,
-		`NOT_SUPPORTED`
+		`{}`
 	))
 
-	//JOOMLA3
+	//JOOMLA3//17022021
 
 	apps_map.set('joomla3', new Application(
 		{
@@ -64,8 +58,6 @@ function initApplicationsData(){
 			"int_number":"62"
 		},
 		true,
-		true,
-		false,
 		`{"apikey":"aqyqy6u3ypyg","form_protection":["check_register","check_contact_forms","check_custom_contact_forms","check_external","check_search"],"comments_and_messages":["jcomments_check_comments"],"cookies":["set_cookies"],"other_settings":["sfw_enable"],"url_exclusions":"","fields_exclusions":"","roles_exclusions":["7","8"],"remote_calls":{"close_renew_banner":{"last_call":0},"sfw_update":{"last_call":1612940479},"sfw_send_logs":{"last_call":0},"update_plugin":{"last_call":0}},"sfw_last_check":1612940480,"sfw_last_send_log":1612940480,"ct_key_is_ok":1,"acc_status_last_check":1612940480,"show_notice":0,"renew":0,"trial":0,"user_token":"eQy9e3ebaJevuJeXuWuGuWemunyHuHug","spam_count":0,"moderate_ip":0,"moderate":1,"show_review":0,"service_id":884143,"license_trial":0,"account_name_ob":"galy****@cleantalk.org","valid":1,"auto_update_app":0,"show_auto_update_notice":0,"ip_license":0,"work_url":"https:\\/\\/moderate3.cleantalk.org","server_ttl":845,"server_changed":1612940505,"connection_reports":{"success":2,"negative":0,"negative_report":null},"js_keys":{"829121296":1612940511}}`
 	))
 
@@ -76,129 +68,107 @@ function initApplicationsData(){
 			"int_number":"46"
 		},
 		true,
-		true,
-		false,
 		`{"access_key":"","cleantalk_check_comments":1,"cleantalk_check_comments_automod":0,"cleantalk_check_comments_min_approved":"3","cleantalk_check_register":1,"cleantalk_check_webforms":0,"cleantalk_check_contact_forms":1,"cleantalk_check_forum_topics":0,"cleantalk_check_ccf":0,"cleantalk_check_search_form":1,"cleantalk_add_search_noindex":0,"cleantalk_url_exclusions":"","cleantalk_url_exclusions_regexp":0,"cleantalk_fields_exclusions":"","cleantalk_roles_exclusions":"4,1,2,12,11","cleantalk_set_cookies":1,"cleantalk_alternative_cookies_session":0,"cleantalk_sfw":0,"cleantalk_ssl":"","cleantalk_link":0}`
 	))
 
-	//DRUPAL8
+	//DRUPAL8//17022021
 	apps_map.set('drupal8', new Application(
 		{
 			"native_number":"drupal8-46",
 			"int_number":"46"
 		},
 		true,
-		true,
-		false,
 		`{"access_key":"","cleantalk_check_comments":true,"cleantalk_check_comments_automod":false,"cleantalk_check_comments_min_approved":3,"cleantalk_check_register":true,"cleantalk_check_webforms":true,"cleantalk_check_contact_forms":true,"cleantalk_check_forum_topics":false,"cleantalk_check_search_form":true,"cleantalk_url_exclusions":"","cleantalk_url_regexp":false,"cleantalk_fields_exclusions":"","cleantalk_roles_exclusions":"administrator","cleantalk_add_search_noindex":null,"cleantalk_search_noindex":false,"cleantalk_set_cookies":true,"cleantalk_alternative_cookies_session":false,"cleantalk_check_ccf":false,"cleantalk_check_external":0,"cleantalk_link":false,"cleantalk_sfw":true}`
 	))
 
-	//DRUPAL9
+	//DRUPAL9//17022021
 	apps_map.set('drupal9', new Application(
 		{
 			"native_number":"drupal9-15",
 			"int_number":"15"
 		},
 		true,
-		true,
-		false,
 		`{"access_key":"","cleantalk_check_comments":true,"cleantalk_check_comments_automod":false,"cleantalk_check_comments_min_approved":3,"cleantalk_check_register":true,"cleantalk_check_webforms":true,"cleantalk_check_contact_forms":true,"cleantalk_check_forum_topics":false,"cleantalk_check_search_form":true,"cleantalk_url_exclusions":"","cleantalk_url_regexp":false,"cleantalk_fields_exclusions":"","cleantalk_roles_exclusions":"administrator","cleantalk_add_search_noindex":null,"cleantalk_search_noindex":false,"cleantalk_set_cookies":true,"cleantalk_alternative_cookies_session":false,"cleantalk_check_ccf":false,"cleantalk_check_external":0,"cleantalk_link":false,"cleantalk_sfw":true}`
 	))
 
-	//UNI
+	//UNI//17022021
 	apps_map.set('uni', new Application(
 		{
 			"native_number":"uni-23",
 			"int_number":"23"
 		},
-		true,
-		true,
 		false,
-		``
+		`{}`
 	))
 
-	//PHPBB3
-	apps_map.set('phpbb3', new Application(
+	//PHPBB3//17022021
+	apps_map.set('phpbb-', new Application(
 		{
 			"native_number":"ct-phpbb-43",
 			"int_number":"43"
 		},
-		true,
-		true,
 		false,
-		``
+		`{}`
 	))
 
-	//OPENCART
-	apps_map.set('opencart', new Application(
-		{
-			"native_number":"opencart-21",
-			"int_number":"21"
-		},
-		true,
-		true,
-		false,
-		``
-	))
-
-	//PHPBB31
+	//PHPBB31//17022021
 	apps_map.set('phpbb31', new Application(
 		{
 			"native_number":"phpbb31-573",
 			"int_number":"573"
 		},
-		true,
-		true,
 		false,
-		``
+		`{}`
 	))
 
-	//IPB
+	//OPENCART//17022021
+	apps_map.set('opencart', new Application(
+		{
+			"native_number":"opencart-21",
+			"int_number":"21"
+		},
+		false,
+		`{}`
+	))
+
+	//IPB//17022021
 	apps_map.set('ipboard', new Application(
 		{
 			"native_number":"ipboard-20",
 			"int_number":"20"
 		},
-		true,
-		true,
 		false,
-		``
+		`{}`
 	))
 
-	//IPS
+	//IPS//17022021
 	apps_map.set('ipboard4', new Application(
 		{
 			"native_number":"ipboard4-200",
 			"int_number":"200"
 		},
-		true,
-		true,
 		false,
 		``
 	))
 
-	//BITRIX
+	//BITRIX//17022021
 	apps_map.set('bitrix', new Application(
 		{
 			"native_number":"bitrix-31113",
 			"int_number":"31113"
 		},
 		true,
-		true,
-		false,
-		``
+		`{"access_key":"","form_new_user":"0","form_comment_blog":"0","form_comment_forum":"0","form_forum_private_messages":"0","form_comment_treelike":"0","form_send_example":"0","form_order":"0","web_form":"0","form_global_check":"0","form_global_check_without_email":"0","form_sfw":"0"}`
 	))
 
-	//SMF//070221
+	//SMF//17022021
 	apps_map.set('smf', new Application(
 		{
 			"native_number":"smf-231",
 			"int_number":"231"
 		},
 		false,
-		false,
-		false,
-		`NONE`
+		`{}`
 	))
 
 	//XENFORO
@@ -208,8 +178,6 @@ function initApplicationsData(){
 			"int_number":"26"
 		},
 		true,
-		true,
-		false,
 		``
 	))
 
@@ -220,8 +188,6 @@ function initApplicationsData(){
 			"int_number":"25"
 		},
 		true,
-		true,
-		false,
 		``
 	))
 
@@ -232,8 +198,6 @@ function initApplicationsData(){
 			"int_number":"129"
 		},
 		true,
-		true,
-		false,
 		``
 	))
 
@@ -244,8 +208,6 @@ function initApplicationsData(){
 			"int_number":"14"
 		},
 		true,
-		true,
-		false,
 		``
 	))
 
@@ -255,8 +217,6 @@ function initApplicationsData(){
 			"native_number":"vbulletin-23",
 			"int_number":"23"
 		},
-		true,
-		true,
 		true,
 		``
 	))
@@ -268,8 +228,6 @@ function initApplicationsData(){
 			"int_number":"11"
 		},
 		true,
-		true,
-		true,
 		``
 	))
 
@@ -279,8 +237,6 @@ function initApplicationsData(){
 			"native_number":"mybb-14",
 			"int_number":"14"
 		},
-		true,
-		true,
 		true,
 		``
 	))
@@ -292,8 +248,6 @@ function initApplicationsData(){
 			"int_number":"13"
 		},
 		true,
-		true,
-		true,
 		``
 	))
 
@@ -304,12 +258,8 @@ function initApplicationsData(){
 			"int_number":"303"
 		},
 		true,
-		true,
-		true,
 		``
 	))
-
-
 
 	return apps_map;
 
@@ -595,7 +545,7 @@ class Helper {	//Helper class, called to keep misc functionality.
 		let left = '<div class="section_block" data-section="' + section_id + '">';
 		let right;
 
-		if (EXTRACTED_HTML.includes(section_id)) {
+		if (EXTRACTED_HTML.includes(left)) {
 
 			if (section_id !== ct.last_section_id) {
 
@@ -1196,22 +1146,33 @@ class Painter{
 
 		try {
 
-			let tag_id = 'headers_table_tr-header';
+			if (ct_headers !== undefined) {
 
-			for (let i = 0; i !== ct_headers.length; i++) {
+				let tag_id = 'headers_table_tr-header';
 
-				if (i > 0) {
-					i--;
-					tag_id = 'headers_table_tier-' + i;
-					i++;
+				for (let i = 0; i !== ct_headers.length; i++) {
+
+					if (i > 0) {
+						i--;
+						tag_id = 'headers_table_tier-' + i;
+						i++;
+					}
+
+					hl.addTag(tag_id, 'afterend', '<tr id="headers_table_tier-' + i + '"></tr>')
+					hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-name-' + i + '">' + ct_headers[i].name + '</td>');
+					hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-value-' + i + '">' + ct_headers[i].value + '</td>');
+					hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-attention-' + i + '">' + ct_headers[i].is_attention + '</td>');
+
 				}
 
-				hl.addTag(tag_id, 'afterend', '<tr id="headers_table_tier-' + i + '"></tr>')
-				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-name-' + i + '">' + ct_headers[i].name + '</td>');
-				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-value-' + i + '">' + ct_headers[i].value + '</td>');
-				hl.addTag('headers_table_tier-' + i, 'beforeend', '<td id="headers_table_td-attention-' + i + '">' + ct_headers[i].is_attention + '</td>');
+			} else {
+
+				hl.addTag('headers_table_tr-header', 'afterend', '<tr id="headers_table_tier-1"></tr>')
+				hl.addTag('headers_table_tier-1','beforeend', '<td colspan="3" id="headers_table_td-name-1" style="text-align: center"><b>Заголовки не переданы</b></td>');
+				hl.addToIssuesList('HTTP заголовки не переданы плагином',10);
 
 			}
+
 		} catch (e) {
 			hl.debugMessage(e.stack,'drawHeadersTable FAIL:');
 		}
@@ -1738,15 +1699,11 @@ class Application{
 	constructor(
 		version,
 		is_options_supported,
-		is_larqa_options_check_supported,
-		is_exotic,
 		options_defaults,
 	) {
 		this.version = version;
 		this.is_options_supported = is_options_supported;
 		this.options_defaults = options_defaults;
-		this.is_exotic = is_exotic;
-		this.is_larqa_options_check_supported = is_larqa_options_check_supported;
 	}
 
 }
@@ -1890,25 +1847,28 @@ class CT {	// Main class CT
 
 			}
 
-			this.headers = [];
+			if (this.getDetailValueByName('all_headers')!=='') {
 
-			let json_string = this.getDetailValueByName('all_headers');
+				this.headers = [];
+
+				let json_string = this.getDetailValueByName('all_headers');
 
 				//hl.debugMessage(json_string,`json_string origin`);
 
-			json_string = escapeSpecialChars(json_string);
+				json_string = escapeSpecialChars(json_string);
 
 				//hl.debugMessage(json_string,`json_string escaped`);
 
-			const json_obj = JSON.parse(json_string);
+				const json_obj = JSON.parse(json_string);
 
-			for (let key in json_obj) {
-				let value = json_obj[key];
-				this.headers.push({
-					name: key,
-					value: value,
-					is_attention: 0
-				})
+				for (let key in json_obj) {
+					let value = json_obj[key];
+					this.headers.push({
+						name: key,
+						value: value,
+						is_attention: 0
+					})
+				}
 			}
 
 			ct.setDetailPropertyByName('all_headers','css_id','INVISIBLE');
@@ -2079,30 +2039,32 @@ class Analysis {	// Analysis class
 
 		}
 
-		for (let entry of this.applications_data) {
+		if (ct.getDetailValueByName(`ct_options`) !== '') {
 
-			if (entry[1].is_options_supported) {
+			for (let entry of this.applications_data) {
 
-				entry[0] = fixAppNames(entry[0]);
-				ct_agent = fixAppNames(ct_agent);
+				if (entry[1].is_options_supported) {
 
-				hl.debugMessage(ct_agent, 'ct_agent ');
-				hl.debugMessage(entry[0], 'entry[0] ');
+					entry[0] = fixAppNames(entry[0]);
+					ct_agent = fixAppNames(ct_agent);
 
-				if (ct_agent.includes(entry[0])) {
+					hl.debugMessage(ct_agent, 'ct_agent ');
+					hl.debugMessage(entry[0], 'entry[0] ');
 
-					hl.debugMessage(ct_agent, 'ct_agent found');
-					hl.debugMessage(entry[0], 'entry[0] found');
-					hl.debugMessage(this.applications_data.get(entry[0]).options_defaults, 'this.applications_data.get(entry[1]).options_defaults found');
+					if (ct_agent.includes(entry[0])) {
 
-					return this.applications_data.get(entry[0]).options_defaults
+						hl.debugMessage(ct_agent, 'ct_agent found');
+						hl.debugMessage(entry[0], 'entry[0] found');
+						hl.debugMessage(this.applications_data.get(entry[0]).options_defaults, 'this.applications_data.get(entry[1]).options_defaults found');
+
+						return this.applications_data.get(entry[0]).options_defaults
+
+					}
 
 				}
-
 			}
 		}
 
-		return false
 	}
 
 	findOptionsChanged(default_options) {	//Compares request options with defaults by agent [default_options:str]
@@ -2125,6 +2087,7 @@ class Analysis {	// Analysis class
 
 					if ([
 						'apikey',
+						'access_key',
 						'user_token',
 						'remote_calls',
 						'service_id',

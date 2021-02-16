@@ -132,13 +132,6 @@
       <workItem from="1604213951006" duration="27407000" />
       <workItem from="1612871247399" duration="24535000" />
     </task>
-    <task id="LOCAL-00013" summary="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций">
-      <created>1605080657468</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1605080657468</updated>
-    </task>
     <task id="LOCAL-00014" summary="- добавил подсветку кастомных множеств">
       <created>1606284551870</created>
       <option name="number" value="00014" />
@@ -475,7 +468,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613474523123</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="- Cadence 16.02.2021 -&#10;Фикс: &#10;- исправил определение фильтров при 0 баллов&#10;Новое:&#10;- поддержка опций друпал 8&#10;- поддержка опций друпал 9&#10;- поддержка опций joomla 1.5 и 34.3">
+      <created>1613488255628</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1613488255628</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -509,7 +509,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- Cadence 25/01&#10;Новое:&#10;- иконку запилил" />
     <MESSAGE value="- alexthegull  27.01.2021 -&#10;Правки:&#10;- сортировка фильтров работала неправильно&#10;- мелкие правки в HTML" />
     <MESSAGE value="- Cadence 27.01.21&#10;Новое:&#10;- выделил жирным значения фильтров" />
     <MESSAGE value="- Cadence 28.01.2021 -&#10;Фикс:&#10;- ещё правки в сортировке, сейчас нормально должно быть&#10;- объект класса Helper переименовал в hl.&#10;&#10;Новое:&#10;- таймеры выполнения добавил в Helper, применил к hl.callwindow&#10;- сортирвока фильтров в обоих направлениях, зависит от константы в опциях" />
@@ -534,7 +533,8 @@
     <MESSAGE value="- Cadence 08.02.2021 -&#10;&#10;Новое:&#10;- скрыть/открыть блоки отчётов" />
     <MESSAGE value="- SOFTMAN 11.02.2021 -&#10;Новое:&#10;- сделал проверку опций Joomla&#10;&#10;Правки: &#10;- привёл в порядок вызовы Api" />
     <MESSAGE value="- Cadence 16.02.2021 -&#10;Фикс:&#10;- исправил логику определения ОС&#10;&#10;Правки:&#10;- убрал таймеры, заменил их на бенчмаркинг" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 16.02.2021 -&#10;Фикс:&#10;- исправил логику определения ОС&#10;&#10;Правки:&#10;- убрал таймеры, заменил их на бенчмаркинг" />
+    <MESSAGE value="- Cadence 16.02.2021 -&#10;Фикс: &#10;- исправил определение фильтров при 0 баллов&#10;Новое:&#10;- поддержка опций друпал 8&#10;- поддержка опций друпал 9&#10;- поддержка опций joomla 1.5 и 34.3" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 16.02.2021 -&#10;Фикс: &#10;- исправил определение фильтров при 0 баллов&#10;Новое:&#10;- поддержка опций друпал 8&#10;- поддержка опций друпал 9&#10;- поддержка опций joomla 1.5 и 34.3" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">
@@ -569,12 +569,12 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="746" y="298" width="540" height="524" key="StructurePopup/0.0.2048.1112@0.0.2048.1112" timestamp="1612245806611" />
-    <state x="481" y="196" key="Vcs.Push.Dialog.v2" timestamp="1613474524735">
+    <state x="481" y="196" key="Vcs.Push.Dialog.v2" timestamp="1613488256886">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1612420273795" />
     <state x="451" y="183" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1613044462122" />
-    <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1613474524735" />
+    <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1613488256886" />
     <state x="771" y="440" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611832180606">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
