@@ -20,14 +20,14 @@ function initApplicationsData(){
 
 	let apps_map = new Map();
 
-	//WORDPRESS//17022021
+	//WORDPRESS//09032021
 	apps_map.set('wordpress', new Application(
 		{
-			"native_number":"wordpress-51525",
-			"int_number":"51525"
+			"native_number":"wordpress-51533",
+			"int_number":"51533"
 		},
 		true,
-		`{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"20","sfw__anti_crawler":"1","sfw__anti_crawler_ua":"1","apikey":"9arymagatetu","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}`
+		`{"spam_firewall":"1","sfw__anti_flood":"1","sfw__anti_flood__view_limit":"5","sfw__anti_crawler":"1","apikey":"esy4e5yseraq","autoPubRevelantMess":"0","registrations_test":"1","comments_test":"1","contact_forms_test":"1","general_contact_forms_test":"1","wc_checkout_test":"1","wc_register_from_order":"1","search_test":"1","check_external":"0","check_external__capture_buffer":"0","check_internal":"0","disable_comments__all":"0","disable_comments__posts":"0","disable_comments__pages":"0","disable_comments__media":"0","bp_private_messages":"1","check_comments_number":"1","remove_old_spam":"0","remove_comments_links":"0","show_check_links":"1","manage_comments_on_public_page":"0","protect_logged_in":"1","use_ajax":"1","use_static_js_key":"-1","general_postdata_test":"0","set_cookies":"1","set_cookies__sessions":"0","ssl_on":"0","use_buitin_http_api":"1","exclusions__urls":"","exclusions__urls__use_regexp":"0","exclusions__fields":"","exclusions__fields__use_regexp":"0","exclusions__roles":["Administrator"],"show_adminbar":"1","all_time_counter":"0","daily_counter":"0","sfw_counter":"0","user_token":"","collect_details":"0","send_connection_reports":"0","async_js":"0","debug_ajax":"0","gdpr_enabled":"0","gdpr_text":"","store_urls":"1","store_urls__sessions":"1","comment_notify":"1","comment_notify__roles":[],"complete_deactivation":"0","dashboard_widget__show":"1","allow_custom_key":"0","allow_custom_settings":"0","white_label":"0","white_label__hoster_key":"","white_label__plugin_name":"","use_settings_template":"0","use_settings_template_apply_for_new":"0","use_settings_template_apply_for_current":"0","use_settings_template_apply_for_current_list_sites":""}`
 	))
 
 	//JOOMLA34//17022021
@@ -50,12 +50,12 @@ function initApplicationsData(){
 		`{}`
 	))
 
-	//JOOMLA3//17022021
+	//JOOMLA3//09032021
 
 	apps_map.set('joomla3', new Application(
 		{
-			"native_number":"joomla3-62",
-			"int_number":"62"
+			"native_number":"joomla3-63",
+			"int_number":"63"
 		},
 		true,
 		`{"apikey":"aqyqy6u3ypyg","form_protection":["check_register","check_contact_forms","check_custom_contact_forms","check_external","check_search"],"comments_and_messages":["jcomments_check_comments"],"cookies":["set_cookies"],"other_settings":["sfw_enable"],"url_exclusions":"","fields_exclusions":"","roles_exclusions":["7","8"],"remote_calls":{"close_renew_banner":{"last_call":0},"sfw_update":{"last_call":1612940479},"sfw_send_logs":{"last_call":0},"update_plugin":{"last_call":0}},"sfw_last_check":1612940480,"sfw_last_send_log":1612940480,"ct_key_is_ok":1,"acc_status_last_check":1612940480,"show_notice":0,"renew":0,"trial":0,"user_token":"eQy9e3ebaJevuJeXuWuGuWemunyHuHug","spam_count":0,"moderate_ip":0,"moderate":1,"show_review":0,"service_id":884143,"license_trial":0,"account_name_ob":"galy****@cleantalk.org","valid":1,"auto_update_app":0,"show_auto_update_notice":0,"ip_license":0,"work_url":"https:\\/\\/moderate3.cleantalk.org","server_ttl":845,"server_changed":1612940505,"connection_reports":{"success":2,"negative":0,"negative_report":null},"js_keys":{"829121296":1612940511}}`
@@ -138,14 +138,14 @@ function initApplicationsData(){
 			"int_number":"20"
 		},
 		false,
-		`{}`
+		``
 	))
 
-	//IPS//17022021
+	//IPS//09032021
 	apps_map.set('ipboard4', new Application(
 		{
-			"native_number":"ipboard4-200",
-			"int_number":"200"
+			"native_number":"ipboard4-201",
+			"int_number":"201"
 		},
 		false,
 		``
@@ -264,7 +264,7 @@ function initApplicationsData(){
 	return apps_map;
 
 }
-function initDetailsSearchData() {	// Init start search data, returns [][]
+function initParseData() {	// Init start search data, returns [][]
 
 	const values = [
 		// detail name, block id, signature, reserved, css_id, section to lookup
@@ -286,7 +286,7 @@ function initDetailsSearchData() {	// Init start search data, returns [][]
 		['page_pre_referrer', '4', '<td>REFFERRER_PREVIOUS&nbsp;</td>', '', 'DEFAULT', 'sender'],
 		['page_url', '4', '<td>page_url&nbsp;</td>', '', 'DEFAULT', 'sender'],
 		['sender_url', '4', '<td>sender_url&nbsp;</td>', '', 'DEFAULT', 'sender'],
-		['comment_type', '4', '<td>comment_type&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['comment_type', '4', '<td>comment_type&nbsp;</td>', '', 'DEFAULT', 'details'],
 		['hook_type', '4', '<td>hook&nbsp;</td>', '', 'DEFAULT', 'sender'],
 		['is_greylisted', '4', '<td>grey_list_stop&nbsp;</td>', '', 'DEFAULT', 'details'],
 		['is_mobile_ua', '4', '<td>is_mobile_UA&nbsp;</td>', '', 'DEFAULT', 'details'],
@@ -385,11 +385,17 @@ class Helper {	//Helper class, called to keep misc functionality.
 												&email=${email}
 												&ip=${ip}
 												&security=some_shiet`);
-					const json = await request.json();
-					msg = JSON.stringify(json);
+					alert(request.statusText);
+					if (request.ok) {
+						const json = await request.json();
+						msg = JSON.stringify(json);
+					} else {
+						alert('ERROR:' + request.status);
+					}
 				}break
 
 			}
+			alert('CT API GOT');
 			ct.painter.drawAPICall(`BLAPI:spam_check`,msg);
 
 		} catch (e) {
@@ -593,12 +599,6 @@ class Helper {	//Helper class, called to keep misc functionality.
 
 	}
 
-	addTag(position_tag_id, align, html) { // Adds HTML tag [html:str] to target tag [position_tag_id:str] with alignment [align:str]
-
-		interface_window.document.getElementById(position_tag_id).insertAdjacentHTML(align, html);
-
-	}
-
 	getOptionsFromJSON(json) { //Return array of Option class [array] from JSON string [json:str]
 
 		try {
@@ -752,6 +752,12 @@ class Helper {	//Helper class, called to keep misc functionality.
 	addInnerHtmlToTag(tag_id,html_code){ //Shortens code for tag insert
 
 		return interface_window.document.getElementById(tag_id).innerHTML+=html_code;
+
+	}
+
+	addTag(position_tag_id, align, html) { // Adds HTML tag [html:str] to target tag [position_tag_id:str] with alignment [align:str]
+
+		interface_window.document.getElementById(position_tag_id).insertAdjacentHTML(align, html);
 
 	}
 
@@ -1642,43 +1648,52 @@ class Status {
 
 	}
 
+	compareAppVersions(){
+
+		// Names the agent
+		this.agent = ct.getDetailValueByName('ct_agent');
+
+		//Checks if the plugin is up-to-date
+		const cms_name = this.agent.replace(/-.+/,"");
+		const app_version_from_request = this.agent.replace(/.+-/,"");
+
+		if (ct.analysis.applications_data.get(cms_name).version.int_number !== app_version_from_request) {
+
+			this.agent = '<a title="Плагин устарел" style  = "color: red">'+this.agent+'</a>';
+			hl.addToIssuesList('Версия плагина устарела','3');
+			ct.setDetailPropertyByName('ct_agent','css_id','BAD');
+
+		} else {
+
+			this.agent = '<a title="Версия в порядке" style = "color: green">'+this.agent+'</a>';
+
+		}
+
+	}
+
 	initStatus() { //Init ct.status parameters
 
-			// Names the agent
-			this.agent = ct.getDetailValueByName('ct_agent');
+		//Checks if is allowed
+		this.isAllowed = (ct.getDetailValueByName('is_allowed') === '1') ? 'ALLOWED' : 'DENIED';
 
-			//Checks if the plugin is up-to-date
-			/*if (this.agent !== CURRENT_VERSIONS.get('wordpress'))  {
+		//Checks request type
+		switch (ct.getDetailValueByName('method_name')) {
+			case 'check_newuser':
+				this.type = "registration";
+				//TODO вот тут можно допилить условия для поиска комментария по comment_type
+				break;
 
-				this.agent = '<a title="Плагин устарел" style  = "color: red">'+this.agent+'</a>';
-				hl.addToIssuesList('Версия плагина устарела','3');
-				ct.setDetailPropertyByName('ct_agent','css_id','BAD');
+			case 'check_message':
+				this.type = "comment or contact form";
+				break;
 
-			} else {
+			default:
 
-				this.agent = '<a title="Версия в порядке" style = "color: green">'+this.agent+'</a>';
+		}
 
-			}*/
+		this.compareAppVersions();
 
-			//Checks if is allowed
-			this.isAllowed = (ct.getDetailValueByName('is_allowed') === '1') ? 'ALLOWED' : 'DENIED';
-
-			//Checks request type
-			switch (ct.getDetailValueByName('method_name')) {
-				case 'check_newuser':
-					this.type = "registration";
-					//TODO вот тут можно допилить условия для поиска комментария по comment_type
-					break;
-
-				case 'check_message':
-					this.type = "comment or contact form";
-					break;
-
-				default:
-
-			}
-
-//links.user_card.email
+		//links.user_card.email
 
 		this.initLinks();
 
@@ -1760,7 +1775,7 @@ class CT {	// Main class CT
 
 		// Creates a new array of Detail class
 		this.details = [];
-		let details_draft = initDetailsSearchData();
+		let details_draft = initParseData();
 		this.getLastSectionIdFromEHTML();
 
 		try {
@@ -1778,7 +1793,7 @@ class CT {	// Main class CT
 					)
 				);
 
-				// Set details.values in accordance with initDetailsSearchData result
+				// Set details.values in accordance with initParseData result
 				this.details[i].value = hl.getDetailBySignatureInSection(this.details[i].section_id, this.details[i].signature);
 
 				// Keep the links from source HTML of sender_email and sender_ip
@@ -1896,7 +1911,7 @@ class CT {	// Main class CT
 		this.painter.drawMessageTextareas();
 		this.painter.drawSubnetsTable();
 		hl.callIpinfoAPI();
-		hl.callCleantalkApi('spam_check');
+		//hl.callCleantalkApi('spam_check');
 		if (IS_DARK_THEME) this.painter.changeTheme();
 
 	}
@@ -2048,14 +2063,7 @@ class Analysis {	// Analysis class
 					entry[0] = fixAppNames(entry[0]);
 					ct_agent = fixAppNames(ct_agent);
 
-					hl.debugMessage(ct_agent, 'ct_agent ');
-					hl.debugMessage(entry[0], 'entry[0] ');
-
 					if (ct_agent.includes(entry[0])) {
-
-						hl.debugMessage(ct_agent, 'ct_agent found');
-						hl.debugMessage(entry[0], 'entry[0] found');
-						hl.debugMessage(this.applications_data.get(entry[0]).options_defaults, 'this.applications_data.get(entry[1]).options_defaults found');
 
 						return this.applications_data.get(entry[0]).options_defaults
 
@@ -2103,7 +2111,9 @@ class Analysis {	// Analysis class
 						'show_review',
 						'account_name_ob',
 						'cleantalk_roles_exclusions'
-					].includes(ct_option.name)) ct_option.setAsAnalysisExclusion();
+					].includes(ct_option.name)) {
+						ct_option.setAsAnalysisExclusion();
+					}
 
 					if ((default_options[i].name === ct_option.name)
 						&&
@@ -2425,7 +2435,7 @@ class Analysis {	// Analysis class
 					}
 					break;
 
-					//MOBILE_UA
+					//is_allowed = invisible
 					case 'is_allowed': {
 
 						detail.value = 'INVISIBLE';
@@ -2464,8 +2474,6 @@ hl = new Helper();
 //*** DECLARE BLOCK END ***
 
 //*** LISTENERS ***
-
-
 chrome.runtime.onMessage.addListener(function (message) {
 		switch (message.command) {
 
@@ -2478,13 +2486,10 @@ chrome.runtime.onMessage.addListener(function (message) {
 				break;
 		}
 	})
-
-	function logHtmlCode(tab) {
+function logHtmlCode(tab) {
 
 		chrome.tabs.executeScript(tab.id, {file: "send-page-code.js"});
 	}
-
-
 chrome.browserAction.onClicked.addListener(logHtmlCode);
 //==== LISTENERS END
 //CODE END
