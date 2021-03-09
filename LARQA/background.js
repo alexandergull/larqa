@@ -1656,10 +1656,11 @@ class Status {
 		//Checks if the plugin is up-to-date
 		const cms_name = this.agent.replace(/-.+/,"");
 		const app_version_from_request = this.agent.replace(/.+-/,"");
+		const app_version_uptodate = ct.analysis.applications_data.get(cms_name).version.int_number;
 
-		if (ct.analysis.applications_data.get(cms_name).version.int_number !== app_version_from_request) {
+		if (app_version_uptodate !== app_version_from_request) {
 
-			this.agent = '<a title="Плагин устарел" style  = "color: red">'+this.agent+'</a>';
+			this.agent = '<a title="Плагин устарел" style="color: #C02000"><b>'+ this.agent +' </b>!= productive '+ app_version_uptodate +'</a>';
 			hl.addToIssuesList('Версия плагина устарела','3');
 			ct.setDetailPropertyByName('ct_agent','css_id','BAD');
 
@@ -2132,6 +2133,13 @@ class Analysis {	// Analysis class
 					}
 				}
 			}
+
+			if (this.options_changes_counter === 0) {
+				hl.addTag('options_table','beforebegin',
+				'<div class="report_block" id="options_table-report-block"><b>Изменений в опциях не обнаружено</b></div>'
+				)
+			}
+
 		} catch (e) {
 			hl.debugMessage(e.stack);
 		}

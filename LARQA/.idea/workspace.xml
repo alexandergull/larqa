@@ -27,9 +27,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0b2a0b2-dbe1-4d34-891e-21c324aff725" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/shelf/Uncommitted_changes_before_Update_at_11_02_2021_10_07_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/shelf/Uncommitted_changes_before_Update_at_11_02_2021_10_07__Default_Changelist_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/background.js" afterDir="false" />
     </list>
@@ -76,8 +73,16 @@
       <option name="presentableId" value="Default" />
       <updated>1606278238925</updated>
       <workItem from="1606278240354" duration="3767000" />
-      <workItem from="1615262691255" duration="11429000" />
+      <workItem from="1615262691255" duration="14556000" />
     </task>
+    <task id="LOCAL-00001" summary="- Cadence 09.03.2021 -&#10;&#10;Новое:&#10;- добавил проверку версий из applications_data">
+      <created>1615282696169</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1615282696169</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -106,7 +111,15 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="- Cadence 09.03.2021 -&#10;&#10;Новое:&#10;- добавил проверку версий из applications_data" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 09.03.2021 -&#10;&#10;Новое:&#10;- добавил проверку версий из applications_data" />
+  </component>
   <component name="WindowStateProjectService">
+    <state x="617" y="289" key="Vcs.Push.Dialog.v2" timestamp="1615282733341">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="617" y="289" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1615282733341" />
     <state x="834" y="470" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1615262886592">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
