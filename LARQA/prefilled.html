@@ -3,175 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <title id="layout_window_title">LARQA WINDOW</title>
-    <script type="text/javascript" src="jquery.min.js"></script>
+    <style>
+        /*COMMON*/
+
+        body{
+            font-family: Verdana;
+            background-color: #3090c7;
+        }
+
+        h1{
+            margin: 2px;
+            padding: 3px;
+            text-align: center;
+            font-size: 95%;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+            text-align: left;
+            font-size: 10px;
+            padding-block: 0.2%;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .hide_me{
+
+        }
+
+
+        .bottom_blocks{
+            overflow: auto;
+            max-height: 700px;
+            min-height: 300px;
+            float: left;
+            margin: 0 1% 1% 0;
+            text-align: center;
+            padding: 1%;
+            background-color: #ECE9E0;
+            border-radius: 7px;
+        }
+
+        .report_block{
+            text-align: left;
+            border-radius: 2px;
+            border-style: dashed;
+            border-color: #000000;
+            border-width: 1px;
+            margin-bottom: 5px;
+            padding: 5px;
+            line-height: 0.8;
+            min-height: 50px;
+            max-height: 50px;
+            overflow: auto;
+        }
+
+        .report_block-issues
+        {
+            font-size: 10px;
+        }
+
+
+
+        /*********************STATUS BLOCK*********************/
+
+        #status_block {
+            display: block;
+        }
+
+        .is_denied{
+            display: block;
+            height:auto;
+            margin: 0 1% 1% 0;
+            text-align:center;
+            padding: 1%;
+            background-color: #ece9e0;
+            border-radius: 7px;
+            border-color: #990000;
+            border-style: dashed;
+            border-width: 3px;
+        }
+
+        .is_allowed{
+            display: block;
+            height:auto;
+            margin: 0 1% 1% 0;
+            text-align:center;
+            padding: 1%;
+            background-color: #ECE9E0;
+            border-radius: 7px;
+            border-color: #009900;
+            border-style: dashed;
+            border-width: 3px;
+        }
+
+        #status_table{
+            width: 100%;
+        }
+
+        .status_table_inner{
+            border: hidden;
+            text-align:left;
+            padding: 1px;
+            margin: 1px;
+            font-size: 10px;
+
+        }
+
+        #debug{
+            font-size: 9px;
+            margin: 4px;
+            width: 98%;
+            height: 20ch;
+            overflow: auto;
+            background: #EFEBE4;
+            resize: none;
+            padding: 10px;
+        }
+
+        #debug-backplate{
+            background: #7cab7459;
+        }
+
+        .hide-show-backplate{
+
+            border-style: solid;
+            border-width: 1px;
+            background: #ECE9E0;
+            text-align: left;
+            margin-top: 3px;
+            padding: 5px;
+
+        }
+
+        .hide-show-button{
+            width: 9%;
+            font-size: 10px;
+            padding: 2px;
+        }
+
+        .hide-show-caption{
+            padding-left: 1%;
+            font-weight: bold;
+        }
+
+
+        /*********************DETAILS BLOCK*********************/
+
+        #details_block{
+            width:57%;
+        }
+
+        #details_table{
+            word-break: break-word;
+            width:100%;
+        }
+
+        .details-name {
+            width: max-content;
+            white-space: nowrap;
+            display: table-cell;
+        }
+
+        .details-value {
+
+        }
+
+        #subnets_table{
+            width: 100%;
+            overflow-wrap: anywhere;
+        }
+
+        .subnet_table_td--by_what{
+            width: 15%;
+            padding-left: 1%;
+        }
+
+
+        .subnet_table_td--network{
+            width: 20%;
+            padding-left: 1%;
+        }
+
+        .subnet_table_td--type{
+            width: 15%;
+            font-weight: bold;
+            padding-left: 1%;
+        }
+
+        .subnet_table_td--misc{
+            padding-left: 1%;
+
+        }
+
+        #ipinfo-tr{
+
+        }
+
+        #headers_table{
+            word-break: break-word;
+            width:100%;
+        }
+
+        .headers_table_column-header{
+            min-width:10%;
+            max-width:20%;
+            width: 15%;
+        }
+
+        .headers_table_column-value{
+
+        }
+
+        .headers_table_column-attention{
+            min-width:10%;
+            max-width:20%;
+            width: 15%;
+        }
+
+        #headers_table_tr-header{
+            text-align: center;
+        }
+
+        #headers_table_th-header{
+
+        }
+
+        #headers_table_th-value{
+
+        }
+
+        #headers_table_th-attention{
+
+        }
+
+        .details_block-messages{
+            width: 99%;
+            resize: vertical;
+            height: 100px;
+            font-size: 10px;
+            background: #EFEBE4;
+            overflow-wrap: break-word;
+        }
+
+
+        /*********************OPTIONS BLOCK*********************/
+
+        #options_block{
+            width: 37%;
+        }
+
+        #options_unsupported{
+            text-align: center;
+            font-style: italic;
+            width: 100%;
+            display: block;
+        }
+
+        #options_table{
+            width:100%;
+            word-break: break-word;
+        }
+
+    </style>
 </head>
-<body>
-<style>
-    body{
+<body id="body">
 
-        font-family: Verdana;
-        background-color: #3090c7;
-    }
-
-    h1{
-        margin: 2px;
-        padding: 3px;
-        text-align: center;
-
-        font-size: 95%;
-    }
-
-    #options_block{
-        overflow: auto;
-        height: 700px;
-        max-height: 700px;
-    }
-
-    table, th, td{
-        border: 1px solid black;
-        border-radius: 7px;
-        background:#E9e9e1;
-        text-align:left;
-        padding: 1px;
-        margin: 1px;
-        font-size: 10px;
-    }
-
-    #line_block {
-        width:47%;
-        height:auto;
-        background:#f1f1f1;
-        float:left;
-        margin: 0 1% 1% 0;
-        text-align:center;
-        padding: 1%;
-        background-color: #ECE9E0;
-        border-radius: 15px;
-    }
-
-    .report_block{
-        text-align:left;
-        border-radius: 2px;
-        border-style: dotted;
-        border-color: #000000;
-        border-width: 2px;
-        margin-bottom: 15px;
-        padding: 5px;
-    }
-
-    #debug{
-        font-size: 5px;
-        margin: 1px;
-    }
-
-    #status_block {
-        display: block;
-        height:auto;
-        background:#f1f1f1;
-        margin: 0 1% 1% 0;
-        text-align:center;
-        padding: 1%;
-        background-color: #ECE9E0;
-        border-radius: 15px;
-    }
-
-    #details_table {
-        word-wrap: break-word;
-        table-layout: fixed;
-        width: 100%;
-
-    }
-
-    th,tr {width:50%}
-
-    .details-value {
-        width:20px;
-    }
-
-    .details-name{
-
-        width: 30px;
-
-    }
-
-    #details_table-header{
-
-    }
-
-    #options_table{
-
-        width: 100%;
-
-    }
-
-
-    #options_table-header{
-
-    }
-
-    #status_table{
-        width: 100%;
-        border: 1px solid black;
-        border-radius: 7px;
-        background:#E9e9e1;
-        text-align:left;
-        padding: 1px;
-        margin: 1px;
-        font-size: 10px;
-    }
-
-    .status_table_inner{
-
-        border: hidden;
-        background:#E9e9e1;
-        text-align:left;
-        padding: 1px;
-        margin: 1px;
-        font-size: 10px;
-
-    }
-
-</style>
-<div style="width:100%; height:1px; clear:both;"></div>
-<div style=" display: block;">
-    <div id="status_block"><h1>STATUS</h1>
+    <div class="status_block" id="status_block"><h1 id="status_block-header"></h1>
         <table id='status_table'>
             <tbody id="status_table-tbody">
                 <tr id="status_table-filter-raw" class="status_table_inner"></tr>
                 <tr class="status_table_inner">
-                    <td id="status_table_status-class-column" class="status_table_inner"></td>
-                </tr>
-                <tr class="status_table_inner">
-
-                </tr>
-                <tr class="status_table_inner">
-
-                </tr>
-                <tr class="status_table_inner">
-
-                </tr>
             </tbody>
         </table>
     </div>
-</div>
-<div id="line_block">
-    <div id="details_block"><h1>Параметры запроса</h1>
+
+
+<div class="bottom_blocks" id="details_block">
+
+    <div id="details_block-inner"><h1>Параметры запроса</h1>
         <table id='details_table'>
             <tbody id="details_table-tbody">
             </tbody>
         </table>
-    </div>
-</div>
-<div id="line_block">
-    <div>
-        <h1 id="options_header">Опций плагина в запросе</h1>
-        <div id="options_block">
-            <table id="options_table">
-                <tbody id="options_table-tbody">
+
+        <div class="hide-show-backplate" id="subnet_table-backplate"><button class="hide-show-button" id="hide-show_subnet-button">[+] Показать</button><a class="hide-show-caption">Подсети</a>
+            <table id='subnets_table'>
+                <tbody id="subnets_table_tbody">
+                <tr id="subnets_table_tr-header">
+                    <th class="subnets_table_column-header" id="subnets_table_th--subnet-by%">        </th>
+                    <th class="subnets_table_column-header" id="subnets_table_th--subnet-name">Подсеть</th>
+                    <th class="subnets_table_column-value" id="subnets_table_th--subnet-type">Тип</th>
+                    <th class="subnets_table_column-attention" id="subnets_table_th--subnet-misc">Управление</th>
+                </tr>
                 </tbody>
             </table>
         </div>
+
+        <div class="hide-show-backplate" id="headers_table-backplate"><button class="hide-show-button" id="hide-show_headers-button">[+] Показать</button><a class="hide-show-caption">HTTP заголовки</a>
+            <table id='headers_table'>
+                <tbody id="headers_table_tbody">
+                <tr id="headers_table_tr-header">
+                    <th class="headers_table_column-header" id="headers_table_th-header">Заголовок</th>
+                    <th class="headers_table_column-value" id="headers_table_th-value">Значение</th>
+                    <th class="headers_table_column-attention" id="headers_table_th-attention">Важный</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="hide-show-backplate" id="message_decoded-backplate"><button class="hide-show-button" id="hide-show_message_decoded-button">[+] Показать</button><a class="hide-show-caption">Message decoded</a>
+            <div id="message_decoded-hider">
+                <textarea readonly class="details_block-messages" id="message_decoded-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="hide-show-backplate" id="message_origin-backplate"><button class="hide-show-button" id="hide-show_message_origin-button">[+] Показать</button><a class="hide-show-caption">Message origin</a>
+            <div id="message_origin-hider">
+                <textarea readonly class="details_block-messages" id="message_origin-textarea"></textarea>
+            </div>
+        </div>
+
     </div>
 </div>
+<div class="bottom_blocks" id="options_block">
+    <div>
+        <h1 id="options_header">Опции плагина в запросе</h1>
+        <div id="options_block-inner">
+                <table id="options_table">
+                    <tbody id="options_table-tbody">
+                    </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+<!--<button id="change_theme">Change theme</button>-->
 </body>
 </html>

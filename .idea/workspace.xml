@@ -16,13 +16,24 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/dev" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_02_2021_15_07_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_15_02_2021_15_07__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LARQA/analytics.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/background.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LARQA/prefilled.html" beforeDir="false" afterPath="$PROJECT_DIR$/LARQA/prefilled.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new 4.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,19 +87,23 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="GitIgnore" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/prefilled.html" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.gutterIcons" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -111,7 +126,7 @@
     <configuration />
   </component>
   <component name="TaskManager">
-    <task id="Default" summary="Default task">
+    <task active="true" id="Default" summary="Default task">
       <branch name="dev" repository="D:\Megadisk\larqa\gitcopy" original="true" />
       <changelist id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="" />
       <created>1604134535335</created>
@@ -120,122 +135,9 @@
       <updated>1604254471446</updated>
       <workItem from="1604134536468" duration="25593000" />
       <workItem from="1604213951006" duration="27407000" />
-    </task>
-    <task id="LOCAL-00001" summary="transfer 6 months changes to GIT">
-      <created>1604134682357</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1604134682357</updated>
-    </task>
-    <task id="LOCAL-00002" summary="transfer 6 months changes to GIT">
-      <created>1604139553436</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1604139553436</updated>
-    </task>
-    <task id="LOCAL-00003" summary="removed OLD folder">
-      <created>1604140834694</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1604140834694</updated>
-    </task>
-    <task id="LOCAL-00004" summary="- перенёс конструктор блоков HTML в класс Ct_request&#10;- рефакторинг некоторых названий и переменных&#10;- избавился от setdata.js и layout .js">
-      <created>1604172362109</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1604172362109</updated>
-    </task>
-    <task id="LOCAL-00005" summary="-мигрировал всё на модальное окно из расширения&#10;- убрал мусор">
-      <created>1604252828443</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1604252828443</updated>
-    </task>
-    <task id="LOCAL-00006" summary="- версировал файлы">
-      <created>1604252870133</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1604252870133</updated>
-    </task>
-    <task active="true" id="LOCAL-00007" summary="CURRENT">
-      <branch name="dev" repository="D:\Megadisk\larqa\gitcopy" />
-      <changelist id="511d5316-a028-4c31-b999-692524fa7b16" name="Default Changelist" comment="" />
-      <created>1604254444639</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1604254471446</updated>
-      <workItem from="1604254472083" duration="347000" />
-      <workItem from="1604306045214" duration="5698000" />
-      <workItem from="1604377790985" duration="7148000" />
-      <workItem from="1604654240579" duration="49357000" />
-      <workItem from="1604909412343" duration="57117000" />
-      <workItem from="1606284307013" duration="4498000" />
-      <workItem from="1610429510145" duration="21000" />
-      <workItem from="1610429572428" duration="169000" />
-      <workItem from="1610430016117" duration="58000" />
-      <workItem from="1610430088063" duration="13938000" />
-      <workItem from="1610535513450" duration="14960000" />
-      <workItem from="1610606240104" duration="2972000" />
-      <workItem from="1610624796123" duration="10445000" />
-      <workItem from="1610943539998" duration="16283000" />
-      <workItem from="1610963158787" duration="10903000" />
-      <workItem from="1611049671519" duration="24121000" />
-    </task>
-    <task id="LOCAL-00008" summary="- передалал туду листы">
-      <created>1604254763003</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1604254763003</updated>
-    </task>
-    <task id="LOCAL-00009" summary="додела коассс статус начал options через JSON">
-      <created>1604772087901</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1604772087901</updated>
-    </task>
-    <task id="LOCAL-00010" summary="- убрал отдельное окно для опций, буду делать всё в одном блоке&#10;&#10;- занимался вёрсткой prefilled">
-      <created>1604856631854</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1604856631854</updated>
-    </task>
-    <task id="LOCAL-00011" summary="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна">
-      <created>1604984205388</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1604984205388</updated>
-    </task>
-    <task id="LOCAL-00012" summary="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию">
-      <created>1605030061480</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1605030061480</updated>
-    </task>
-    <task id="LOCAL-00013" summary="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций">
-      <created>1605080657468</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1605080657468</updated>
-    </task>
-    <task id="LOCAL-00014" summary="- добавил подсветку кастомных множеств">
-      <created>1606284551870</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1606284551870</updated>
+      <workItem from="1612871247399" duration="24535000" />
+      <workItem from="1615290515112" duration="5548000" />
+      <workItem from="1615357274491" duration="2476000" />
     </task>
     <task id="LOCAL-00015" summary="- добавил подсветку кастомных множеств">
       <created>1606284620917</created>
@@ -349,7 +251,238 @@
       <option name="project" value="LOCAL" />
       <updated>1611140351379</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="- alexthegull  20.01.2021 -&#10;Новое:&#10;- вывожу красиво измения в опциях и параметрах, добавил класс  .report_block, чуть поправил вёрстку">
+      <created>1611143536476</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1611143536476</updated>
+    </task>
+    <task id="LOCAL-00032" summary="- alexthegull  20.01.2021 -&#10;Новое:&#10;- сделал обёрку, если вывод опций в запросе не поддерживается плагином">
+      <created>1611312405217</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1611312405218</updated>
+    </task>
+    <task id="LOCAL-00033" summary="- alexthegull  22.01.2021 -&#10;Правки:&#10;- перенёс initHelperData в callWindow, не обнулялся issues_list при открытии нового окна">
+      <created>1611314808855</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1611314808855</updated>
+    </task>
+    <task id="LOCAL-00034" summary="- alexthegull  22.01.2021 -&#10;Правки:&#10;- поправил ещё helper.initHelperData();">
+      <created>1611314911617</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1611314911617</updated>
+    </task>
+    <task id="LOCAL-00035" summary="- alexthegull  25.01.2021 -&#10;Новое:&#10;- запилил проверку ОС&#10;- запили проверку private_list&#10;Правки:&#10;- блок статуса">
+      <created>1611563132729</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1611563132729</updated>
+    </task>
+    <task id="LOCAL-00036" summary="- Cadence 25/01&#10;Правки:&#10;- отключил jQuery, парсинг JSON теперь через нативные средства">
+      <created>1611591631170</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1611591631170</updated>
+    </task>
+    <task id="LOCAL-00037" summary="- Cadence 25/01&#10;Новое:&#10;- иконку запилил">
+      <created>1611593550198</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1611593550198</updated>
+    </task>
+    <task id="LOCAL-00038" summary="- alexthegull  27.01.2021 -&#10;Правки:&#10;- сортировка фильтров работала неправильно&#10;- мелкие правки в HTML">
+      <created>1611743387851</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1611743387851</updated>
+    </task>
+    <task id="LOCAL-00039" summary="- Cadence 27.01.21&#10;Новое:&#10;- выделил жирным значения фильтров">
+      <created>1611750643273</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1611750643273</updated>
+    </task>
+    <task id="LOCAL-00040" summary="- Cadence 28.01.2021 -&#10;Фикс:&#10;- ещё правки в сортировке, сейчас нормально должно быть&#10;- объект класса Helper переименовал в hl.&#10;&#10;Новое:&#10;- таймеры выполнения добавил в Helper, применил к hl.callwindow&#10;- сортирвока фильтров в обоих направлениях, зависит от константы в опциях">
+      <created>1611779399245</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1611779399245</updated>
+    </task>
+    <task id="LOCAL-00041" summary="- Cadence 28.01.2021 -&#10;Фикс:&#10;- ещё правки в сортировке&#10;&#10;Новое:&#10;- привязал таймеры к флагу TIMERS_ENABLED в опциях&#10;- эксаериментальный hl.hideTag вроде работает, надо развивать структуру.">
+      <created>1611838884029</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1611838884029</updated>
+    </task>
+    <task id="LOCAL-00042" summary="- Cadence 28.01.2021 -&#10;Фикс:&#10;- много правок в HTML и CSS&#10;&#10;Новое:&#10;- выровнял отчётные блоки и таблицы">
+      <created>1611853685801</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1611853685801</updated>
+    </task>
+    <task id="LOCAL-00043" summary="- alexthegull  29.01.2021 -&#10;Новое:&#10;- начал вывод типов сетей, есть ошибки в получени остутствующих юлоков нужна доработка">
+      <created>1611905458381</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1611905458381</updated>
+    </task>
+    <task id="LOCAL-00044" summary="- Cadence 01.02.2021 -&#10;Фикс:&#10;- поправил регулярки фильтрации JSON, были проблемы с очерёдностью прохода регулярок&#10;&#10;Новое:&#10;- вывод блоков message под кат&#10;- отверстал каты, старый метод убрал&#10;&#10;Срочно: переделать значения details.value = INVISIBLE в CSS_id invisible">
+      <created>1612208353618</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1612208353618</updated>
+    </task>
+    <task id="LOCAL-00045" summary="- Cadence 01.02.2021 -&#10;&#10;Срочно: &#10;- переделать значения details.value = INVISIBLE в CSS_id invisible&#10;- исправить каты под корректный скролл, надо  допилить логику скртыь/показывать 111 стр">
+      <created>1612208736589</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1612208736589</updated>
+    </task>
+    <task id="LOCAL-00046" summary="- Cadence 02.02.2021 -&#10;&#10;Новое:&#10;- добил логику катов, добавил опцию DEF_CATS_HIDDEN скрытые по умолчанию каты тут&#10;- убрал поля messages и all_headers из details&#10;- начал делать логику INVISIBLE">
+      <created>1612211889537</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1612211889537</updated>
+    </task>
+    <task id="LOCAL-00047" summary="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- опять с фильтрами ерунда была, привязал жёстко отсутсвие фильтров к 0 баллов&#10;&#10;Новое:&#10;- убрал типы сетей в отдельный кат">
+      <created>1612268847838</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1612268847838</updated>
+    </task>
+    <task id="LOCAL-00048" summary="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- переделал проверку опций в предварительную&#10;&#10;Новое:&#10;- запилил дебаг в кат textarea">
+      <created>1612293224060</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1612293224060</updated>
+    </task>
+    <task id="LOCAL-00049" summary="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- правки тудулистов, по мелочи ещё поправил дебаг">
+      <created>1612294719733</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1612294719733</updated>
+    </task>
+    <task id="LOCAL-00050" summary="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах">
+      <created>1612349182780</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1612349182780</updated>
+    </task>
+    <task id="LOCAL-00051" summary="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах&#10;- Правки по обратной связи">
+      <created>1612351741484</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1612351741484</updated>
+    </task>
+    <task id="LOCAL-00052" summary="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах&#10;- Правки по обратной связи&#10;&#10;Новое: &#10;- протащил API запрос к ipinfo.io в таблице subnets">
+      <created>1612375302768</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1612375302768</updated>
+    </task>
+    <task id="LOCAL-00053" summary="- класс Painter ввёл пока непонятно зачем&#10;- фикс ipinfoCall для пустых IP адресов">
+      <created>1612420272126</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1612420272127</updated>
+    </task>
+    <task id="LOCAL-00054" summary="- Cadence 07.02.2021 -&#10;Фикс:&#10;- исправил падение при нестандартных агентах&#10;&#10;Новое:&#10;- добавил класс Application&#10;- реализована поддержка опций для всех агентов (требуется заполнение options_default и is_supported), раньше было только для wordpress. Параметры приложений заполняются в анонимной initApplicationsData">
+      <created>1612642333231</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1612642333231</updated>
+    </task>
+    <task id="LOCAL-00055" summary="- Cadence 07.02.2021 -&#10;Фикс:&#10;- исправил падение при нестандартных агентах&#10;&#10;Новое:&#10;- добавил класс Application&#10;- реализована поддержка опций для всех агентов (требуется заполнение options_default и is_supported), раньше было только для wordpress. Параметры приложений заполняются в анонимной initApplicationsData">
+      <created>1612642471741</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1612642471741</updated>
+    </task>
+    <task id="LOCAL-00056" summary="- Cadence 07.02.2021 -&#10;&#10;Новое:&#10;- опции Drupal 7">
+      <created>1612675103684</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1612675103684</updated>
+    </task>
+    <task id="LOCAL-00057" summary="- Cadence 07.02.2021 -&#10;&#10;Новое:&#10;- CleanTalk API запущен. Надо только добить методы.">
+      <created>1612726517717</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1612726517717</updated>
+    </task>
+    <task id="LOCAL-00058" summary="- Cadence 08.02.2021 -&#10;&#10;Новое:&#10;- время запроса в статусе&#10;- управление сетями&#10;- запросы за последнюю неделю из сети&#10;&#10;Фикс:&#10;- MessageDecoded&#10;- отображение API вызова роняло таблицу&#10;- setCAPD&#10;- определение админки">
+      <created>1612785064393</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1612785064393</updated>
+    </task>
+    <task id="LOCAL-00059" summary="- Cadence 08.02.2021 -&#10;&#10;Новое:&#10;- скрыть/открыть блоки отчётов">
+      <created>1612786870218</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1612786870218</updated>
+    </task>
+    <task id="LOCAL-00060" summary="- SOFTMAN 11.02.2021 -&#10;Новое:&#10;- сделал проверку опций Joomla&#10;&#10;Правки: &#10;- привёл в порядок вызовы Api">
+      <created>1613044460529</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1613044460529</updated>
+    </task>
+    <task id="LOCAL-00061" summary="- Cadence 16.02.2021 -&#10;Фикс:&#10;- исправил логику определения ОС&#10;&#10;Правки:&#10;- убрал таймеры, заменил их на бенчмаркинг">
+      <created>1613474523123</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1613474523123</updated>
+    </task>
+    <task id="LOCAL-00062" summary="- Cadence 16.02.2021 -&#10;Фикс: &#10;- исправил определение фильтров при 0 баллов&#10;Новое:&#10;- поддержка опций друпал 8&#10;- поддержка опций друпал 9&#10;- поддержка опций joomla 1.5 и 34.3">
+      <created>1613488255628</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1613488255628</updated>
+    </task>
+    <task id="LOCAL-00063" summary="- Cadence 16.02.2021 -&#10;Фикс:&#10;- обработал ошибку если пришли пустые загловки HTTP&#10;Новое:&#10;- обработал опции UNI, PHPBB31, PHPBB30, OPENCART, IPB, IPS, BITRIX, SMF">
+      <created>1613503264948</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1613503264948</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <option name="createChangelist" value="false" />
     <option name="createBranch" value="false" />
     <option name="useBranch" value="true" />
@@ -363,7 +496,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/dev" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -371,32 +516,32 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- перенёс конструктор блоков HTML в класс Ct_request&#10;- рефакторинг некоторых названий и переменных&#10;- избавился от setdata.js и layout .js" />
-    <MESSAGE value="-мигрировал всё на модальное окно из расширения&#10;- убрал мусор" />
-    <MESSAGE value="- версировал файлы" />
-    <MESSAGE value="- передалал туду листы" />
-    <MESSAGE value="додела коассс статус начал options через JSON" />
-    <MESSAGE value="- убрал отдельное окно для опций, буду делать всё в одном блоке&#10;&#10;- занимался вёрсткой prefilled" />
-    <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна" />
-    <MESSAGE value="- запилил таблицу options во второй ряд&#10;- запилил shift+a как горячую клавишу вызова окна&#10;-запилил класс аналитики, метод проверки опций по умолчанию" />
-    <MESSAGE value="- обернул проверку дефолтных опций в функцию&#10;&#10;- добавил окрашивание отличающихся опций" />
-    <MESSAGE value="- добавил подсветку кастомных множеств" />
-    <MESSAGE value="- добавил подсветку кастомных множеств (правки)" />
-    <MESSAGE value="Refacotred commit" />
-    <MESSAGE value="сделал обход при несовпадении количества опций в агенте" />
-    <MESSAGE value="Правки в подсветке опций" />
-    <MESSAGE value="Допилил подсветку плохих параметров, сделал вывод обнаруженных проблем через ISSUES в status_block" />
-    <MESSAGE value="Новое:&#10;- запилил функцию поиска между строками в строке find_between&#10;- продолжил логику аналитики (есть проблемы с параметрами)" />
-    <MESSAGE value="//todo перенести в класс Helper внеклассовые методы, начать с ISSUES&#10;// останавливаю разработку до наведения порядка в коде&#10;// нет поля username..." />
-    <MESSAGE value="-find_between moved to helper&#10;-debugger refractored" />
-    <MESSAGE value="Новое:&#10;- убрал все неклассовые методы в класс Helper&#10;- рефакторинг кода, привёл все методы к каноническому виду&#10;- сделал issueslist как в debugMessages - новой строкой в таблицу status" />
-    <MESSAGE value="Новое:&#10;- вывел message и username в блок details" />
-    <MESSAGE value="Новое:&#10;- вывожу изменения опций и параметров в соответствующих блоках" />
-    <MESSAGE value="Новое:&#10;- причесал код&#10;- избавился от класса ID&#10;- вывел конец requaest id в имя окна larqa" />
-    <MESSAGE value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- унёс разбор фильтров в отдельный метод clearFiltersString();&#10;Правки:&#10;- канонизировал class Status" />
-    <MESSAGE value="- alexthegull  20.01.2021 -&#10;Правки:&#10;- канонизировал все классы" />
-    <MESSAGE value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- добавил метод helper.hardDebug для жёсткого дебага HTML кода" />
-    <option name="LAST_COMMIT_MESSAGE" value="- alexthegull  20.01.2021 -&#10;Новое:&#10;- добавил метод helper.hardDebug для жёсткого дебага HTML кода" />
+    <MESSAGE value="- Cadence 27.01.21&#10;Новое:&#10;- выделил жирным значения фильтров" />
+    <MESSAGE value="- Cadence 28.01.2021 -&#10;Фикс:&#10;- ещё правки в сортировке, сейчас нормально должно быть&#10;- объект класса Helper переименовал в hl.&#10;&#10;Новое:&#10;- таймеры выполнения добавил в Helper, применил к hl.callwindow&#10;- сортирвока фильтров в обоих направлениях, зависит от константы в опциях" />
+    <MESSAGE value="- Cadence 28.01.2021 -&#10;Фикс:&#10;- ещё правки в сортировке&#10;&#10;Новое:&#10;- привязал таймеры к флагу TIMERS_ENABLED в опциях&#10;- эксаериментальный hl.hideTag вроде работает, надо развивать структуру." />
+    <MESSAGE value="- Cadence 28.01.2021 -&#10;Фикс:&#10;- много правок в HTML и CSS&#10;&#10;Новое:&#10;- выровнял отчётные блоки и таблицы" />
+    <MESSAGE value="- alexthegull  29.01.2021 -&#10;Новое:&#10;- начал вывод типов сетей, есть ошибки в получени остутствующих юлоков нужна доработка" />
+    <MESSAGE value="- Cadence 01.02.2021 -&#10;Фикс:&#10;- поправил регулярки фильтрации JSON, были проблемы с очерёдностью прохода регулярок&#10;&#10;Новое:&#10;- вывод блоков message под кат&#10;- отверстал каты, старый метод убрал&#10;&#10;Срочно: переделать значения details.value = INVISIBLE в CSS_id invisible" />
+    <MESSAGE value="- Cadence 01.02.2021 -&#10;&#10;Срочно: &#10;- переделать значения details.value = INVISIBLE в CSS_id invisible&#10;- исправить каты под корректный скролл, надо  допилить логику скртыь/показывать 111 стр" />
+    <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Новое:&#10;- добил логику катов, добавил опцию DEF_CATS_HIDDEN скрытые по умолчанию каты тут&#10;- убрал поля messages и all_headers из details&#10;- начал делать логику INVISIBLE" />
+    <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- опять с фильтрами ерунда была, привязал жёстко отсутсвие фильтров к 0 баллов&#10;&#10;Новое:&#10;- убрал типы сетей в отдельный кат" />
+    <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- переделал проверку опций в предварительную&#10;&#10;Новое:&#10;- запилил дебаг в кат textarea" />
+    <MESSAGE value="- Cadence 02.02.2021 -&#10;&#10;Фикс:&#10;- правки тудулистов, по мелочи ещё поправил дебаг" />
+    <MESSAGE value="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах" />
+    <MESSAGE value="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах&#10;- Правки по обратной связи" />
+    <MESSAGE value="- Cadence 03.02.2021 -&#10;&#10;Фикс:&#10;- Правки по отображению опций в неподдерживаемых агентах&#10;- Правки по обратной связи&#10;&#10;Новое: &#10;- протащил API запрос к ipinfo.io в таблице subnets" />
+    <MESSAGE value="- класс Painter ввёл пока непонятно зачем" />
+    <MESSAGE value="- класс Painter ввёл пока непонятно зачем&#10;- фикс ipinfoCall для пустых IP адресов" />
+    <MESSAGE value="- Cadence 07.02.2021 -&#10;Фикс:&#10;- исправил падение при нестандартных агентах&#10;&#10;Новое:&#10;- добавил класс Application&#10;- реализована поддержка опций для всех агентов (требуется заполнение options_default и is_supported), раньше было только для wordpress. Параметры приложений заполняются в анонимной initApplicationsData" />
+    <MESSAGE value="- Cadence 07.02.2021 -&#10;&#10;Новое:&#10;- опции Drupal 7" />
+    <MESSAGE value="- Cadence 07.02.2021 -&#10;&#10;Новое:&#10;- CleanTalk API запущен. Надо только добить методы." />
+    <MESSAGE value="- Cadence 08.02.2021 -&#10;&#10;Новое:&#10;- время запроса в статусе&#10;- управление сетями&#10;- запросы за последнюю неделю из сети&#10;&#10;Фикс:&#10;- MessageDecoded&#10;- отображение API вызова роняло таблицу&#10;- setCAPD&#10;- определение админки" />
+    <MESSAGE value="- Cadence 08.02.2021 -&#10;&#10;Новое:&#10;- скрыть/открыть блоки отчётов" />
+    <MESSAGE value="- SOFTMAN 11.02.2021 -&#10;Новое:&#10;- сделал проверку опций Joomla&#10;&#10;Правки: &#10;- привёл в порядок вызовы Api" />
+    <MESSAGE value="- Cadence 16.02.2021 -&#10;Фикс:&#10;- исправил логику определения ОС&#10;&#10;Правки:&#10;- убрал таймеры, заменил их на бенчмаркинг" />
+    <MESSAGE value="- Cadence 16.02.2021 -&#10;Фикс: &#10;- исправил определение фильтров при 0 баллов&#10;Новое:&#10;- поддержка опций друпал 8&#10;- поддержка опций друпал 9&#10;- поддержка опций joomla 1.5 и 34.3" />
+    <MESSAGE value="- Cadence 16.02.2021 -&#10;Фикс:&#10;- обработал ошибку если пришли пустые загловки HTTP&#10;Новое:&#10;- обработал опции UNI, PHPBB31, PHPBB30, OPENCART, IPB, IPS, BITRIX, SMF" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Cadence 16.02.2021 -&#10;Фикс:&#10;- обработал ошибку если пришли пустые загловки HTTP&#10;Новое:&#10;- обработал опции UNI, PHPBB31, PHPBB30, OPENCART, IPB, IPS, BITRIX, SMF" />
   </component>
   <component name="WindowStateProjectService">
     <state x="484" y="71" key="#background.js" timestamp="1610947327296">
@@ -407,33 +552,42 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="830" y="272" key="#com.intellij.ide.util.MemberChooser/0.0.2048.1112@0.0.2048.1112" timestamp="1611053425716" />
-    <state x="772" y="411" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1611057892236">
-      <screen x="0" y="0" width="2048" height="1112" />
+    <state x="724" y="384" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1613025767500">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="772" y="411" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2048.1112@0.0.2048.1112" timestamp="1611057892236" />
-    <state x="124" y="126" width="1800" height="861" key="DiffContextDialog" timestamp="1611075030554">
+    <state x="724" y="384" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1920.1040@0.0.1920.1040" timestamp="1613025767500" />
+    <state x="772" y="411" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2048.1112@0.0.2048.1112" timestamp="1612293372773" />
+    <state x="124" y="126" width="1800" height="861" key="DiffContextDialog" timestamp="1612588469798">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="93" y="93" width="1350" height="638" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1611038145093" />
-    <state x="124" y="126" width="1800" height="861" key="DiffContextDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1611075030554" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1610947540679">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="124" y="126" width="1800" height="861" key="DiffContextDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1612588469798" />
+    <state x="732" y="225" key="FileChooserDialogImpl" timestamp="1611829764096">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1610947540679" />
-    <state x="400" y="115" key="SettingsEditor" timestamp="1611037578379">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="732" y="225" key="FileChooserDialogImpl/0.0.2048.1112@0.0.2048.1112" timestamp="1611829764096" />
+    <state x="466" y="207" width="981" height="707" key="SettingsEditor" timestamp="1612245821898">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="400" y="115" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1611037578379" />
-    <state x="533" y="201" key="SettingsEditor/0.0.2048.1112@0.0.2048.1112" timestamp="1610983626278" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1611140357288">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="466" y="207" width="981" height="707" key="SettingsEditor/0.0.2048.1112@0.0.2048.1112" timestamp="1612245821898" />
+    <state x="746" y="298" width="540" height="524" key="StructurePopup" timestamp="1612245806611">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1611140357288" />
-    <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1611050927054" />
-    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611035676501">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="746" y="298" width="540" height="524" key="StructurePopup/0.0.2048.1112@0.0.2048.1112" timestamp="1612245806611" />
+    <state x="481" y="196" key="Vcs.Push.Dialog.v2" timestamp="1613503265967">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1611035676501" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1612420273795" />
+    <state x="451" y="183" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1613044462122" />
+    <state x="481" y="196" key="Vcs.Push.Dialog.v2/0.0.2048.1112@0.0.2048.1112" timestamp="1613503265967" />
+    <state x="482" y="269" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1615350502349">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="482" y="269" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.680@0.0.1280.680" timestamp="1615350502349" />
+    <state x="578" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1611144210928" />
+    <state x="771" y="440" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.2048.1112@0.0.2048.1112" timestamp="1611832180606" />
     <state x="497" y="201" key="git4idea.merge.GitPullDialog" timestamp="1611140438068">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -442,9 +596,14 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="1004" y="271" key="refactoring.ChangeSignatureDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1610986063921" />
-    <state x="681" y="259" key="run.anything.popup" timestamp="1611073659766">
+    <state x="681" y="259" key="run.anything.popup" timestamp="1613384531802">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="681" y="259" key="run.anything.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1611073659766" />
+    <state x="681" y="259" key="run.anything.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1613384531802" />
+    <state x="575" y="196" width="896" height="915" key="search.everywhere.popup" timestamp="1612369795553">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1611563013366" />
+    <state x="575" y="196" width="896" height="915" key="search.everywhere.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1612369795553" />
   </component>
 </project>
