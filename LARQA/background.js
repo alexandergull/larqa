@@ -16,6 +16,8 @@ const DEF_CATS_HIDDEN = {
 };
 const CAPD_SIGNATURES = ['general_postdata_test','data_processing','check_all_post','form_global_check_without_email'];
 const IS_DARK_THEME = false;
+
+//*** OPTIONS END ***
 function initApplicationsData(){
 
 	let apps_map = new Map();
@@ -62,7 +64,7 @@ function initApplicationsData(){
 	))
 
 	//DRUPAL7//070221
- 	apps_map.set('drupal', new Application(
+	apps_map.set('drupal', new Application(
 		{
 			"native_number":"drupal-46",
 			"int_number":"46"
@@ -278,6 +280,7 @@ function initParseData() {	// Init start search data, returns [][]
 		['sender_ip_is_sc', '1', '<td>short_cache_ip&nbsp;</td>', '', 'DEFAULT', 'details'],
 		['username', '1', '<td>username&nbsp;</td>', '', 'DEFAULT', 'sender'],
 		['ct_options', '2', '<td>ct_options&nbsp;</td>', '', 'DEFAULT', 'sender'],
+		['apikey', '2', '<td>auth_key&nbsp;</td>', '', 'INVISIBLE', 'details'],
 		['ct_agent', '3', '<td>agent&nbsp;</td>', '', 'DEFAULT', 'params'],
 		['js_status', '4', '<td>js_passed&nbsp;</td>', '', 'DEFAULT', 'details'],
 		['submit_time', '4', '<td>submit_time&nbsp;</td>', '', 'DEFAULT', 'params'],
@@ -313,8 +316,6 @@ function initParseData() {	// Init start search data, returns [][]
 
 }
 
-//*** OPTIONS END ***
-
 class Helper {	//Helper class, called to keep misc functionality.
 
 	constructor(
@@ -344,7 +345,6 @@ class Helper {	//Helper class, called to keep misc functionality.
 		if (BENCHMARK_ENABLED) hl.debugMessage(new Date().getTime(),point_name);
 
 	}
-
 
 	async callIpinfoAPI() {
 
@@ -867,9 +867,9 @@ class Painter{
 		this.bindSHButtonToTag('hide-show_message_origin-button','message_origin-hider', DEF_CATS_HIDDEN.message_decoded);
 		this.bindSHButtonToTag('hide-show_subnet-button','subnets_table', DEF_CATS_HIDDEN.subnet);
 		this.bindSHButtonToTag('hide-show_debug-button','debug-hider', DEF_CATS_HIDDEN.debug);
-		interface_window.document.getElementById('change_theme').onclick = function () {
+/*		interface_window.document.getElementById('change_theme').onclick = function () {
 			ct.painter.changeTheme();
-		}
+		}*/
 
 	}
 
@@ -879,6 +879,26 @@ class Painter{
 																				<td class="subnet_table_td--by_what">${api_name}</td>
 																				<td colspan="3" id="ipinfo-tr">${api_call}</td>
 																			  </tr>`);
+	}
+
+	drawCTAPIBlock() {
+
+		try {
+
+			const email = ct.getDetailValueByName('sender_email');
+			const ip = ct.getDetailValueByName('sender_ip');
+			const apikey = `w4pvofhy03br`;
+
+			const spam_check_call = `https://api.cleantalk.org?method_name=spam_check&auth_key=${apikey}&email=${email}&ip=${ip}`;
+
+			hl.addTag('subnets_table_tbody', 'beforeend',
+				`<tr>
+						<td class="subnet_table_td--by_what">SPAM_CHECK</td>
+						<td colspan="3" id="ipinfo-tr"><a href="${spam_check_call}">${spam_check_call}</a></td>
+					  </tr>`);
+		} catch(e){
+			hl.debugMessage(e.stack,`drawCTAPIBlock fail:`)
+		}
 	}
 
 	drawOptionsBlock(ct_options) {	//Draws details block in layout_window
@@ -1911,6 +1931,7 @@ class CT {	// Main class CT
 		this.painter.drawHeadersTable(this.headers);
 		this.painter.drawMessageTextareas();
 		this.painter.drawSubnetsTable();
+		this.painter.drawCTAPIBlock();
 		hl.callIpinfoAPI();
 		//hl.callCleantalkApi('spam_check');
 		if (IS_DARK_THEME) this.painter.changeTheme();
@@ -1997,8 +2018,8 @@ class Option {	// Options class
 
 	paintThis(){
 
-		this.value = `<a style="color:red">${this.value}</a>`;
-		this.name = `<a style="color:red">${this.name}</a>`;
+		this.value = `<a style="color:#C02000">${this.value}</a>`;
+		this.name = `<a style="color:#C02000">${this.name}</a>`;
 
 	}
 
@@ -2079,7 +2100,6 @@ class Analysis {	// Analysis class
 	findOptionsChanged(default_options) {	//Compares request options with defaults by agent [default_options:str]
 
 		this.options_changes_counter = 0;
-
 
 		try {
 
@@ -2415,7 +2435,6 @@ class Analysis {	// Analysis class
 					}
 					break;
 
-
 					//ALLOWED BY PL
 					case 'denied_by_pl':
 					case 'allowed_by_pl':{
@@ -2463,7 +2482,6 @@ class Analysis {	// Analysis class
 					}
 						break;
 				}
-
 			}
 		} else hl.debugMessage('ct.checkdetails failed');
 	}
